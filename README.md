@@ -304,9 +304,9 @@ class Model:
         return Resnet(BottleNeck, [3, 8, 36, 3])
 ```
 
-resnet50을 기준으로 구조 설명
+resnet-101을 기준으로 구조 설명
 
-`BottleNeck`을 [3, 4, 6, 3]의 형태로 블록을 구성
+`BottleNeck`을 [3, 4, 23, 3]의 형태로 블록을 구성
 
 1. 처음은 입력 이미지를 64 채널로 바꾸는 7 X 7 컨볼루션 계층 과 MaxPooling 계층
     
@@ -329,9 +329,9 @@ resnet50을 기준으로 구조 설명
     _make_layer(BottleNeck, 128, 4, stride=2)
     
 
-1. 256 채널로 구성된 6개의 `BottleNeck`
+1. 256 채널로 구성된 23개의 `BottleNeck`
     
-    _make_layer(BottleNeck, 256, 6, stride=2)
+    _make_layer(BottleNeck, 256, 23, stride=2)
     
 2. 512 채널로 구성된 3개의 `BottleNeck`
     
@@ -349,9 +349,19 @@ resnet50을 기준으로 구조 설명
     
 
 ```python
-model = Model().resnet152()
-y = model(torch.randn(1, 3, 224, 224))
-print (y.size()) # torch.Size([1, 10])
+# Model 클래스
+class Model:
+    def resnet101(self): # resnet-101 layer
+        return models.resnet101(pretrained=False, num_classes=10)
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+model = Model().resnet101()
+model = model.to(device)
+
+input_tensor = torch.randn(1, 3, 224, 224).to(device)
+
+y = model(input_tensor)
+print(y.size())  # torch.Size([1, 10])
 ```
 
 Mean Subtraction (이미지에서 각 픽셀 값에 해당하는 평균과 표준편차 구하는 코드)
