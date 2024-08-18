@@ -289,7 +289,6 @@ SGD optimizer (momentum=0.9, weight decay=0.0005)
 <img src="https://github.com/user-attachments/assets/fa1cc32a-af02-4ff1-9e4f-aa96b0485b9e" width="700" height="400">
 
 
-
 Minimum Test Error Rate: 4.27%
 
 **WRN-40-1 모델**
@@ -297,6 +296,7 @@ Minimum Test Error Rate: 4.27%
 <img src="https://github.com/user-attachments/assets/990638c4-79d9-422f-846a-532832a737a4" width="700" height="200">
 
 <img src="https://github.com/user-attachments/assets/c3d58808-1b78-49e4-8369-90e1e20a82c1" width="700" height="400">
+
 
 Minimum Test Error Rate: 6.89%
 
@@ -307,6 +307,7 @@ Minimum Test Error Rate: 6.89%
 **WRN-40-1(Drop out 적용)**
 
 <img src="https://github.com/user-attachments/assets/c3d58808-1b78-49e4-8369-90e1e20a82c1" width="700" height="400">
+
 Minimum Test Error Rate: 6.89%
 
 <img src="https://github.com/user-attachments/assets/88dd4758-4b44-4355-a4b3-ded68b6c80b4" width="700" height="400">
