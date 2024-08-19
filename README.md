@@ -310,7 +310,7 @@ Minimum Test Error Rate: 6.89%
 
 Minimum Test Error Rate: 6.89%
 
-<img src="https://github.com/user-attachments/assets/88dd4758-4b44-4355-a4b3-ded68b6c80b4" width="700" height="400">
+<img src="https://github.com/user-attachments/assets/88dd4758-4b44-4355-a4b3-ded68b6c80b4" width="700" height="300">
 
 **WRN-40-1(Drop out 적용 X)**
 
@@ -318,4 +318,4 @@ Minimum Test Error Rate: 6.89%
 
 Minimum Test Error Rate: 6.65%
 
-<img src="https://github.com/user-attachments/assets/b7d9917c-99d8-4f12-a8fe-b6a1afe565a2" width="700" height="400">
+<img src="https://github.com/user-attachments/assets/b7d9917c-99d8-4f12-a8fe-b6a1afe565a2" width="700" height="300">
