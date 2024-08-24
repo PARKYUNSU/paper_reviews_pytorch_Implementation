@@ -1,8 +1,7 @@
----
 
 Link to Paper:
 
-**“Efficient Convolutional Neural Networks for Mobile Vision Applications” -** 
+**“Efficient Convolutional Neural Networks for Mobile Vision Applications”** 
 
 — Andrew G. Howard Weijun Wang, Menglong Zhu Tobias Weyand, Bo Chen Marco Andreetto, Dmitry Kalenichenko Hartwig Adam
 
