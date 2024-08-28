@@ -154,7 +154,7 @@ Color Augmentation
 
 Optimizer - SGD
 
-Batch_size - 256 ( 논문에서는 256 이지만, 자원 한계로 64로 진행)
+Batch_size - 128 ( 논문에서는 128 이지만, 자원 한계로 64로 진행)
 
 weight decay - 0.001, momentum - 0.9
 
