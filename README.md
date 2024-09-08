@@ -47,7 +47,8 @@ $D_K · D_K · M · N · D_F · D_F$
 
 논문에서는, 기존 연산 과정을 Depth wise(공간 축), Point wise(채널 축) 으로 나눠서 계산
 
-![image](https://github.com/user-attachments/assets/d2a8c376-2e3f-49b1-83f3-149b01c079db)
+<img src="https://github.com/user-attachments/assets/d2a8c376-2e3f-49b1-83f3-149b01c079db" width="500" height="550">
+
 fig.2
 
 fig.2 처럼 기존 연산 과정을 나눠서 계산
