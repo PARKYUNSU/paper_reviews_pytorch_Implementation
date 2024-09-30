@@ -294,36 +294,50 @@ Architecture
 
 ```python
 class MobileNetV2(nn.Module):
-    def __init__(self, n_classes=1000):
+    def __init__(self, n_classes=102, width_mult=1.0, pretrained=False):
         super().__init__()
-
-        self.first_conv = nn.Sequential(
-            nn.Conv2d(3, 32, 3, stride=2, padding=1, bias=False),
-            nn.BatchNorm2d(32),
-            nn.ReLU6(inplace=True)
-        )
-
-        self.bottlenecks = nn.Sequential(
-            self._make_stage(32, 16, t=1, n=1),
-            self._make_stage(16, 24, t=6, n=2, stride=2),
-            self._make_stage(24, 32, t=6, n=3, stride=2),
-            self._make_stage(32, 64, t=6, n=4, stride=2),
-            self._make_stage(64, 96, t=6, n=3),
-            self._make_stage(96, 160, t=6, n=3, stride=2),
-            self._make_stage(160, 320, t=6, n=1)
-        )
         
-        self.last_conv = nn.Sequential(
-            nn.Conv2d(320, 1280, 1, bias=False),
-            nn.BatchNorm2d(1280),
-            nn.ReLU6(inplace=True)
-        )
+        # width multiplier 추가
+        self.width_mult = width_mult
+
+        if pretrained:
+            # 사전 학습된 MobileNetV2 모델 로드
+            mobilenet_v2_pretrained = models.mobilenet_v2(weights=models.MobileNet_V2_Weights.DEFAULT)
+            
+            # 사전 학습된 모델의 첫 번째 컨볼루션과 모든 bottleneck 레이어를 가져옵니다.
+            self.first_conv = mobilenet_v2_pretrained.features[0]
+            self.bottlenecks = mobilenet_v2_pretrained.features[1:-1]
+            self.last_conv = mobilenet_v2_pretrained.features[-1]  # 사전 학습된 마지막 레이어 사용
+            
+        else:
+            self.first_conv = nn.Sequential(
+                nn.Conv2d(3, int(32 * width_mult), 3, stride=2, padding=1, bias=False),
+                nn.BatchNorm2d(int(32 * width_mult)),
+                nn.ReLU6(inplace=True)
+            )
+
+            self.bottlenecks = nn.Sequential(
+                self._make_stage(int(32 * width_mult), int(16 * width_mult), t=1, n=1),
+                self._make_stage(int(16 * width_mult), int(24 * width_mult), t=6, n=2, stride=2),
+                self._make_stage(int(24 * width_mult), int(32 * width_mult), t=6, n=3, stride=2),
+                self._make_stage(int(32 * width_mult), int(64 * width_mult), t=6, n=4, stride=2),
+                self._make_stage(int(64 * width_mult), int(96 * width_mult), t=6, n=3),
+                self._make_stage(int(96 * width_mult), int(160 * width_mult), t=6, n=3, stride=2),
+                self._make_stage(int(160 * width_mult), int(320 * width_mult), t=6, n=1)
+            )
+        
+            self.last_conv = nn.Sequential(
+                nn.Conv2d(int(320 * width_mult), int(1280 * width_mult), 1, bias=False),
+                nn.BatchNorm2d(int(1280 * width_mult)),
+                nn.ReLU6(inplace=True)
+            )
 
         self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
         self.fc = nn.Sequential(
-            nn.Dropout(0.2),
-            nn.Linear(1280, n_classes)
+            nn.Dropout(0.3),
+            nn.Linear(int(1280 * width_mult), n_classes)
         )
+    
     def forward(self, x):
         x = self.first_conv(x)
         x = self.bottlenecks(x)
@@ -331,6 +345,7 @@ class MobileNetV2(nn.Module):
         x = self.avgpool(x)
         x = torch.flatten(x, 1)
         x = self.fc(x)
+        
         return x
     
     def _make_stage(self, in_channels, out_channels, t, n, stride = 1):
