@@ -11,32 +11,32 @@ from eval import model_eval
 from utils import save_checkpoint
 import argparse
 
-# Argument parsing for model selection
+# 모델 찾기
 parser = argparse.ArgumentParser(description='Train and Evaluate SE Models')
-parser.add_argument('--model', type=str, required=True, choices=['se_mobile', 'se_resnet50', 'se_resnext50'],
-                    help='Choose the model: se_mobile, se_resnet50, se_resnext50')
+parser.add_argument('--model', type=str, required=True, choices=['se_mobile', 'se_resnet50', 'se_resnext50', 'se_vgg16'],
+                    help='Choose the model: se_mobile, se_resnet50, se_resnext50, se_vgg16')
 args = parser.parse_args()
 
-# 데이터셋 로딩 (모델에 맞게 데이터 증강 선택)
+# 데이터셋 로딩
 train_transforms, val_transforms = get_transforms(args.model)
-train_dataset = datasets.CIFAR10(root='/kaggle/working/data', train=True, transform=train_transforms, download=True)
-val_dataset = datasets.CIFAR10(root='/kaggle/working/data', train=False, transform=val_transforms, download=True)
+train_dataset = datasets.Flowers102(root='/kaggle/working/data', split='train', transform=train_transforms, download=True)
+val_dataset = datasets.Flowers102(root='/kaggle/working/data', split='val', transform=val_transforms, download=True)
 
 # DataLoader 설정
 train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=2)
 val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False, num_workers=2)
 
-# 모델 선택 로직 (model 폴더 안에서 불러오기)
+# 모델 선택
 if args.model == 'se_mobile':
     from model.se_mobile import SE_MobileNetV1 as Model
 elif args.model == 'se_resnet50':
     from model.se_resnet import se_resnet50 as Model
 elif args.model == 'se_resnext50':
     from model.se_resnext import se_resnext50 as Model
-# elif args.model == 'se_resnext101':
-    # from model.se_resnext import se_resnext101 as Model  # se_resnext101 호출
+elif args.model == 'se_vgg16':
+    from model.se_vgg16 import SE_VGG16 as Model
 
-# 모델, 옵티마이저 및 스케줄러 설정
+# 모델, 옵티마이저 
 model = Model().to(device)
 optimizer = optim.RMSprop(model.parameters(), lr=initial_lr, momentum=momentum, weight_decay=weight_decay)
 scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=num_epochs)
@@ -79,22 +79,21 @@ for epoch in range(num_epochs):
     print(f"Train Loss: {train_loss:.4f}, Train Accuracy: {train_accuracy:.4f}, Train Error Rate: {train_error_rate:.2f}%")
     print(f"Val Loss: {val_loss:.4f}, Val Accuracy: {val_accuracy:.4f}, Val Error Rate: {val_error_rate:.2f}%")
     
-    # Early Stopping 체크
-    if val_loss < best_val_loss:
-        best_val_loss = val_loss
-        early_stopping_counter = 0
-    else:
-        early_stopping_counter += 1
+    # # Early Stopping
+    # if val_loss < best_val_loss:
+    #     best_val_loss = val_loss
+    #     early_stopping_counter = 0
+    # else:
+    #     early_stopping_counter += 1
     
-    if early_stopping_counter >= patience:
-        print(f"Early stopping triggered at epoch {epoch + 1}")
-        break
+    # if early_stopping_counter >= patience:
+    #     print(f"Early stopping triggered at epoch {epoch + 1}")
+    #     break
 
 # 최종 모델 저장
 model_save_path = f'/kaggle/working/{args.model}_model.pth'
 torch.save(model.state_dict(), model_save_path)
 print(f"Model saved to {model_save_path}")
-
 
 # 결과 시각화
 epochs = range(1, len(train_error_rates) + 1)
