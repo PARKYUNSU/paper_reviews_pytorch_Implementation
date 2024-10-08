@@ -17,8 +17,8 @@ class SE_block(nn.Module):
         )
     
     def forward(self, x):
-        x = self.squeeze(x)
-        x = x.view(x.size(0), -1) # (N, C, 1, 1) -> N * C
-        x = self.excitation(x)
-        x = x.view(x.size(0), x.size(1), 1, 1) # N * C -> N * C * 1 * 1
+        x = self.squeeze(x)  # (N, C, H, W) -> (N, C, 1, 1)
+        x = x.view(x.size(0), -1)  # (N, C, 1, 1) -> (N, C)로 reshape
+        x = self.excitation(x)  # 채널별 중요도 계산
+        x = x.view(x.size(0), x.size(1), 1, 1)  # (N, C) -> (N, C, 1, 1)로 다시 reshape
         return x
