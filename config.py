@@ -12,7 +12,7 @@ lr_decay_epochs = 30
 # Device 설정
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-# 데이터 증강 설정 (ResNet과 Inception-ResNet-v2에 맞춤)
+# 데이터 증강 설정
 def get_transforms(model_name='resnet'):
     if 'inception' in model_name.lower():  # Inception 계열 모델인 경우
         resize_size = 299  # Inception-ResNet-v2의 경우 299x299
