@@ -25,7 +25,7 @@ class DwSepConv(nn.Module):
     def forward(self, x):
         x = self.depthwise(x)
         x = self.pointwise(x)
-        x = self.se_block(x) * x
+        x = self.se_block(x)
         return x
     
 
