@@ -35,8 +35,7 @@ class SE_BottleNeck(nn.Module):
         x = self.conv2(x)
         x = self.conv3(x)
 
-        se = self.se_block(x)
-        x = x * se
+        x = self.se_block(x)
 
         x += self.residual(identity)  # shortcut connection
         x = self.relu1(x)
