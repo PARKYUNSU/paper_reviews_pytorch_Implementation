@@ -19,8 +19,8 @@ args = parser.parse_args()
 
 # 데이터셋 로딩 (모델에 맞게 데이터 증강 선택)
 train_transforms, val_transforms = get_transforms(args.model)
-train_dataset = datasets.Flowers102(root='/kaggle/working/data', split='train', transform=train_transforms, download=True)
-val_dataset = datasets.Flowers102(root='/kaggle/working/data', split='val', transform=val_transforms, download=True)
+train_dataset = datasets.CIFAR10(root='/kaggle/working/data', train=True, transform=train_transforms, download=True)
+val_dataset = datasets.CIFAR10(root='/kaggle/working/data', train=False, transform=val_transforms, download=True)
 
 # DataLoader 설정
 train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=2)
