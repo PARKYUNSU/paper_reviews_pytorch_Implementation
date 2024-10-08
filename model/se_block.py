@@ -17,8 +17,8 @@ class SE_block(nn.Module):
         )
     
     def forward(self, x):
-        x = self.squeeze(x)  # (N, C, H, W) -> (N, C, 1, 1)
-        x = x.view(x.size(0), -1)  # (N, C, 1, 1) -> (N, C)로 reshape
-        x = self.excitation(x)  # 채널별 중요도 계산
-        x = x.view(x.size(0), x.size(1), 1, 1)  # (N, C) -> (N, C, 1, 1)로 다시 reshape
-        return x
+        se_weight = self.squeeze(x)  # (N, C, H, W) -> (N, C, 1, 1)
+        se_weight = se_weight.view(se_weight.size(0), -1)  # (N, C, 1, 1) -> (N, C)로 reshape
+        se_weight = self.excitation(se_weight)  # 채널별 중요도 계산
+        se_weight = se_weight.view(se_weight.size(0), se_weight.size(1), 1, 1)  # (N, C) -> (N, C, 1, 1)로 다시 reshape
+        return x * se_weight  # 입력에 중요도를 반영하여 조정
