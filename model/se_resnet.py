@@ -41,7 +41,7 @@ class SE_BottleNeck(nn.Module):
 
 
 class SE_Resnet(nn.Module):
-    def __init__(self, block, num_blocks, num_classes=1000):
+    def __init__(self, block, num_blocks, num_classes=10):
         super(SE_Resnet, self).__init__()
         self.in_channels = 64
         self.conv1 = nn.Sequential(
