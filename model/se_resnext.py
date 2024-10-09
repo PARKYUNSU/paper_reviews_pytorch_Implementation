@@ -43,7 +43,7 @@ class SE_BottleNeck(nn.Module):
 
 
 class SE_Resnext(nn.Module):
-    def __init__(self, block, num_blocks, num_classes=1000, cardinality=32):
+    def __init__(self, block, num_blocks, num_classes=10, cardinality=32):
         super(SE_Resnext, self).__init__()
         self.in_channels = 64
         self.cardinality = cardinality
