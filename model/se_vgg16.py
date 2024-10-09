@@ -4,7 +4,7 @@ from model.se_block import SE_block
 from torchinfo import summary
 
 class SE_VGG16(nn.Module):
-    def __init__(self, num_classes=100):
+    def __init__(self, num_classes=10):
         super(SE_VGG16, self).__init__()
         self.layer1 = nn.Sequential(
             nn.Conv2d(3, 64, kernel_size=3, stride=1, padding=1),
