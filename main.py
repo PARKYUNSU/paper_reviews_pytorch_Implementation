@@ -13,8 +13,8 @@ import argparse
 
 # 모델 찾기
 parser = argparse.ArgumentParser(description='Train and Evaluate SE Models')
-parser.add_argument('--model', type=str, required=True, choices=['se_mobile', 'se_resnet50', 'se_resnext50', 'se_vgg16'],
-                    help='Choose the model: se_mobile, se_resnet50, se_resnext50, se_vgg16')
+parser.add_argument('--model', type=str, required=True, choices=['se_mobile', 'se_resnet50', 'se_resnext50', 'se_vgg16', 'mobile','resnet50', 'resnext50', 'vgg16'],
+                    help='Choose the model: se_mobile, se_resnet50, se_resnext50, se_vgg16, mobile, resnet50, resnext50, vgg16')
 args = parser.parse_args()
 
 # 데이터셋 로딩
@@ -38,6 +38,14 @@ elif args.model == 'se_resnext50':
     from model.se_resnext import se_resnext50 as Model
 elif args.model == 'se_vgg16':
     from model.se_vgg16 import SE_VGG16 as Model
+elif args.model == 'mobile':
+    from model.mobile import MobileNetV1 as Model
+elif args.model == 'resnet50':
+    from model.resnet import resnet50 as Model
+elif args.model == 'resnext50':
+    from model.resnext import resnext50 as Model
+elif args.model == 'vgg16':
+    from model.vgg16 import VGG16 as Model
 
 # 모델, 옵티마이저 
 model = Model().to(device)
