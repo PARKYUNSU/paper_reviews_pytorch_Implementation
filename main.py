@@ -11,7 +11,7 @@ from eval import model_eval
 from utils import save_checkpoint
 import argparse
 
-# 모델 찾기
+# model
 parser = argparse.ArgumentParser(description='Train and Evaluate SE Models')
 parser.add_argument('--model', type=str, required=True, choices=['se_mobile', 'se_resnet50', 'se_resnext50', 'se_vgg16', 'mobile','resnet50', 'resnext50', 'vgg16'],
                     help='Choose the model: se_mobile, se_resnet50, se_resnext50, se_vgg16, mobile, resnet50, resnext50, vgg16')
@@ -47,7 +47,7 @@ elif args.model == 'resnext50':
 elif args.model == 'vgg16':
     from model.vgg16 import VGG16 as Model
 
-# 모델, 옵티마이저 
+# model, optimizer
 model = Model().to(device)
 optimizer = optim.SGD(model.parameters(), lr=initial_lr, momentum=momentum, weight_decay=weight_decay)
 scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=num_epochs)
@@ -79,7 +79,6 @@ for epoch in range(num_epochs):
     train_error_rates.append(train_error_rate)
     val_error_rates.append([top1_error_rate, top5_error_rate])
 
-    # 스케줄러 업데이트
     scheduler.step()
     
     # 결과 출력
@@ -128,6 +127,6 @@ plt.ylabel('Accuracy/Error Rate (%)')
 plt.title('Train Accuracy and Error Rate vs Val Error Rate')
 plt.legend()
 
-# 그래프를 파일로 저장
+# 그래프 파일저장
 plt.savefig('/kaggle/working/train_val_accuracy_error.png')
 print('Graph saved as train_val_accuracy_error.png')
