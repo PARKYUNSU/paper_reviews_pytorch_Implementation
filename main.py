@@ -85,6 +85,12 @@ for epoch in range(num_epochs):
     # 결과 출력
     print(f"Train Loss: {train_loss:.4f}, Train Accuracy: {train_accuracy:.2f}%, Train Error Rate: {train_error_rate:.2f}%")
     print(f"Val Loss: {val_loss:.4f}, Top-1 Error Rate: {top1_error_rate:.2f}%, Top-5 Error Rate: {top5_error_rate:.2f}%")
+    
+    if epoch + 1 == 80:
+        checkpoint_80_path = os.path.join(checkpoint_dir, 'checkpoint_80.pth')
+        save_checkpoint(epoch, model, optimizer, scheduler, checkpoint_80_path)
+        print(f"Checkpoint saved at epoch 80: {checkpoint_80_path}")
+    
     # # Early Stopping 체크
     # if val_loss < best_val_loss:
     #     best_val_loss = val_loss
@@ -96,8 +102,7 @@ for epoch in range(num_epochs):
     #     print(f"Early stopping triggered at epoch {epoch + 1}")
     #     break
 
-
-# 학습 종료 후 최종 체크포인트 저장
+# 최종 체크포인트 저장
 checkpoint_path = os.path.join(checkpoint_dir, 'final_checkpoint.pth')
 save_checkpoint(epoch, model, optimizer, scheduler, checkpoint_path)
 print(f"Final checkpoint saved after epoch {num_epochs}")
@@ -122,5 +127,7 @@ plt.xlabel('Epoch')
 plt.ylabel('Accuracy/Error Rate (%)')
 plt.title('Train Accuracy and Error Rate vs Val Error Rate')
 plt.legend()
-plt.show()
 
+# 그래프를 파일로 저장
+plt.savefig('/kaggle/working/train_val_accuracy_error.png')
+print('Graph saved as train_val_accuracy_error.png')
