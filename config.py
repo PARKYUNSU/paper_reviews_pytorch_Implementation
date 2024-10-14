@@ -12,6 +12,11 @@ lr_decay_epochs = 30
 # Device 설정
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
+
+# cifar = {'mean' : [0.4914, 0.4822, 0.4465], 'std' : [0.2023, 0.1994, 0.2010]}
+
+animals = {'mean' : [0.5177, 0.5003, 0.4126], 'std' : [0.2133, 0.2130, 0.2149]}
+
 def get_transforms():
 
     train_transforms = transforms.Compose([
@@ -23,15 +28,14 @@ def get_transforms():
         transforms.RandomPerspective(distortion_scale=0.2, p=0.5),
         transforms.GaussianBlur(kernel_size=(5, 5), sigma=(0.1, 2.0)),
         transforms.ToTensor(),
-        transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010))
+        transforms.Normalize(mean=animals['mean'], std=animals['std'])
     ])
 
     val_transforms = transforms.Compose([
         transforms.Resize((224, 224)),
         transforms.CenterCrop(224),
         transforms.ToTensor(),
-        transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010))
-
+        transforms.Normalize(mean=animals['mean'], std=animals['std'])
     ])
 
     return train_transforms, val_transforms
