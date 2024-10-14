@@ -3,8 +3,8 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 from torch import optim, nn
-from torch.utils.data import DataLoader
-from torchvision import datasets
+from torch.utils.data import DataLoader, random_split
+from torchvision import datasets, transforms
 from config import *
 from train import model_train
 from eval import model_eval
@@ -18,9 +18,25 @@ parser.add_argument('--model', type=str, required=True, choices=['se_mobile', 's
 args = parser.parse_args()
 
 # 데이터셋 로딩
+# train_transforms, val_transforms = get_transforms()
+
+# CIFAR-10
+# train_dataset = datasets.CIFAR10(root='/kaggle/working/data', train=True, transform=train_transforms, download=True)
+# val_dataset = datasets.CIFAR10(root='/kaggle/working/data', train=False, transform=val_transforms, download=True)
+
+
+
+# Animals-10
+data_dir = '/kaggle/input/animals10/raw-img'
 train_transforms, val_transforms = get_transforms()
-train_dataset = datasets.CIFAR10(root='/kaggle/working/data', train=True, transform=train_transforms, download=True)
-val_dataset = datasets.CIFAR10(root='/kaggle/working/data', train=False, transform=val_transforms, download=True)
+
+dataset = datasets.ImageFolder(root=data_dir, transform=train_transforms)
+
+train_size = int(0.8 * len(dataset))  # 80%
+val_size = len(dataset) - train_size   # 20%
+train_dataset, val_dataset = random_split(dataset, [train_size, val_size])
+
+val_dataset.dataset.transform = val_transforms
 
 print(len(train_dataset))
 print(len(val_dataset))
