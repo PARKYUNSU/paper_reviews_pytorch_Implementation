@@ -6,7 +6,9 @@ SNet(Squeeze and Excitation Networks)
 ## Squeeze and Excitation Networks
 
 ### 1.Introduction
-**Squeeze and Excitation Networks(SENet)**은 기존 CNN의 성능을 향상시키기 위해 간단하고도 효과적인 방법을 제안한 네트워크입니다. CNN 과정에서 중요한 정보와 덜 중요한 정보를 구별하는 능력을 높여주는 SE Block을 도입함으로써 채널 간의 상호작용을 학습하고 각 채널의 중요도를 조정합니다. 논문에서는 SE Block을 다양한 CNN 모델 구조에 통합하여, SE Block의 네트워크 표현력의 향상 효과에 대해서 설명하고 있습니다. 그 결과로 ImageNet 대회에서 큰 성과를 거두며 그 유용성을 입증했습니다.
+**Squeeze and Excitation Networks(SENet)**은 기존 CNN의 성능을 향상시키기 위해 간단하고도 효과적인 방법을 제안한 네트워크입니다.
+
+CNN 과정에서 중요한 정보와 덜 중요한 정보를 구별하는 능력을 높여주는 SE Block을 도입함으로써 채널 간의 상호작용을 학습하고 각 채널의 중요도를 조정합니다. 논문에서는 SE Block을 다양한 CNN 모델 구조에 통합하여, SE Block의 네트워크 표현력의 향상 효과에 대해서 설명하고 있습니다. 그 결과로 ImageNet 대회에서 큰 성과를 거두며 그 유용성을 입증했습니다.
 
 
 <img src="https://velog.velcdn.com/images/qkrdbstn24/post/bfded920-3176-43f9-8e43-14d1e17cc153/image.png" alt="image" width="400"/> Fig.1
