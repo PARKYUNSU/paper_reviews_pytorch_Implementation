@@ -29,17 +29,20 @@ SE Block을 도입하면서, 네트워크가 전체적인 정보를 사용하여
 ### Squeeze and Excitation Blocks
 
 
-<img src="https://velog.velcdn.com/images/qkrdbstn24/post/6ae36879-9a07-4f87-88d8-4a19cb1f5f05/image.png" alt="image" width="500"/>
+<img src="https://velog.velcdn.com/images/qkrdbstn24/post/6ae36879-9a07-4f87-88d8-4a19cb1f5f05/image.png" alt="image" width="700"/>
 
 
-*$F_{tr}$* 은 단순한 Convolution 연산입니다.
+**$F_{tr}$** 은 단순한 Convolution 연산입니다.
 
-$F_{tr}$ : $X$ $→$ $U$, $X$$∈$$R^{H^′×W^′×C^′}$, $U$$∈$$R^{H×W×C}$
+$F_{tr}$ : $X$ $→$ $U$, $X$ $∈$ $R^{H^′×W^′×C^′}$, $U$ $∈$ $R^{H×W×C}$
 
-$X$=$[x^1,x^2,...,x^{C^′}]:$ Input
-$U$=$[u_1,u_2,...,u_C]$ : $F_{tr}$을 통과한 Output
-$V$=$[v_1,v_2,...,v_c]$ : 필터 집합 $V$와 각 필터의 파라미터. $v_c$는 $c$번째 필터의 파라미터
-$v_c$=$[v^1_c,v^2_c,...,v^{C^′}_c]$ : $v_c$ 가중치 벡터, $v^s_c$는 $s$번째 입력 채널에서 $c$번째 출력 채널로 연결되는 2D spatial kernel이자 학습가능한 가중치
+$X$ = $[x^1,x^2,...,x^{C^′}]:$ Input
+
+$U$ = $[u_1,u_2,...,u_C]$ : $F_{tr}$을 통과한 Output
+
+$V$ = $[v_1,v_2,...,v_c]$ : 필터 집합 $V$와 각 필터의 파라미터. $v_c$는 $c$번째 필터의 파라미터
+
+$v_c$ = $[v^1_c,v^2_c,...,v^{C^′}_c]$ : $v_c$ 가중치 벡터, $v^s_c$는 $s$번째 입력 채널에서 $c$번째 출력 채널로 연결되는 2D spatial kernel이자 학습가능한 가중치
 
 
 <img src="https://velog.velcdn.com/images/qkrdbstn24/post/a10bf854-ccf7-4e2c-82d7-02ec9cacf411/image.png" alt="image" width="500"/>
@@ -58,9 +61,13 @@ Squeeze Operatioin은 말그대로 압축하는 과정입니다. Feature Map을 
 <img src="https://velog.velcdn.com/images/qkrdbstn24/post/a8359671-9e5b-41f1-9157-b871dcef84c3/image.png" alt="image" width="500"/>
 
 $z_c$ : **채널 $c$**에 대한 Squeeze 단계 출력 값
+
 $H$ , $W$ : 입력 Feature Map의 높이와 너비
+
 $u_c(i, j)$ : $c$채널의 **위치$(i, j)$** 값
+
 $\frac{1}{H \times W}$ : 평균을 위한 나누기
+
 
 입력 Feature Map의 각 채널에 대해 spatial dimensions에서 평균을 계산합니다. 주어진 채널의 모든 픽셀 값들을 더한 후, 픽셀 수 **$H \times W$**로 나누어 평균을 구합니다. 이를 통해서 공간적인 정보를 요약하여 각 채널의 Global Representation을 얻습니다. GAP를 통해 전체적인 공간적 패턴을 요약할 수 있어 네트워크가 특정 Channel 정보가 얼마나 중요한지를 학습할 수 있게 도와줍니다.
 
@@ -76,18 +83,25 @@ Excitation Operation은 재조정 과정으로, 채널 간 의존성(Channel-wis
 <img src="https://velog.velcdn.com/images/qkrdbstn24/post/e9a21613-425a-46bd-a9b6-f94d76779884/image.png" alt="image" width="500"/>
 
 $s_c$ : **채널 $c$**에 대한 Excitation 가중치(Excitation 단계의 출력 값)
+
 $z$ : Squeeze 단계에서 구한 Channel Descriptor
+
 $W_1$ , $W_2$ : Fully Connected Layer의 가중치 행렬. $W_1$은 채널 수를 줄이며 $W_2$는 채널 수를 다시 원래대로 복원
+
 $δ$ : ReLU 활성화 함수
+
 $σ$ : Sigmoid 활성화 함수
 
 그림으로 간단하게 그려보면 다음과 같습니다.(그림은 C=4, r=2라 가정한 그림)
 
 <img src="https://velog.velcdn.com/images/qkrdbstn24/post/bef315af-2d1a-4945-9421-88e592b4316c/image.png" alt="image" width="600"/>
 
-1) Squeeze 단계에서 생성된 채널 디스크립터 $z$를 입력으로 받아, $W_1$의 노드 **C**를 reduction ratio **r**을 통해서 노드 수를 줄입니다. 이때 차원 축소를 통해 비선형성을 도입하고, 중요한 특징만을 더 잘 학습할 수 있도록 합니다. 
+1) Squeeze 단계에서 생성된 채널 디스크립터 $z$를 입력으로 받아, $W_1$의 노드 **C**를 reduction ratio **r**을 통해서 노드 수를 줄입니다. 이때 차원 축소를 통해 비선형성을 도입하고, 중요한 특징만을 더 잘 학습할 수 있도록 합니다.
+   
 2) $W_{1}z$ 에 ReLU를 적용하여 음수 값을 0으로 비선형 변환을 수행합니다.
+   
 3) $W2$에서 다시 피쳐맵의 수 **C**만큼 복원합니다. 이 단계는 각 채널에 대한 가중치를 결정하는 과정입니다.
+   
 4) 최종적으로 Sigmoid 함수를 사용하여 0~1 사이의 값으로 정규화하여 각 채널의 가중치를 확률적으로 해석할 수 있으며, 중요한 채널은 가종하고 덜 중요한 채널은 억제할 수 있습니다.
 
 이렇게 모든 함수를 거쳐서 나온 값을 아래 수식으로 계산합니다.
@@ -95,13 +109,18 @@ $σ$ : Sigmoid 활성화 함수
 <img src="https://velog.velcdn.com/images/qkrdbstn24/post/7c4b2b37-5a33-46c7-8648-3c16ae552570/image.png" alt="image" width="500"/>
 
 $u_c$ : 입력 특징 맵의 $c$번째 채널. Squeeze 단계 전에 Convolution 연산으로 나온 $c$번째 채널의 Spatial 특징
+
 $s_c$ : Excitation 과정에서 학습된 $c$번째 채널에 대한 중요도. Sigmoid로 정규화 되어 0 ~ 1 값으로 채널의 중요도를 나타낸다.
+
 $\widetilde{x}_c$ : Reweighting 과정의 출력, 입력 특징맵 $u_c$에 가중치 $s_c$를 곱한 값
+
 $F_scale$ : Channel-wise Multiplication(채널 별 곱셈), 각 채널의 Global Spatial에 걸쳐 동일한 가중치 $s_c$를 곱하여 채널의 중요도 반영
 
 
 1) 입력 Feature map $u_c$는 $c$번째 채널에서 추출된 Spatial Information을 포함하고 있습니다.
+   
 2) Excitaion 단계에서 학습된 가중치 $s_c$는 해당 채널의 중요도를 나타내며, 중요도가 높은 채널은 강조되고, 중요도가 낮으면 억제됩니다.
+ 
 3) Reweighting 단계에서, 각 채널에 대해 $s_c$를 곱하여, 중요도에 따라 입력 Feature map을 재조정합니다. $s_c$가 1에 가까우면 정보가 유지되며, 반대로 0에 가까우면 해당 채널의 정보는 많이 억제됩니다.
 
 ### Exemplars: SE-Inception and SE-ResNet
