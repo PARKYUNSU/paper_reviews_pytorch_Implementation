@@ -107,18 +107,18 @@ $F_scale$ : Channel-wise Multiplication(채널 별 곱셈), 각 채널의 Global
 ### Exemplars: SE-Inception and SE-ResNet
 논문 저자들은 SE Block을 VGGNet, InceptionNet, ResNet등 다양한 모델에 적용을 합니다. InceptionNet과 ResNet에 적용한 구조는 다음과 같습니다.
 
-<img src="https://velog.velcdn.com/images/qkrdbstn24/post/1b23721a-4975-4ecb-8688-45158cbc264d/image.png" alt="image" width="500"/>
+<img src="https://velog.velcdn.com/images/qkrdbstn24/post/1b23721a-4975-4ecb-8688-45158cbc264d/image.png" alt="image" width="400"/>
 
-<img src="https://velog.velcdn.com/images/qkrdbstn24/post/abfb7658-0cd8-4e96-b906-b9775c90f1ba/image.png" alt="image" width="500"/>
+<img src="https://velog.velcdn.com/images/qkrdbstn24/post/abfb7658-0cd8-4e96-b906-b9775c90f1ba/image.png" alt="image" width="400"/>
 
 ResNet-50과 ResNeXt-50을 예시로 SEBlock을 적용했을때 모델 구조의 설명
 
-<img src="https://velog.velcdn.com/images/qkrdbstn24/post/a3d2e35e-f485-423d-a5ab-d8d13f7036e6/image.png" alt="image" width="500"/>
+<img src="https://velog.velcdn.com/images/qkrdbstn24/post/a3d2e35e-f485-423d-a5ab-d8d13f7036e6/image.png" alt="image" width="700"/>
 
 
 SEBlock을 다양한 모델에 적용했을때 모델의 성능 비교 테이블
 
-<img src="https://velog.velcdn.com/images/qkrdbstn24/post/ec9f400b-ba9a-4c80-b342-a21fd6ee7ea3/image.png" alt="image" width="500"/>
+<img src="https://velog.velcdn.com/images/qkrdbstn24/post/ec9f400b-ba9a-4c80-b342-a21fd6ee7ea3/image.png" alt="image" width="700"/>
 
 SEBlock을 적용한 것 만으로도 연산량은 아주 조금 늘어났지만 모델의 성능을 어느정도 상승시키는 특징을 가지고 있다.
 
