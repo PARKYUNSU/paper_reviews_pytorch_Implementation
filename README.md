@@ -72,7 +72,9 @@ $\frac{1}{H \times W}$ : 평균을 위한 나누기
 
 ### Excitation: Adaptive Recalibratcion
 Excitation Operation은 재조정 과정으로, 채널 간 의존성(Channel-wise-dependencies)을 계산하게 됩니다. 논문에서는 Fully Connected Layer와 비선형 함수를 조절하는 것으로 간단하게 계산합니다. 수식은 다음과 같습니다.
+
 <img src="https://velog.velcdn.com/images/qkrdbstn24/post/e9a21613-425a-46bd-a9b6-f94d76779884/image.png" alt="image" width="500"/>
+
 $s_c$ : **채널 $c$**에 대한 Excitation 가중치(Excitation 단계의 출력 값)
 $z$ : Squeeze 단계에서 구한 Channel Descriptor
 $W_1$ , $W_2$ : Fully Connected Layer의 가중치 행렬. $W_1$은 채널 수를 줄이며 $W_2$는 채널 수를 다시 원래대로 복원
@@ -80,14 +82,16 @@ $δ$ : ReLU 활성화 함수
 $σ$ : Sigmoid 활성화 함수
 
 그림으로 간단하게 그려보면 다음과 같습니다.(그림은 C=4, r=2라 가정한 그림)
-<img
-src="https://velog.velcdn.com/images/qkrdbstn24/post/bef315af-2d1a-4945-9421-88e592b4316c/image.png" alt="image" width="600"/>
+
+<img src="https://velog.velcdn.com/images/qkrdbstn24/post/bef315af-2d1a-4945-9421-88e592b4316c/image.png" alt="image" width="600"/>
+
 1) Squeeze 단계에서 생성된 채널 디스크립터 $z$를 입력으로 받아, $W_1$의 노드 **C**를 reduction ratio **r**을 통해서 노드 수를 줄입니다. 이때 차원 축소를 통해 비선형성을 도입하고, 중요한 특징만을 더 잘 학습할 수 있도록 합니다. 
 2) $W_{1}z$ 에 ReLU를 적용하여 음수 값을 0으로 비선형 변환을 수행합니다.
 3) $W2$에서 다시 피쳐맵의 수 **C**만큼 복원합니다. 이 단계는 각 채널에 대한 가중치를 결정하는 과정입니다.
 4) 최종적으로 Sigmoid 함수를 사용하여 0~1 사이의 값으로 정규화하여 각 채널의 가중치를 확률적으로 해석할 수 있으며, 중요한 채널은 가종하고 덜 중요한 채널은 억제할 수 있습니다.
 
 이렇게 모든 함수를 거쳐서 나온 값을 아래 수식으로 계산합니다.
+
 <img src="https://velog.velcdn.com/images/qkrdbstn24/post/7c4b2b37-5a33-46c7-8648-3c16ae552570/image.png" alt="image" width="500"/>
 
 $u_c$ : 입력 특징 맵의 $c$번째 채널. Squeeze 단계 전에 Convolution 연산으로 나온 $c$번째 채널의 Spatial 특징
