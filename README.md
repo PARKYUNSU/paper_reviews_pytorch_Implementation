@@ -13,13 +13,13 @@ CNN 과정에서 중요한 정보와 덜 중요한 정보를 구별하는 능력
 논문에서는 SE Block을 다양한 CNN 모델 구조에 통합하여, SE Block의 네트워크 표현력의 향상 효과에 대해서 설명하고 있습니다. 그 결과로 ImageNet 대회에서 큰 성과를 거두며 그 유용성을 입증했습니다.
 
 
-<img src="https://velog.velcdn.com/images/qkrdbstn24/post/bfded920-3176-43f9-8e43-14d1e17cc153/image.png" alt="image" width="400"/> Fig.1
+<img src="https://velog.velcdn.com/images/qkrdbstn24/post/bfded920-3176-43f9-8e43-14d1e17cc153/image.png" alt="image" width="400"/>
 
 먼저, CNN(인공신경망)은 **Local Receptive Field** 을 기반으로 연산을 한다는 점에서 시작됩니다.
 
 CNN의 연산 과정을 생각하면, 위의 Fig.1 처럼 이미지의 작은 부분, 즉 국소영역에만 집중해서 추출합니다. 이때 각 Convolution filter 또는 Feature map은 이미지의 일정한 작은 영역에서(local)을 학습하여 정보를 얻습니다. 이러한 CNN의 연산과정은 이미지를 작은 크기의 패치로 분해하고 그 패치에서 중요한 특징(Edge, 코너, 질감 등)을 뽑아냅니다. 
 
-<img src="https://velog.velcdn.com/images/qkrdbstn24/post/aaf5f67b-dd33-47b7-a4c5-76a52c001228/image.png" alt="image" width="400"/> Fig.2
+<img src="https://velog.velcdn.com/images/qkrdbstn24/post/aaf5f67b-dd33-47b7-a4c5-76a52c001228/image.png" alt="image" width="400"/>
 
 
 그러나, 논문에서는 CNN의 연산은 **국소적 영역(local)**에서 정보를 얻기 때문에 **전체적인(global)문맥**을 이해하기는 어렵다라는 문제점을 제기합니다. 즉, Feature map도 각 필터의 국소적 시야에서 추출된 정보로, 이미지의 특정 영역에만 집중합니다.
