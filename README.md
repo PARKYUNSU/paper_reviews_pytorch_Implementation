@@ -28,7 +28,9 @@ SE Block을 도입하면서, 네트워크가 전체적인 정보를 사용하여
 
 ### Squeeze and Excitation Blocks
 
+
 <img src="https://velog.velcdn.com/images/qkrdbstn24/post/6ae36879-9a07-4f87-88d8-4a19cb1f5f05/image.png" alt="image" width="500"/>
+
 
 *$F_{tr}$* 은 단순한 Convolution 연산입니다.
 
@@ -39,7 +41,9 @@ $U$=$[u_1,u_2,...,u_C]$ : $F_{tr}$을 통과한 Output
 $V$=$[v_1,v_2,...,v_c]$ : 필터 집합 $V$와 각 필터의 파라미터. $v_c$는 $c$번째 필터의 파라미터
 $v_c$=$[v^1_c,v^2_c,...,v^{C^′}_c]$ : $v_c$ 가중치 벡터, $v^s_c$는 $s$번째 입력 채널에서 $c$번째 출력 채널로 연결되는 2D spatial kernel이자 학습가능한 가중치
 
+
 <img src="https://velog.velcdn.com/images/qkrdbstn24/post/a10bf854-ccf7-4e2c-82d7-02ec9cacf411/image.png" alt="image" width="500"/>
+
 
 수식은, $C'$번째 출력 채널 값이 여러 입력 채널의 가중합으로 계산됩니다. 각 입력 채널 값에 가중치를 곱해주고, 그 결과를 모두 더해서 하나의 출력 채널을 생성하는 Convolution 연산 과정입니다.
 
@@ -50,6 +54,7 @@ Squeeze Operatioin은 말그대로 압축하는 과정입니다. Feature Map을 
 논문에서는 GAP(Global Average Pooling)로 중요 정보를 추출 합니다. GAP를 사용하여 Global Spatial Information을 Channel Descriptor로 압축시킬 수 있습니다.
 
 수식은 다음과 같습니다.
+
 <img src="https://velog.velcdn.com/images/qkrdbstn24/post/a8359671-9e5b-41f1-9157-b871dcef84c3/image.png" alt="image" width="500"/>
 
 $z_c$ : **채널 $c$**에 대한 Squeeze 단계 출력 값
@@ -58,8 +63,9 @@ $u_c(i, j)$ : $c$채널의 **위치$(i, j)$** 값
 $\frac{1}{H \times W}$ : 평균을 위한 나누기
 
 입력 Feature Map의 각 채널에 대해 spatial dimensions에서 평균을 계산합니다. 주어진 채널의 모든 픽셀 값들을 더한 후, 픽셀 수 **$H \times W$**로 나누어 평균을 구합니다. 이를 통해서 공간적인 정보를 요약하여 각 채널의 Global Representation을 얻습니다. GAP를 통해 전체적인 공간적 패턴을 요약할 수 있어 네트워크가 특정 Channel 정보가 얼마나 중요한지를 학습할 수 있게 도와줍니다.
-<img
-src="https://velog.velcdn.com/images/qkrdbstn24/post/719ae51c-b68e-4944-8b32-5dd4c48167c5/image.png" alt="image" width="400"/>
+
+<img src="https://velog.velcdn.com/images/qkrdbstn24/post/719ae51c-b68e-4944-8b32-5dd4c48167c5/image.png" alt="image" width="400"/>
+
 <img src="https://velog.velcdn.com/images/qkrdbstn24/post/e9596459-e1a9-46e6-b1cf-0fcaea189518/image.png" alt="image" width="400"/>
 
 논문의 저자들은 간단한 방식으로 GAP를 사용했지만, 다른 방법론을 사용할 수 있다고 합니다.
@@ -98,6 +104,7 @@ $F_scale$ : Channel-wise Multiplication(채널 별 곱셈), 각 채널의 Global
 논문 저자들은 SE Block을 VGGNet, InceptionNet, ResNet등 다양한 모델에 적용을 합니다. InceptionNet과 ResNet에 적용한 구조는 다음과 같습니다.
 
 <img src="https://velog.velcdn.com/images/qkrdbstn24/post/1b23721a-4975-4ecb-8688-45158cbc264d/image.png" alt="image" width="500"/>
+
 <img src="https://velog.velcdn.com/images/qkrdbstn24/post/abfb7658-0cd8-4e96-b906-b9775c90f1ba/image.png" alt="image" width="500"/>
 
 ResNet-50과 ResNeXt-50을 예시로 SEBlock을 적용했을때 모델 구조의 설명
