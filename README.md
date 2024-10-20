@@ -318,7 +318,3 @@ SE-ResNeXt는 epoch 10, 20, 30 모두에서 Train Loss가 더 빠르게 감소�
 
 epoch 30 기준으로, SE-ResNeXt의 Val Loss은 **1.0737**로 ResNeXt의 **1.2505**보다 낮습니다. 이는 SE-ResNeXt가 더 일반화된 성능을 보인다는 것을 의미합니다.
 Top-1 Error Rate에서 SE-ResNeXt는 에포크 30에서 **23.43%**로, ResNeXt의 **26.20%**보다 더 낮은 Error Rate를 보입니다. Top-5 Error Rate 역시 SE-ResNeXt가 **2.98%**로 더 좋은 성능을 보이고 있습니다.
-
-
-MobilenetV1, ResNeXt, VgGG16이 적용된 다른 코드는 Github 참조
-https://github.com/PARKYUNSU/SE-Net
