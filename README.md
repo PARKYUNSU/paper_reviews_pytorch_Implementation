@@ -1,7 +1,10 @@
 # SE-Net
-ILSVRC 2017 ImageNet 분류 대회에서 1위 
+ILSVRC 2017 ImageNet 분류 대회에서 1위
+
 SNet(Squeeze and Excitation Networks)
+
 저자 : Jie Hu, Li Shen, Samuel Albanie, Gang Sun, Enhua Wu
+
 
 ## Squeeze and Excitation Networks
 
