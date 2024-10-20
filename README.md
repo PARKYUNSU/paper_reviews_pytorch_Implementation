@@ -88,7 +88,7 @@ Excitation Operation은 재조정 과정으로, 채널 간 의존성(Channel-wis
 
 <img src="https://velog.velcdn.com/images/qkrdbstn24/post/e9a21613-425a-46bd-a9b6-f94d76779884/image.png" alt="image" width="500"/>
 
-$s_c$ : **채널 $c$**에 대한 Excitation 가중치(Excitation 단계의 출력 값)
+$s_c$ : **채널 $c$** 에 대한 Excitation 가중치(Excitation 단계의 출력 값)
 
 $z$ : Squeeze 단계에서 구한 Channel Descriptor
 
