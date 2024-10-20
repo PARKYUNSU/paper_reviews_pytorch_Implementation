@@ -71,7 +71,11 @@ $u_c(i, j)$ : $c$채널의 **위치$(i, j)$** 값
 
 $\frac{1}{H \times W}$ : 평균을 위한 나누기
 
-입력 Feature Map의 각 채널에 대해 spatial dimensions에서 평균을 계산합니다. 주어진 채널의 모든 픽셀 값들을 더한 후, 픽셀 수 **$H \times W$** 로 나누어 평균을 구합니다. 이를 통해서 공간적인 정보를 요약하여 각 채널의 Global Representation을 얻습니다. GAP를 통해 전체적인 공간적 패턴을 요약할 수 있어 네트워크가 특정 Channel 정보가 얼마나 중요한지를 학습할 수 있게 도와줍니다.
+입력 Feature Map의 각 채널에 대해 spatial dimensions에서 평균을 계산합니다.
+
+주어진 채널의 모든 픽셀 값들을 더한 후, 픽셀 수 **$H \times W$** 로 나누어 평균을 구합니다. 이를 통해서 공간적인 정보를 요약하여 각 채널의 Global Representation을 얻습니다.
+
+GAP를 통해 전체적인 공간적 패턴을 요약할 수 있어 네트워크가 특정 Channel 정보가 얼마나 중요한지를 학습할 수 있게 도와줍니다.
 
 <img src="https://velog.velcdn.com/images/qkrdbstn24/post/719ae51c-b68e-4944-8b32-5dd4c48167c5/image.png" alt="image" width="400"/>
 
