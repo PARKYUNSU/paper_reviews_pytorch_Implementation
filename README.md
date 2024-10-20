@@ -41,13 +41,13 @@ SE Block을 도입하면서, 네트워크가 전체적인 정보를 사용하여
 
 $F_{tr}$ : $X$ $→$ $U$, $X$ $∈$ $R^{H^′×W^′×C^′}$, $U$ $∈$ $R^{H×W×C}$
 
-$X$=$[x^1,x^2,...,x^{C^′}]:$ Input
+$X$ = $[x^1,x^2,...,x^{C^′}]:$ Input
 
-$U$=$[u_1,u_2,...,u_C]$ : $F_{tr}$을 통과한 Output
+$U$ = $[u_1,u_2,...,u_C]$ : $F_{tr}$을 통과한 Output
 
-$V$=$[v_1,v_2,...,v_c]$ : 필터 집합 $V$와 각 필터의 파라미터. $v_c$는 $c$번째 필터의 파라미터
+$V$ = $[v_1,v_2,...,v_c]$ : 필터 집합 $V$와 각 필터의 파라미터. $v_c$는 $c$번째 필터의 파라미터
 
-$v_c$=$[v^1_c,v^2_c,...,v^{C^′}_c]$ : $v_c$ 가중치 벡터, $v^s_c$는 $s$번째 입력 채널에서 $c$번째 출력 채널로 연결되는 2D spatial kernel이자 학습가능한 가중치
+$v_c$ = $[v^1_c,v^2_c,...,v^{C^′}_c]$ : $v_c$ 가중치 벡터, $v^s_c$는 $s$번째 입력 채널에서 $c$번째 출력 채널로 연결되는 2D spatial kernel이자 학습가능한 가중치
 
 <img src="https://velog.velcdn.com/images/qkrdbstn24/post/a10bf854-ccf7-4e2c-82d7-02ec9cacf411/image.png" alt="image" width="500"/>
 
