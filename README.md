@@ -60,6 +60,7 @@ Squeeze Operatioin은 말그대로 압축하는 과정입니다. Feature Map을 
 논문에서는 GAP(Global Average Pooling)로 중요 정보를 추출 합니다. GAP를 사용하여 Global Spatial Information을 Channel Descriptor로 압축시킬 수 있습니다.
 
 수식은 다음과 같습니다.
+
 <img src="https://velog.velcdn.com/images/qkrdbstn24/post/a8359671-9e5b-41f1-9157-b871dcef84c3/image.png" alt="image" width="500"/>
 
 $z_c$ : **채널 $c$**에 대한 Squeeze 단계 출력 값
@@ -125,7 +126,8 @@ $F_scale$ : Channel-wise Multiplication(채널 별 곱셈), 각 채널의 Global
 
 ### Model and Computational Complexity
 다음 수식은 모델의 네트워크에서 연산량을 계산할 때 사용되는 수식입니다.
-![](https://velog.velcdn.com/images/qkrdbstn24/post/93fc186e-e10b-4f0a-aeea-33f72aadd019/image.png)
+
+<img src="https://velog.velcdn.com/images/qkrdbstn24/post/93fc186e-e10b-4f0a-aeea-33f72aadd019/image.png" alt="image" width="500"/>
 
 $r$ : Reduction ratio
 
@@ -148,23 +150,24 @@ Reduction ratio $r$에 따른 영향은 아래 표와 같습니다.
 
 $r$ = 16은 Error rate에 큰 영향을 미치지 않았으며, $r$=2 에 비해서 38%의 Parameter 감소 효과를 보였습니다.
 
-![](https://velog.velcdn.com/images/qkrdbstn24/post/9cabdb33-0213-4656-80e7-e9efba14bc8d/image.png)
+<img src="https://velog.velcdn.com/images/qkrdbstn24/post/9cabdb33-0213-4656-80e7-e9efba14bc8d/image.png" alt="image" width="500"/>
 
 
 ### Exemplars: SE-Inception and SE-ResNet
 논문 저자들은 SE Block을 VGGNet, InceptionNet, ResNet등 다양한 모델에 적용을 합니다. InceptionNet과 ResNet에 적용한 구조는 다음과 같습니다.
 
 <img src="https://velog.velcdn.com/images/qkrdbstn24/post/1b23721a-4975-4ecb-8688-45158cbc264d/image.png" alt="image" width="500"/>
+
 <img src="https://velog.velcdn.com/images/qkrdbstn24/post/abfb7658-0cd8-4e96-b906-b9775c90f1ba/image.png" alt="image" width="500"/>
 
 ResNet-50과 ResNeXt-50을 예시로 SEBlock을 적용했을때 모델 구조의 설명
 
-<img src="https://velog.velcdn.com/images/qkrdbstn24/post/a3d2e35e-f485-423d-a5ab-d8d13f7036e6/image.png" alt="image" width="500"/>
+<img src="https://velog.velcdn.com/images/qkrdbstn24/post/a3d2e35e-f485-423d-a5ab-d8d13f7036e6/image.png" alt="image" width="700"/>
 
 
 SEBlock을 다양한 모델에 적용했을때 모델의 성능 비교 테이블
 
-<img src="https://velog.velcdn.com/images/qkrdbstn24/post/ec9f400b-ba9a-4c80-b342-a21fd6ee7ea3/image.png" alt="image" width="500"/>
+<img src="https://velog.velcdn.com/images/qkrdbstn24/post/ec9f400b-ba9a-4c80-b342-a21fd6ee7ea3/image.png" alt="image" width="700"/>
 
 SE Block을 적용한 것 만으로도 연산량은 아주 조금 늘어났지만 모델의 성능을 어느정도 상승시키는 특징을 가지고 있다.
 
