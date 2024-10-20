@@ -337,7 +337,7 @@ def se_resnet152():
 
 ---
 
-SE-ResNet은 epoch 10, 20, 30에서 훈련 손실이 더 빠르게 감소하고, Train Accuracy 더 높습니다. SE-ResNet의 30 epoch에서 Train Accuracy는 **99.71%**이며, ResNet은 **98.78%** 로 SE-ResNet보다 낮습니다.
+SE-ResNet은 epoch 10, 20, 30에서 훈련 손실이 더 빠르게 감소하고, Train Accuracy 더 높습니다. SE-ResNet의 30 epoch에서 Train Accuracy는 **99.71%** 이며, ResNet은 **98.78%** 로 SE-ResNet보다 낮습니다.
 
 Validation Loss에서도 SE-ResNet이 더 낮은 값을 보입니다. 특히 30 epoch에서 SE-ResNet의 Validation Loss는 **1.0737** 로, ResNet의 **1.2505** 보다 낮습니다.
 Top-1 Error Rate와 Top-5 Error Rate 둘다 SE-ResNet이 더 낮은 Error Rate를 보입니다. 30 epoch 기준으로 SE-ResNet의 Top-1 Error Rate는 **23.43%** 로, ResNet의 ***26.20%** 보다 낮습니다.
