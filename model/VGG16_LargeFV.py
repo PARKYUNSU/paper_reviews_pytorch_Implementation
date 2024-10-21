@@ -3,10 +3,9 @@ from torch import nn
 import torch.nn.functional as F
 
 class VGG16_LargeFV(nn.Module):
-    def __init__(self, num_classes=21, input_size=321, split='train', init_weights=True):
+    def __init__(self, num_classes=21, input_size=321, init_weights=True):
         super(VGG16_LargeFV, self).__init__()
         self.input_size = input_size
-        self.split = split
         
         self.features = nn.Sequential(
             # Conv1
@@ -101,6 +100,6 @@ class VGG16_LargeFV(nn.Module):
 
 if __name__ == "__main__":
     model = VGG16_LargeFV()
-    input_tensor = torch.ones([2, 3, 321, 321])
-    output = model(input_tensor)
+    input = torch.ones([2, 3, 321, 321])
+    output = model(input)
     print(output.shape)
