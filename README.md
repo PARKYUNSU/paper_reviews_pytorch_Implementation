@@ -8,7 +8,7 @@ Dilation은 convolutional layer에 있는 파라미터로
 
 dilation을 한 마디로 말하자면 convolution 커널의 간격을 의미한다.
 
-​![alt text](image.png)
+![image](https://github.com/user-attachments/assets/b1a3b425-8910-4450-94c2-2b1047746fd0)
 출처: https://www.semanticscholar.org/paper/Deep-Dilated-Convolution-on-Multimodality-Time-for-Xi-Hou/afadf82529110fadcbbe82671d35a83f334ca242
 
 ​
