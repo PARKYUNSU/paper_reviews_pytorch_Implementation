@@ -1,5 +1,6 @@
 import torch
 from torchvision import transforms
+from PIL import Image
 
 # Device 설정
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -16,7 +17,8 @@ num_epochs = 50
 lr_decay_epochs = 30
 
 def get_transforms(input_size=321):
-    train_transforms = transforms.Compose([
+    
+    image_transform = transforms.Compose([
         transforms.Resize((input_size, input_size)),
         transforms.RandomResizedCrop(input_size, scale=(0.8, 1.0)),
         transforms.RandomHorizontalFlip(),
@@ -28,11 +30,9 @@ def get_transforms(input_size=321):
         transforms.Normalize(mean=pascal['mean'], std=pascal['std'])
     ])
 
-    val_transforms = transforms.Compose([
+    mask_transform = transforms.Compose([
         transforms.Resize((input_size, input_size)),
-        transforms.CenterCrop(input_size),
-        transforms.ToTensor(),
-        transforms.Normalize(mean=pascal['mean'], std=pascal['std'])
+        transforms.ToTensor()
     ])
 
-    return train_transforms, val_transforms
+    return image_transform, mask_transform
