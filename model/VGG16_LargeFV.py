@@ -76,7 +76,7 @@ class VGG16_LargeFV(nn.Module):
             nn.Dropout2d(0.5)
         )
         
-        # classification layer
+        # Classification layer
         self.classifier = nn.Conv2d(1024, num_classes, kernel_size=1)
 
         if init_weights:
