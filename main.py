@@ -2,7 +2,6 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import DataLoader
-from config import *
 import config # 하이퍼파라미터 및 transform 설정
 from datasets import PascalVOCSegmentationDataset
 from model import VGG16_LargeFV
