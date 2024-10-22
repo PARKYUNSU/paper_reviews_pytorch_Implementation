@@ -7,8 +7,6 @@ import os
 import json
 
 def intersection_and_union(pred, label, num_classes):
-    # 예측값과 레이블이 이미 1차원이므로 argmax 불필요
-    # pred = np.argmax(pred, axis=1)  # 이 부분 제거
     pred = pred.flatten()  # 1차원 배열로 변환
     label = label.flatten()  # 1차원 배열로 변환
 
@@ -40,12 +38,16 @@ def resize_labels(labels, size):
         new_labels.append(np.asarray(label))
     
     new_labels = np.array(new_labels)
-    new_labels = torch.LongTensor(new_labels)
+    new_labels = torch.LongTensor(new_labels)  # 마스크는 LongTensor로 변환
     return new_labels
 
 
-def build_metrics(model, batch, device, num_classes):
-    CEL = nn.CrossEntropyLoss(ignore_index=255).to(device)
+def build_metrics(model, batch, device, num_classes, class_weights=None):
+    # 클래스 가중치가 없으면 기본값으로 설정
+    if class_weights is None:
+        CEL = torch.nn.CrossEntropyLoss(ignore_index=255).to(device)
+    else:
+        CEL = torch.nn.CrossEntropyLoss(ignore_index=255, weight=class_weights).to(device)
 
     images, labels = batch
     labels = resize_labels(labels, size=(321, 321)).to(device)  # 레이블 크기를 모델 출력 크기와 맞춤
@@ -57,17 +59,15 @@ def build_metrics(model, batch, device, num_classes):
     # 예측된 클래스 계산
     preds = torch.argmax(logits, dim=1)  # (batch_size, H, W)
 
-    # 예측값과 레이블의 크기가 일치하는지 확인하고 맞추기
-    if preds.shape != labels.shape:
-        raise ValueError(f"Prediction and label sizes do not match: preds shape {preds.shape}, labels shape {labels.shape}")
-    
     # 정확도 계산
-    accuracy = float(torch.eq(preds, labels).sum().cpu()) / (len(images) * logits.shape[2] * logits.shape[3])
+    valid_mask = labels != 255  # ignore_index인 255를 제외한 마스크
+    correct = (preds == labels) & valid_mask  # 올바르게 예측한 픽셀
+    accuracy = correct.sum().item() / valid_mask.sum().item()  # 유효한 픽셀에 대한 정확도
 
     # mIoU 계산
     preds_np = preds.detach().cpu().numpy()  # (batch_size, H, W)
     labels_np = labels.cpu().numpy()  # (batch_size, H, W)
-    
+
     # 예측값과 레이블 크기를 1차원 배열로 변환하여 처리
     preds_np = preds_np.flatten()
     labels_np = labels_np.flatten()
@@ -82,7 +82,6 @@ def build_metrics(model, batch, device, num_classes):
     return loss_seg, accuracy, mIoU
 
 
-
 class SegmentationTransform:
     def __init__(self, size):
         self.image_transform = transforms.Compose([
@@ -91,23 +90,23 @@ class SegmentationTransform:
             transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
         ])
         self.mask_transform = transforms.Compose([
-            transforms.Resize(size),
-            transforms.ToTensor()  # 마스크는 Normalize 하지 않음
+            transforms.Resize(size, interpolation=Image.NEAREST),
+            transforms.Lambda(lambda x: torch.from_numpy(np.array(x, dtype=np.uint8))),  # 마스크를 LongTensor로 변환
         ])
 
     def __call__(self, image, mask):
         image = self.image_transform(image)
         mask = self.mask_transform(mask)
-        mask = torch.squeeze(mask, dim=0)  # 마스크는 (1, H, W)이므로 (H, W)로 변환
         return image, mask
+
 
 def create_segmentation_data_lists(voc07_path, voc12_path, output_folder):
     voc07_path = os.path.abspath(voc07_path)
     voc12_path = os.path.abspath(voc12_path)
 
     # 훈련 데이터 준비
-    train_images = list()
-    train_masks = list()
+    train_images = []
+    train_masks = []
 
     for path in [voc07_path, voc12_path]:
         with open(os.path.join(path, 'ImageSets/Segmentation/trainval.txt')) as f:
@@ -133,8 +132,8 @@ def create_segmentation_data_lists(voc07_path, voc12_path, output_folder):
     print(f'\n{len(train_images)} training images and masks have been saved to {os.path.abspath(output_folder)}.')
 
     # 테스트 데이터 준비 (VOC 2007)
-    test_images = list()
-    test_masks = list()
+    test_images = []
+    test_masks = []
 
     with open(os.path.join(voc07_path, 'ImageSets/Segmentation/test.txt')) as f:
         ids = f.read().splitlines()
@@ -168,4 +167,3 @@ def save_segmentation_result(model, image, device, filename="segmentation_result
     # 세그멘테이션 결과를 .pth로 저장
     torch.save(pred, filename)
     print(f"Segmentation result saved as {filename}")
-
