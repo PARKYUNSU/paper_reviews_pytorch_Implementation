@@ -50,7 +50,7 @@ def build_metrics(model, batch, device, num_classes, class_weights=None):
         CEL = torch.nn.CrossEntropyLoss(ignore_index=255, weight=class_weights).to(device)
 
     images, labels = batch
-    labels = resize_labels(labels, size=(321, 321)).to(device)  # 레이블 크기를 모델 출력 크기와 맞춤
+    labels = resize_labels(labels, size=(224, 224)).to(device)  # 레이블 크기를 모델 출력 크기와 맞춤
     logits = model(images.to(device))
 
     # 손실 계산 (CrossEntropy Loss)
