@@ -9,60 +9,36 @@ class DeconvNet(nn.Module):
             nn.Conv2d(3, 64, kernel_size=3, stride=1, padding=1),
             nn.BatchNorm2d(64),
             nn.ReLU(inplace=True),
-            nn.Conv2d(64, 64, kernel_size=3, stride=1, padding=1),
-            nn.BatchNorm2d(64),
-            nn.ReLU(inplace=True),
-            nn.MaxPool2d(kernel_size=2, stride=2),  # 1/2 크기
         )
+        self.pool1 = nn.MaxPool2d(kernel_size=2, stride=2, return_indices=True)  # 1/2 크기
         
         self.encode2 = nn.Sequential(
             nn.Conv2d(64, 128, kernel_size=3, stride=1, padding=1),
             nn.BatchNorm2d(128),
             nn.ReLU(inplace=True),
-            nn.Conv2d(128, 128, kernel_size=3, stride=1, padding=1),
-            nn.BatchNorm2d(128),
-            nn.ReLU(inplace=True),
-            nn.MaxPool2d(kernel_size=2, stride=2),  # 1/4 크기
         )
+        self.pool2 = nn.MaxPool2d(kernel_size=2, stride=2, return_indices=True)  # 1/4 크기
         
         self.encode3 = nn.Sequential(
             nn.Conv2d(128, 256, kernel_size=3, stride=1, padding=1),
             nn.BatchNorm2d(256),
             nn.ReLU(inplace=True),
-            nn.Conv2d(256, 256, kernel_size=3, stride=1, padding=1),
-            nn.BatchNorm2d(256),
-            nn.ReLU(inplace=True),
-            nn.Conv2d(256, 256, kernel_size=3, stride=1, padding=1),
-            nn.BatchNorm2d(256),
-            nn.ReLU(inplace=True),
-            nn.MaxPool2d(kernel_size=2, stride=2),  # 1/8 크기
         )
-
+        self.pool3 = nn.MaxPool2d(kernel_size=2, stride=2, return_indices=True)  # 1/8 크기
+        
         self.encode4 = nn.Sequential(
             nn.Conv2d(256, 512, kernel_size=3, stride=1, padding=1),
             nn.BatchNorm2d(512),
             nn.ReLU(inplace=True),
-            nn.Conv2d(512, 512, kernel_size=3, stride=1, padding=1),
-            nn.BatchNorm2d(512),
-            nn.ReLU(inplace=True),
-            nn.Conv2d(512, 512, kernel_size=3, stride=1, padding=1),
-            nn.BatchNorm2d(512),
-            nn.ReLU(inplace=True),
-            nn.MaxPool2d(kernel_size=2, stride=2),  # 1/16 크기
         )
-
+        self.pool4 = nn.MaxPool2d(kernel_size=2, stride=2, return_indices=True)  # 1/16 크기
+        
         self.encode5 = nn.Sequential(
             nn.Conv2d(512, 512, kernel_size=3, stride=1, padding=1),
             nn.BatchNorm2d(512),
             nn.ReLU(inplace=True),
-            nn.Conv2d(512, 512, kernel_size=3, stride=1, padding=1),
-            nn.BatchNorm2d(512),
-            nn.ReLU(inplace=True),
-            nn.Conv2d(512, 512, kernel_size=3, stride=1, padding=1),
-            nn.BatchNorm2d(512),
-            nn.ReLU(inplace=True),
-            nn.MaxPool2d(kernel_size=2, stride=2),  # 1/32 크기
         )
+        self.pool5 = nn.MaxPool2d(kernel_size=2, stride=2, return_indices=True)  # 1/32 크기
 
         # Fully connected layers
         self.conv6 = nn.Sequential(
@@ -77,103 +53,129 @@ class DeconvNet(nn.Module):
             nn.ReLU(inplace=True),
             nn.Dropout2d()
         )
-        # deconv
-        self.deconv1 = nn.Sequential(
-            nn.ConvTranspose2d(4096, 512, kernel_size=7, stride=1),
+
+        # Deconv layers
+        self.deconv6 = nn.Sequential(
+            nn.ConvTranspose2d(4096, 512, kernel_size=7, stride=1, output_padding=1),  # output_padding 추가
             nn.BatchNorm2d(512),
             nn.ReLU(inplace=True)
         )
         
-        self.deconv5 = nn.Sequential(
-            nn.MaxUnpool2d(kernel_size=2, stride=2),
-            nn.ConvTranspose2d(512, 512, kernel_size=3, stride=1, padding=1),
-            nn.BatchNorm2d(512),
-            nn.ReLU(inplace=True),
-            nn.ConvTranspose2d(512, 512, kernel_size=3, stride=1, padding=1),
-            nn.BatchNorm2d(512),
-            nn.ReLU(inplace=True),
+        self.unpool5 = nn.MaxUnpool2d(kernel_size=2, stride=2)
+        self.deconv5_conv = nn.Sequential(
             nn.ConvTranspose2d(512, 512, kernel_size=3, stride=1, padding=1),
             nn.BatchNorm2d(512),
             nn.ReLU(inplace=True),
         )
         
-        self.deconv4 = nn.Sequential(
-            nn.MaxUnpool2d(kernel_size=2, stride=2),
+        self.unpool4 = nn.MaxUnpool2d(kernel_size=2, stride=2)
+        self.deconv4_conv = nn.Sequential(
             nn.ConvTranspose2d(512, 512, kernel_size=3, stride=1, padding=1),
             nn.BatchNorm2d(512),
             nn.ReLU(inplace=True),
-            nn.ConvTranspose2d(512, 512, kernel_size=3, stride=1, padding=1),
-            nn.BatchNorm2d(512),
-            nn.ReLU(inplace=True),
+        )
+        
+        self.unpool3 = nn.MaxUnpool2d(kernel_size=2, stride=2)
+        self.deconv3_conv = nn.Sequential(
             nn.ConvTranspose2d(512, 256, kernel_size=3, stride=1, padding=1),
             nn.BatchNorm2d(256),
             nn.ReLU(inplace=True),
-        )
-        
-        self.deconv3 = nn.Sequential(
-            nn.MaxUnpool2d(kernel_size=2, stride=2),
-            nn.ConvTranspose2d(256, 256, kernel_size=3, stride=1, padding=1),
-            nn.BatchNorm2d(256),
-            nn.ReLU(inplace=True),
-            nn.ConvTranspose2d(256, 256, kernel_size=3, stride=1, padding=1),
-            nn.BatchNorm2d(256),
-            nn.ReLU(inplace=True),
+        )                
+        self.unpool2 = nn.MaxUnpool2d(kernel_size=2, stride=2)
+        self.deconv2_conv = nn.Sequential(
             nn.ConvTranspose2d(256, 128, kernel_size=3, stride=1, padding=1),
             nn.BatchNorm2d(128),
             nn.ReLU(inplace=True),
-        )                
-        self.deconv2 = nn.Sequential(
-            nn.MaxUnpool2d(kernel_size=2, stride=2),
-            nn.ConvTranspose2d(128, 128, kernel_size=3, stride=1, padding=1),
-            nn.BatchNorm2d(128),
-            nn.ReLU(inplace=True),
+        )
+        self.unpool1 = nn.MaxUnpool2d(kernel_size=2, stride=2)
+        self.deconv1_conv = nn.Sequential(
             nn.ConvTranspose2d(128, 64, kernel_size=3, stride=1, padding=1),
             nn.BatchNorm2d(64),
             nn.ReLU(inplace=True),
         )
-        self.deconv1 = nn.Sequential(
-            nn.MaxUnpool2d(kernel_size=2, stride=2),
-            nn.ConvTranspose2d(128, 128, kernel_size=3, stride=1, padding=1),
-            nn.BatchNorm2d(128),
-            nn.ReLU(inplace=True),
-            nn.ConvTranspose2d(128, 64, kernel_size=3, stride=1, padding=1),
-            nn.BatchNorm2d(64),
-            nn.ReLU(inplace=True),
-        )
+        self.score = nn.Conv2d(64, num_classes, kernel_size=1, stride=1, dilation=1)
 
     def forward(self, x):
-        # Features extraction through VGG16
-        x1 = self.encode1(x)
-        x2 = self.encode2(x1)
-        x3 = self.encode3(x2)
-        x4 = self.encode4(x3)
-        x5 = self.encode5(x4)
+        # Encoding path
+        x = self.encode1(x)
+        print(f"x.shape after encode1: {x.shape}")
+        
+        x, indices1 = self.pool1(x)
+        print(f"x.shape after pool1: {x.shape}")
+        
+        x = self.encode2(x)
+        print(f"x.shape after encode2: {x.shape}")
+        
+        x, indices2 = self.pool2(x)
+        print(f"x.shape after pool2: {x.shape}")
+        
+        x = self.encode3(x)
+        print(f"x.shape after encode3: {x.shape}")
+        
+        x, indices3 = self.pool3(x)
+        print(f"x.shape after pool3: {x.shape}")
+        
+        x = self.encode4(x)
+        print(f"x.shape after encode4: {x.shape}")
+        
+        x, indices4 = self.pool4(x)
+        print(f"x.shape after pool4: {x.shape}")
+        
+        x = self.encode5(x)
+        print(f"x.shape after encode5: {x.shape}")
+        
+        x, indices5 = self.pool5(x)
+        print(f"x.shape after pool5: {x.shape}")
 
         # Fully connected layers
-        x6 = self.conv6(x5)
-        x7 = self.conv7(x6)
-        score = self.score(x7)
-
-        # FCN-32s
-        fcn32 = self.upscore32(score)
+        x = self.conv6(x)
+        print(f"x.shape after conv6: {x.shape}")
         
-        # FCN-16s
-        score2 = self.score_upsample(score)
-        fcn16 = self.deconv16(score2)
-        score4 = self.score4(x4) 
+        x = self.conv7(x)
+        print(f"x.shape after conv7: {x.shape}")
 
-        score4_1 = score4 + score2
+        # Decoding path
+        x = self.deconv6(x)
+        print(f"x.shape after deconv6: {x.shape}")
         
-        # FCN-8s
-        score3 = self.score3(x3)
-        score4_2 = self.score_upsample2(score4_1)
-        score3_1 = score3 + score4_2
-        fcn8 = self.deconv8(score3_1)
+        x = self.unpool5(x, indices5)
+        print(f"x.shape after unpool5: {x.shape}")
+        
+        x = self.deconv5_conv(x)
+        print(f"x.shape after deconv5_conv: {x.shape}")
+        
+        x = self.unpool4(x, indices4)
+        print(f"x.shape after unpool4: {x.shape}")
+        
+        x = self.deconv4_conv(x)
+        print(f"x.shape after deconv4_conv: {x.shape}")
+        
+        x = self.unpool3(x, indices3)
+        print(f"x.shape after unpool3: {x.shape}")
+        
+        x = self.deconv3_conv(x)
+        print(f"x.shape after deconv3_conv: {x.shape}")
+        
+        x = self.unpool2(x, indices2)
+        print(f"x.shape after unpool2: {x.shape}")
+        
+        x = self.deconv2_conv(x)
+        print(f"x.shape after deconv2_conv: {x.shape}")
+        
+        x = self.unpool1(x, indices1)
+        print(f"x.shape after unpool1: {x.shape}")
+        
+        x = self.deconv1_conv(x)
+        print(f"x.shape after deconv1_conv: {x.shape}")
+        
+        x = self.score(x)
+        print(f"x.shape after score: {x.shape}")
 
-        return fcn32, fcn16, fcn8
+        return x
+
 
 if __name__ == "__main__":
     model = DeconvNet(num_classes=21)
     input = torch.ones([1, 3, 224, 224])
-    fcn32, fcn16, fcn8 = model(input)
-    print(f"Final shapes - FCN32: {fcn32.shape}, FCN16: {fcn16.shape}, FCN8: {fcn8.shape}")
+    output = model(input)
+    print(f"Final shapes - output: {output.shape}")
