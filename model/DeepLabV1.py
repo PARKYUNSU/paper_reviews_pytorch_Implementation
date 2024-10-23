@@ -4,7 +4,7 @@ from model.VGG16_LargeFV import VGG16_LargeFV
 from utils.crf import DenseCRF
 
 class DeepLabV1(nn.Module):
-    def __init__(self, num_classes=21, input_size=321):
+    def __init__(self, num_classes=21, input_size=224):
         super(DeepLabV1, self).__init__()
         self.backbone = VGG16_LargeFV(num_classes=num_classes, input_size=input_size)
         self.crf = DenseCRF(iter_max=10, 
