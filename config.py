@@ -16,16 +16,10 @@ weight_decay = 0.0001
 num_epochs = 50
 lr_decay_epochs = 30
 
-def get_transforms(input_size=321):
+def get_transforms(input_size=224):
     
     image_transform = transforms.Compose([
         transforms.Resize((input_size, input_size)),
-        transforms.RandomResizedCrop(input_size, scale=(0.8, 1.0)),
-        transforms.RandomHorizontalFlip(),
-        transforms.RandomRotation(degrees=15),
-        transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2, hue=0.1),
-        transforms.RandomPerspective(distortion_scale=0.2, p=0.5),
-        transforms.GaussianBlur(kernel_size=(5, 5), sigma=(0.1, 2.0)),
         transforms.ToTensor(),
         transforms.Normalize(mean=pascal['mean'], std=pascal['std'])
     ])
