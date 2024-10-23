@@ -13,7 +13,7 @@ def main():
     device = config.device
 
     # Model
-    model = VGG16_LargeFV(num_classes=21, input_size=321).to(device)
+    model = VGG16_LargeFV(num_classes=21, input_size=224).to(device)
     
     # criterion, optimizer
     criterion = nn.CrossEntropyLoss(ignore_index=255).to(device)
@@ -23,8 +23,8 @@ def main():
     scaler = torch.cuda.amp.GradScaler()
 
     # Dataset Load
-    train_image_transform, train_mask_transform = config.get_transforms(input_size=321)
-    val_image_transform, val_mask_transform = config.get_transforms(input_size=321)
+    train_image_transform, train_mask_transform = config.get_transforms(input_size=224)
+    val_image_transform, val_mask_transform = config.get_transforms(input_size=224)
 
     train_dataset = PascalVOCSegmentationDataset(
         data_folder='/kaggle/working',  # 데이터 파일들이 저장된 경로
