@@ -65,8 +65,16 @@ class VGG16_FCN(nn.Module):
         )
 
         # Fully connected layers (converted to convolutions)
-        self.conv6 = nn.Conv2d(512, 4096, kernel_size=3, padding=1)
-        self.conv7 = nn.Conv2d(4096, 4096, kernel_size=1)
+        self.conv6 = nn.Sequential(
+            nn.Conv2d(512, 4096, kernel_size=1),
+            nn.ReLU(inplace=True),
+            nn.Dropout2d()
+        )
+        self.conv7 = nn.Sequential(
+            nn.Conv2d(4096, 4096, kernel_size=1),
+            nn.ReLU(inplace=True),
+            nn.Dropout2d()
+        )
         self.score = nn.Conv2d(4096, num_classes, kernel_size=1)
 
         # 추가: score를 7x7에서 14x14로 업샘플링
