@@ -1,1 +1,1 @@
-from .VGG16_FCN import VGG16_FCN
+from .vgg16_fpn import VGG16_FCN
