@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+# from torchsummary import summary
 
 class VGG16_FCN(nn.Module):
     def __init__(self, num_classes=21):
@@ -130,10 +131,8 @@ if __name__ == "__main__":
     print(f"Final shapes - FCN32: {fcn32.shape}, FCN16: {fcn16.shape}, FCN8: {fcn8.shape}")
 
 
-from torchsummary import summary
+# # 모델 정의
+# model = VGG16_FCN(num_classes=21).to('cpu')  # 모델을 GPU로 이동
 
-# 모델 정의
-model = VGG16_FCN(num_classes=21).to('cpu')  # 모델을 GPU로 이동
-
-# 모델 요약 정보 출력
-summary(model, input_size=(3, 224, 224))  # 입력 이미지 크기 (채널 수, 높이, 너비)
+# # 모델 요약 정보 출력
+# summary(model, input_size=(3, 224, 224))  # 입력 이미지 크기 (채널 수, 높이, 너비)
