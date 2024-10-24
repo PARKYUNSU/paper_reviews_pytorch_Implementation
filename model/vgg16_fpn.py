@@ -4,6 +4,8 @@ import torch.nn as nn
 class VGG16_FCN(nn.Module):
     def __init__(self, num_classes=21):
         super(VGG16_FCN, self).__init__()
+        
+        self.num_classes = num_classes
 
         self.features1 = nn.Sequential(
             nn.Conv2d(3, 64, kernel_size=3, stride=1, padding=1),
@@ -68,12 +70,12 @@ class VGG16_FCN(nn.Module):
         self.conv6 = nn.Sequential(
             nn.Conv2d(512, 4096, kernel_size=1),
             nn.ReLU(inplace=True),
-            nn.Dropout2d()  # [1, 4096, 7, 7]
+            nn.Dropout2d(p=0.5)  # [1, 4096, 7, 7]
         )
         self.conv7 = nn.Sequential(
             nn.Conv2d(4096, 4096, kernel_size=1),
             nn.ReLU(inplace=True),
-            nn.Dropout2d()  # [1, 4096, 7, 7]
+            nn.Dropout2d(p=0.5)  # [1, 4096, 7, 7]
         )
         self.score = nn.Conv2d(4096, num_classes, kernel_size=1)  # [1, 21, 7, 7]
 
@@ -109,10 +111,9 @@ class VGG16_FCN(nn.Module):
         
         # FCN-16s
         score2 = self.score_upsample(score)  # [1, 21, 14, 14]
-        fcn16 = self.deconv16(score2)  # [1, 21, 224, 224]
         score4 = self.score4(x4)  # [1, 21, 14, 14] 
-
         score4_1 = score4 + score2  # [1, 21, 14, 14]
+        fcn16 = self.deconv16(score4_1)  # [1, 21, 224, 224]
         
         # FCN-8s
         score3 = self.score3(x3)  # [1, 21, 28, 28]
@@ -127,3 +128,12 @@ if __name__ == "__main__":
     input = torch.ones([1, 3, 224, 224])
     fcn32, fcn16, fcn8 = model(input)
     print(f"Final shapes - FCN32: {fcn32.shape}, FCN16: {fcn16.shape}, FCN8: {fcn8.shape}")
+
+
+from torchsummary import summary
+
+# 모델 정의
+model = VGG16_FCN(num_classes=21).to('cpu')  # 모델을 GPU로 이동
+
+# 모델 요약 정보 출력
+summary(model, input_size=(3, 224, 224))  # 입력 이미지 크기 (채널 수, 높이, 너비)
