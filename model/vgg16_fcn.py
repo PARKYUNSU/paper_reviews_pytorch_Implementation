@@ -1,6 +1,5 @@
 import torch
 import torch.nn as nn
-# from torchsummary import summary
 
 class VGG16_FCN(nn.Module):
     def __init__(self, num_classes=21):
@@ -97,24 +96,34 @@ class VGG16_FCN(nn.Module):
     def forward(self, x):
         # Features extraction through VGG16
         x1 = self.features1(x)  # [1, 64, 112, 112]
+
         x2 = self.features2(x1)  # [1, 128, 56, 56]
+
         x3 = self.features3(x2)  # [1, 256, 28, 28]
+
         x4 = self.features4(x3)  # [1, 512, 14, 14]
+
         x5 = self.features5(x4)  # [1, 512, 7, 7]
+
 
         # Fully connected layers
         x6 = self.conv6(x5)  # [1, 4096, 7, 7]
+
         x7 = self.conv7(x6)  # [1, 4096, 7, 7]
+
         score = self.score(x7)  # [1, 21, 7, 7]
+
 
         # FCN-32s
         fcn32 = self.upscore32(score)  # [1, 21, 224, 224]
+
         
         # FCN-16s
         score2 = self.score_upsample(score)  # [1, 21, 14, 14]
         score4 = self.score4(x4)  # [1, 21, 14, 14] 
         score4_1 = score4 + score2  # [1, 21, 14, 14]
         fcn16 = self.deconv16(score4_1)  # [1, 21, 224, 224]
+
         
         # FCN-8s
         score3 = self.score3(x3)  # [1, 21, 28, 28]
@@ -122,17 +131,10 @@ class VGG16_FCN(nn.Module):
         score3_1 = score3 + score4_2  # [1, 21, 28, 28]
         fcn8 = self.deconv8(score3_1)  # [1, 21, 224, 224]
 
-        return fcn32, fcn16, fcn8
+
+        return fcn8
 
 if __name__ == "__main__":
     model = VGG16_FCN(num_classes=21)
     input = torch.ones([1, 3, 224, 224])
-    fcn32, fcn16, fcn8 = model(input)
-    print(f"Final shapes - FCN32: {fcn32.shape}, FCN16: {fcn16.shape}, FCN8: {fcn8.shape}")
-
-
-# # 모델 정의
-# model = VGG16_FCN(num_classes=21).to('cpu')  # 모델을 GPU로 이동
-
-# # 모델 요약 정보 출력
-# summary(model, input_size=(3, 224, 224))  # 입력 이미지 크기 (채널 수, 높이, 너비)
+    fcn8 = model(input)
