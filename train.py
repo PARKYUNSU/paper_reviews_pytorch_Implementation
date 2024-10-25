@@ -60,7 +60,7 @@ def validate_per_class_iou(model, val_loader, criterion, num_classes, device):
     for idx, iou in enumerate(ious):
         print(f"Class '{class_names[idx]}': IoU = {iou:.4f}")
 
-    # 최종 mIoU 계산
-    miou = iou_meter.avg
+    # 최종 mIoU 계산 (sum과 count를 이용해 직접 계산)
+    miou = iou_meter.sum / (iou_meter.count + 1e-10)  # NaN 방지를 위한 작은 값 추가
     print(f"Validation - mIoU: {miou:.4f}")
     return miou
