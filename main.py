@@ -9,10 +9,20 @@ from train import train, validate_per_class_iou
 
 import albumentations as A
 from albumentations.pytorch import ToTensorV2
+from albumentations import HorizontalFlip, RandomScale, ShiftScaleRotate, RandomBrightnessContrast
 
 # 트레이닝용 이미지 변환 (이미지 크기 통일)
 train_transform = A.Compose([
-    A.Resize(224, 224),  # 이미지 크기를 224x224로 고정
+    A.RandomScale(scale_limit=0.2, p=0.5),       # 이미지 크기를 80%~120% 범위에서 랜덤으로 조정
+    A.ShiftScaleRotate(shift_limit=0.0625,       # 약간의 이동 및 회전 (회전 각도와 이동을 작게 설정)
+                       scale_limit=0.1, 
+                       rotate_limit=15, 
+                       p=0.5),
+    A.HorizontalFlip(p=0.5),                     # 좌우 반전
+    A.RandomBrightnessContrast(brightness_limit=0.2,  # 밝기 및 대비 랜덤 조정
+                               contrast_limit=0.2, 
+                               p=0.5),
+    A.Resize(224, 224),                          # 이미지 크기를 224x224로 고정
     A.Normalize(mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225)),
     ToTensorV2(),
 ])
@@ -36,8 +46,8 @@ def main():
 
     # 파라미터
     epochs = 100
-    batch_size = 8
-    learning_rate = 1e-6
+    batch_size = 16
+    learning_rate = 1e-5
     num_classes = 21
     voc_root_2007 = '/kaggle/input/voc0712/VOC_dataset/VOCdevkit/VOC2007'
     voc_root_2012 = '/kaggle/input/voc0712/VOC_dataset/VOCdevkit/VOC2012'
@@ -62,7 +72,7 @@ def main():
     # 모델 초기화
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = VGG16_FCN(num_classes=num_classes).to(device)
-    optimizer = optim.Adam(model.parameters(), lr=learning_rate)
+    optimizer = optim.SGD(model.parameters(), lr=learning_rate, momentum=0.9, weight_decay=1e-4)
     criterion = CrossEntropyLoss()
     
     best_miou = float('-inf')  # mIoU를 초기화
