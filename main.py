@@ -4,7 +4,7 @@ import torch.optim as optim
 from torch.nn import CrossEntropyLoss
 
 from dataset import VOCDataset
-from model import VGG16_FCN
+from model import FCN32s
 from train import train, validate_per_class_iou
 
 import albumentations as A
@@ -71,7 +71,7 @@ def main():
 
     # 모델 초기화
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    model = VGG16_FCN(num_classes=num_classes).to(device)
+    model = FCN32s(num_classes=num_classes).to(device)
     optimizer = optim.SGD(model.parameters(), lr=learning_rate, momentum=0.9, weight_decay=1e-4)
     criterion = CrossEntropyLoss()
     
