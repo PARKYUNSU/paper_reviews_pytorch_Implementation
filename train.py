@@ -1,7 +1,8 @@
 import torch
 from tqdm import tqdm
-from utils import AverageMeter, intersectionAndUnionGPU
+from utils import AverageMeter
 from utils import calculate_mIoU
+
 VOC_CLASSES = ["background", "aeroplane", "bicycle", "bird", "boat", "bottle", "bus", "car", "cat", "chair", "cow", 
                "diningtable", "dog", "horse", "motorbike", "person", "potted plant", "sheep", "sofa", "train", "tvmonitor"]
 
@@ -27,7 +28,7 @@ def train(model, train_loader, optimizer, criterion, device):
     avg_loss = total_loss / len(train_loader)
     
     # tqdm을 이용한 출력
-    tqdm.write(f"Train Loss: {avg_loss:.4f}")
+    tqdm.write(f"Train Loss: {avg_loss:.7f}")
     return avg_loss
 
 
@@ -58,9 +59,9 @@ def validate_per_class_iou(model, val_loader, criterion, num_classes, device):
 
     # 클래스별 IoU 출력
     for idx, iou in enumerate(ious):
-        print(f"Class '{class_names[idx]}': IoU = {iou:.4f}")
+        print(f"Class '{class_names[idx]}': IoU = {iou:.7f}")
 
     # 최종 mIoU 계산 (sum과 count를 이용해 직접 계산)
     miou = iou_meter.sum / (iou_meter.count + 1e-10)  # NaN 방지를 위한 작은 값 추가
-    print(f"Validation - mIoU: {miou:.4f}")
+    print(f"Validation - mIoU: {miou:.7f}")
     return miou
