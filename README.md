@@ -6,28 +6,148 @@ https://arxiv.org/pdf/1412.7062
 저자 : Liang-Chieh Chen, George Papandreou, Iasonas Kokkinos, Kevin Murphy, Alan L. Yuille
 ---
 
-1. Introduction
-** Deep Convolutional Neural Networks ** (DCNN)은 컴퓨터 비전에서 큰 영향을 끼쳤습니다. 이로 인해 이미지 분류 성능이 크게 향상되었으나, 하지만 문제점이 있었습니다.
+## 1. Introduction
+**Deep Convolutional Neural Networks** (DCNN)은 image classification, object detection, fine-grained categorization 등 컴퓨터 비전의 여러 방면으로 시스템을 향상시켰습니다.
 
-우리가 목표로 하는 Semantic Segmentation(의미론적 분할)에서는 DCNN만으로는 부족합니다. DCNN은 분류 작업에 최적화되어 있어 이를 활용하려면 몇 가지 추가적인 작업이 필요합니다. DCNN도 Semantic Segmentation 작업을 위해서는 추가적인 요소가 필요합니다.
+이러한 성공의 주된 부분은 Image의 Spatial ‘insensitivity’ (invariance)으로 인해 단계적으로 학습할 수 있다는 점으로 볼 수 있겠습ㄴ디ㅏ. 그러나 이러한 Saptial Invariace는 자세 추정 및 Segmentation 등 정확한 위치 지정이 필요한 작업에서는 불 필요할 수 있습니다.
 
-그럼, DCNN을 활용해 어떻게 Semantic Segmentation을 구현할 수 있을까요? 고려해야 할 몇 가지 과제가 있습니다:
+논문에서는 2가지의 문제점을 거론합니다.
 
-해상도 축소: 특징 맵(feature map)의 해상도가 점점 줄어들면서 자세한 부분을 놓칠 수 있습니다.
-다중 스케일 객체 탐지: 서로 다른 크기의 객체를 인식하는 것이 어려워집니다.
-정확도 감소: 다운샘플링 과정에서 위치 정보가 불확실해집니다.
-1.1 해상도 축소 문제
-DCNN에서 다운샘플링은 보통 stride와 max-pooling으로 이루어지며, 이로 인해 최종적으로 사용 가능한 공간 해상도가 원본 이미지보다 현저히 작아집니다. 그 결과로, 고해상도의 상세한 분할이 어려워집니다.
+## 1.1 문제점
 
-이를 해결하기 위해, 일부 max-pooling 계층을 제거하고 대신 후속 컨볼루션 계층에서 업샘플링 필터를 사용하여 더 높은 샘플링 해상도로 특징 맵을 생성할 수 있습니다. 이 역할을 하는 것이 바로 Atrous(확장) 필터로, 효율적으로 넓은 공간을 탐색할 수 있게 해줍니다.
+**1) DCNN에서 수행되는 MaxPooling과 Stride로 인한 이미지 해상도 저하**
+ 
+ 특징 맵(feature map)의 해상도가 점점 줄어들면서 자세한 부분을 놓칠 수 있고, 서로 다른 크기의 객체를 인식하는 것이 어려워집니다.
 
-1.2 다중 스케일 객체의 존재
-DCNN에 이미지를 넣으면 여러 스케일의 필터들이 적용되며, 각 스케일의 특징이 추출됩니다. 하지만 이 과정에서 연산량이 크게 늘어나 속도 측면에서의 성능이 저하됩니다.
+**2) DCNN의 Spatial Invariance의 문제점**
+   
+다운샘플링 과정에서 위치 정보가 불확실해집니다. 이러한 특성 때문에, 정밀한 경계선 및 세부적인 위치를 못 찾게 됩니다.
 
-이를 해결하기 위해 제안된 방법이 Spatial Pyramid Pooling입니다. 다양한 유효 시야를 가진 필터들을 사용해 여러 스케일에서 객체와 유용한 맥락 정보를 포착합니다. 이때, 단순 리샘플링 대신 다중 병렬 Atrous 컨볼루션 계층을 사용하는 것이 효율적이며 이를 **Atrous Spatial Pyramid Pooling(ASPP)**이라 부릅니다.
+논문의 저자는 2가지의 문제점을 해결하기 위해 2가지 해결방안을 제안합니다.
+
+## 1.2 해결방안
+
+**1) Atrous Convolution (Dilation convolution)**
+
+**2) Fully-Connected Conditional Random Field / Dense Conditional Random Field (CRF)**
+
+
+## 2. Atrous Convolution (Dilation convolution)
+
+DCNN의 첫 번째 문제인, Downsampling은 MaxPooling과 Stride로 인해 깊은 층으로 가면 갈 수록 이미지 해상도 저하 문제를 일으킵니다.
+
+논문에서는 이 문제점을 해결하기 위해, 일부 max-pooling 계층을 제거하고 대신 **Dilation convolution**을 도입하여 해상도를 유지하면서 더 넒은 수용 영역을 확보합니다.
+
+Dilation convolution의 설명은 다음과 같습니다.
+
+dilation을 한 마디로 말하자면 convolution 커널의 간격을 의미합니다.
+
+dilation이 2라면 커널 사이의 간격이 2가 되고, 커널의 크기가 (3,3)이라면 (5,5) 커널과 동일한 넓이가 됩니다.
+
+필터 내부에 zero padding을 추가해 강제로 receptive field를 늘리게 됩니다.
+
+즉, weight가 있는 부분을 제외한 나머지 부분은 전부 0으로 채워지게 됩니다.
+
+기존의 receptive field의 한계를 극복하고 좀 더 넓은 간격의 커널을 적은 리소스로 사용할 때 많이 활용됩니다.
+
+###### 케라스에서는 dilation rate로 파이토치에서는 dilation으로 입력을 받는다.
+
+![image](https://github.com/user-attachments/assets/b1a3b425-8910-4450-94c2-2b1047746fd0)
+
+## 2.1 Dilation convolution의 계산 방법
+
+아래 그림에서 파란색 weight가 있는 픽셀 사이에 0이 들어간다고 생각하면 되는데, 여기서 rate parameter = 2이면 계산은 다음과 같다.
+k = 3 (일반적인 CNN 커널사이즈 3)
+r = 2
+
+$k_e$ = $k$ + ($k$ - 1)($r$ - 1)
+5 = 3 + (3 - 1)(2 - 1)
+$k_e$ = 5 (5 X 5 커널)
+
+![image](https://github.com/user-attachments/assets/6bcc6fd3-0774-482f-8a70-5a9176d47b0d)
+
+![image](https://github.com/user-attachments/assets/7b0dfabe-4625-49e4-b01a-05dae4273722)
+
+
+논문에서는 Dilation convolution를 Conv5와 FC6에서 rate=2, rat2 12로 지정해서 사용했다.
+
+## 2.2 Bilinear Intrepolation
+
+마지막은 원본 해상도로 복구하기 위해서 upsampling은 Bilinear Intrepolation을 사용했다.
+
+Bilinear Intrepolation 선형 보간법으로 작은 이미지를 부드럽게 확장하는 효과가 있다.
+
+![image](https://github.com/user-attachments/assets/02bd2f7f-c6cf-48f8-a684-3478153c44e5)
+
+
+
+## 3. Fully-Connected Conditional Random Field / Dense Conditional Random Field (CRF)
+
+두 번째 문제는, Spatial Invariance입니다. Image Classification 같은 작업에서는 Spatial Transformation 에 대해 Invariance해야합니다.
+
+Spatial Invariance으로 인해 손실된 공간적 정보를 복원하고, 객체의 경계선을 더 정교하게 표현할 수 있습니다.
+
+논문에서는 10번의 CRF 과정을 적용하여 세밀한 경계선을 복원하고 정확한 위치 정보를 보완 합니다.
+
+![image](https://github.com/user-attachments/assets/e5a4e799-1f4c-4ba8-9f56-189dccbe80bd)
+
+
+## 3.1 Spatial Invariance
+
+Spatial Invariance는 어떤 이미제 물체가 나타나면 그 위치에 관계없이 감죄 된다는 의미입니다.
+
+그로인해서, 고양이가 이미지 왼쪽 위, 오른쪽 위 등 어느 곳에 있든지 위치에 상관없이 고양이로 인식하는 것을 의미합니다.
+
+![image](https://github.com/user-attachments/assets/de58e08a-7f32-408f-a20d-d9be5e8e2897)
+
+
+## 3.2 CRF
+
+**CRF** 는 2가지 과정으로 이루어져 있습니다.
+
+## 3.2.1 Unray Term
+
+  개별 픽셀의 클래스 확률(점수)을 할당 받습니다. 즉, 각 픽셀이 특정 클래스에 속할 가능성을 나타냅니다. ex) 고양이인지 배경인지 등의 확률
+
+## 3.2.2 Pairwise Term
+
+   픽셀간의 상호작용을 담당하는 과정으로, 근처의 픽셀들이 비슷한 레이블을 가지도록 도와줍니다.
+   pairwise에서도 2가지 방식이 있습니다. 이 두 방식은 함께 적용되어 객체의 세부적인 경계를 표현하도록 도와줍니다.
+
+   **3.2.2.1 Gaussian Pairwise Term**
+
+   색상, 위치, 밝기 등의 외형적 유사성을 체크합니다. 두 픽셀이 색상이나 위치가 유사하면 같은 클래스로 분류되도록 유도하고, 차이가 크면 서로 다른 클래스로 나뉘도록 합니다. 이 방식을 통해 이미지 내 경계가 뚜렷한 영역을 잘 구분할 수 있도록 도와줍니다.
+   
+   **3.2.2.2 Smoothness Pairwise Term**
+
+   인접한 픽셀이 같은 클래스로 분류되도록 유도합니다. 두 픽셀이 가까울수록 같은 클래스로 분류될 가능성이 높아지며, 경계선 주변의 픽셀을 부드럽게 연결하는 효과를 줍니다.
+   
+## 3.2.3 수식
+
+$x$ 는 Pixels에 대한 label assignment입니다. Unray Term은 $θ_i(x_i)$ = $-logP(x_i)$를 사용하며 $P(x_i)$는 DCNN으로 계산된 개별 픽셀의 클래스 확률입니다.
+
+$θ_{i,j}(x_i, x_j)$ = $µ(x_i, x_j)Σ^K_{m=1}w_m⋅k^m(f_i, f_j)$ 이며 $x_i$와 $x_j$이 일치하지 않을 때 $µ(x_i ,x_j)$$=$$1$ 이고 아니면 0이다(즉 Potts Model). pixel i, j가 얼마나 멀리 있든 각 pair에 대한 하나의 pairwise term이 있다. 즉, 모델의
+
+
+![image](https://github.com/user-attachments/assets/e6b97a48-6ad2-49ba-b976-e20bbc563c27)
+
+
+
+
+​
+
+
+
+​
+
+
+
+
+
+
 
 1.3 정확도 감소 문제
-Semantic Segmentation에서 픽셀 단위의 정밀한 예측이 필요하지만, DCNN을 기반으로 하면 다운샘플링 과정에서 정밀도가 떨어질 수 있습니다. 이를 보완하기 위해 **CRF(Conditional Random Fields)**가 활용됩니다. CRF는 각 픽셀의 클래스 점수를 주변 픽셀과의 상호작용을 통해 결합하여 더 정확한 예측을 가능하게 합니다.
+
 
 2. Method
 논문의 저자들은 3가지 방법을 제안했습니다. 이들 각각에 대해 더 깊이 살펴보겠습니다.
@@ -37,49 +157,8 @@ Atrous Convolution 방식은 해상도를 줄이지 않으면서 특징을 추�
 
 이때, rate parameter를 조정하여 픽셀 간의 간격을 두고 필터를 적용함으로써 연산량을 증가시키지 않으면서 해상도를 유지하는 Dense feature extraction이 가능합니다.
 
-2.2 ASPP를 활용한 다중 스케일 이미지 표현
-ASPP(Atrous Spatial Pyramid Pooling)는 다양한 rate 값의 여러 Atrous Convolution 계층을 병렬로 적용하여 여러 스케일에서 객체와 이미지를 탐지할 수 있도록 합니다.
-
 이는 R-CNN의 Spatial Pyramid Pooling에서 영감을 얻은 방식으로, 각기 다른 스케일의 Atrous Convolution 계층이 병렬로 적용된 후 각각의 특징들이 결합됩니다.
 
 2.3 정확한 경계 복구를 위한 CRF 적용
 DCNN을 통해 얻게 된 특징 맵을 Bilinear Interpolation으로 원본 이미지 크기로 확대한 후, CRF를 사용해 픽셀 단위의 정밀도를 높입니다. CRF는 각 픽셀의 위치와 색상을 기준으로 주변 픽셀과의 상호작용을 통해 비슷한 컬러를 가진 인접 픽셀에 동일한 레이블을 부여함으로써 더욱 정확한 경계 복구를 가능하게 합니다.
 
-Dilation은 convolutional layer에 있는 파라미터로
-
-케라스에서는 dilation rate로 파이토치에서는 dilation으로 입력을 받는다.
-
-
-
-dilation을 한 마디로 말하자면 convolution 커널의 간격을 의미한다.
-
-![image](https://github.com/user-attachments/assets/b1a3b425-8910-4450-94c2-2b1047746fd0)
-출처: https://www.semanticscholar.org/paper/Deep-Dilated-Convolution-on-Multimodality-Time-for-Xi-Hou/afadf82529110fadcbbe82671d35a83f334ca242
-
-​
-
-dilation이 2라면 커널 사이의 간격이 2가 되는 것이고, 커널의 크기가 (3,3)이라면 (5,5) 커널과 동일한 넓이가 되는 것이다.
-
-​
-
-필터 내부에 zero padding을 추가해 강제로 receptive field를 늘린다.
-
-즉, weight가 있는 부분을 제외한 나머지 부분은 전부 0으로 채워진다.
-
-​
-
-기존의 receptive field의 한계를 극복하고 좀 더 넓은 간격의 커널을 적은 리소스로 사용할 때 많이 활용된다.
-
-​
-
-이 파라미터는 wavenet 같은 유명한 신경망을 구현할 때도 많이 활용된다.
-
-1. Mixed Precision Training Ole!?
-   대부분의 deep learning framework(eg. PyTorch, TensorFlow)들은 모델을 training할 때 float32(FP32) data type을 사 용하게 됩니다. 즉, 모델의 weight와 input data가 모두 FP32(32bit)의 data type을 가진다는 뜻입니다. 이와 다르게 Mixed-p recision training은 single-precision(FP32)와 half-precision(FP16) format을 결합하여 사용하여 모델을 training하 는 방식입니다.
-   (FP16 data type은 FP32와 다르게 16bit만을 사용하게 됩니다.)
-   Mixed-precision training방식을 통해 다음과 같은 장점을 가집니다.
-   • FP32로만 training한 경우와 같은 accuracy 성능을 도출
-   • Training time이 줄음
-   • Memory 사용량이 줄음
-   • 이로 인해 더 큰 batch size, model, input을 사용 가능하게 함
-   Mixed-precision training은 NVIDIA에 의해 처음 제안되었고 Automatic Mixed Precision(AMP)라는 feature를 개발하였습 니다. AMP feature는 특정 GPU operation을 FP32에서 mived precision으로 자동으로 바꿔주었으며 이는 performance를 향상시키면서 accuracy는 유지하는 효과를 가져왔습니다.
