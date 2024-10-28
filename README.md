@@ -11,11 +11,11 @@ https://arxiv.org/pdf/1412.7062
 ## 1. Introduction
 **Deep Convolutional Neural Networks** (DCNN)은 image classification, object detection, fine-grained categorization 등 컴퓨터 비전의 여러 방면으로 시스템을 향상시켰습니다.
 
-이러한 성공의 주된 부분은 Image의 Spatial invariance으로 인해 단계적으로 학습할 수 있다는 점으로 볼 수 있겠습니다. 
-
-그러나 이러한 Saptial Invariace는 자세 추정 및 Segmentation 등 정확한 위치 지정이 필요한 작업에서는 불 필요할 수 있습니다.
-
-논문에서는 2가지의 문제점을 거론합니다.
+   이러한 성공의 주된 부분은 Image의 Spatial invariance으로 인해 단계적으로 학습할 수 있다는 점으로 볼 수 있겠습니다. 
+   
+   그러나 이러한 Saptial Invariace는 자세 추정 및 Segmentation 등 정확한 위치 지정이 필요한 작업에서는 불 필요할 수 있습니다.
+   
+   논문에서는 2가지의 문제점을 거론합니다.
 
 ## 1.1 문제점
 
