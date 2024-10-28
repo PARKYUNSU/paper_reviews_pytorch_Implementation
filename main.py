@@ -46,15 +46,9 @@ for i in test_files:
 
 print('ok')
 
-# 클래스 딕셔너리 로드 및 변환 사전 생성
-class_dict_path = "/kaggle/input/camvid/CamVid/class_dict.csv"
-class_dict = load_class_dict(class_dict_path)
-rgb_to_label_dict, label_to_rgb_dict = create_conversion_dicts(class_dict)
-
-# 데이터셋 생성 시 rgb_to_label_dict 전달
-train_dataset = CamVidDataset(img_dir=train_dir, label_dir=train_labels_dir, augment=True, rgb_to_label_dict=rgb_to_label_dict)
-val_dataset = CamVidDataset(img_dir=val_dir, label_dir=val_labels_dir, rgb_to_label_dict=rgb_to_label_dict)
-test_dataset = CamVidDataset(img_dir=test_dir, label_dir=test_labels_dir, rgb_to_label_dict=rgb_to_label_dict)
+train_dataset = CamVidDataset(img_dir=train_dir, label_dir=train_labels_dir)
+val_dataset = CamVidDataset(img_dir=val_dir, label_dir=val_labels_dir)
+test_dataset = CamVidDataset(img_dir=test_dir, label_dir=test_labels_dir)
 
 train_loader = DataLoader(train_dataset, batch_size=4, shuffle=True)
 val_loader = DataLoader(val_dataset, batch_size=4, shuffle=False)
@@ -77,7 +71,7 @@ model, history = train_model(
     num_epochs=100,
     device=device,
     patience=5,
-    delta=0.01
+    delta=0.01,
 )
 
 # 학습 결과 시각화
