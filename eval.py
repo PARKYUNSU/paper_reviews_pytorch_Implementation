@@ -44,5 +44,4 @@ def evaluate_model(model, dataloader, device, num_classes):
     print(f'Recall: {recall:.4f}')
     print(f'F1-Score: {f1:.4f}')
 
-    # 6개의 성능 지표 반환
     return avg_pixel_acc, accuracy, iou, precision, recall, f1
