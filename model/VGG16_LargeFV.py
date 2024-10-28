@@ -87,7 +87,7 @@ class VGG16_LargeFV(nn.Module):
         x = self.fc7(x)
         x = self.classifier(x)
 
-        # Upsampling
+        # Upsampling (input에 맞게 자동으로 업샘플링, 선형보간법)
         x = F.interpolate(x, size=(self.input_size, self.input_size), mode='bilinear', align_corners=True)
         return x
 
