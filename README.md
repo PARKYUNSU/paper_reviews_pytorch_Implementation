@@ -1,9 +1,10 @@
 # DeepLabV1
 ---
-Semantic Image Segmentation with Deep Convolutional Nets and Fully Connected CRFs
-https://arxiv.org/pdf/1412.7062
+"Semantic Image Segmentation with Deep Convolutional Nets and Fully Connected CRFs"
 
-Liang-Chieh Chen, George Papandreou, Iasonas Kokkinos, Kevin Murphy, Alan L. Yuille
+- Liang-Chieh Chen, George Papandreou, Iasonas Kokkinos, Kevin Murphy, Alan L. Yuille
+
+https://arxiv.org/pdf/1412.7062
 
 ---
 
