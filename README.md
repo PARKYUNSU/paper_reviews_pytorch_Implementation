@@ -6,30 +6,34 @@ https://arxiv.org/pdf/1412.7062
 저자 : Liang-Chieh Chen, George Papandreou, Iasonas Kokkinos, Kevin Murphy, Alan L. Yuille
 ---
 
+
+
 ## 1. Introduction
 **Deep Convolutional Neural Networks** (DCNN)은 image classification, object detection, fine-grained categorization 등 컴퓨터 비전의 여러 방면으로 시스템을 향상시켰습니다.
 
-이러한 성공의 주된 부분은 Image의 Spatial ‘insensitivity’ (invariance)으로 인해 단계적으로 학습할 수 있다는 점으로 볼 수 있겠습ㄴ디ㅏ. 그러나 이러한 Saptial Invariace는 자세 추정 및 Segmentation 등 정확한 위치 지정이 필요한 작업에서는 불 필요할 수 있습니다.
+이러한 성공의 주된 부분은 Image의 Spatial invariance으로 인해 단계적으로 학습할 수 있다는 점으로 볼 수 있겠습니다. 
+
+그러나 이러한 Saptial Invariace는 자세 추정 및 Segmentation 등 정확한 위치 지정이 필요한 작업에서는 불 필요할 수 있습니다.
 
 논문에서는 2가지의 문제점을 거론합니다.
 
 ## 1.1 문제점
 
-**1) DCNN에서 수행되는 MaxPooling과 Stride로 인한 이미지 해상도 저하**
+### **1) DCNN에서 수행되는 MaxPooling과 Stride로 인한 이미지 해상도 저하**
  
- 특징 맵(feature map)의 해상도가 점점 줄어들면서 자세한 부분을 놓칠 수 있고, 서로 다른 크기의 객체를 인식하는 것이 어려워집니다.
+ = 특징 맵(feature map)의 해상도가 점점 줄어들면서 자세한 부분을 놓칠 수 있고, 서로 다른 크기의 객체를 인식하는 것이 어려워집니다.
 
-**2) DCNN의 Spatial Invariance의 문제점**
+### **2) DCNN의 Spatial Invariance의 문제점**
    
-다운샘플링 과정에서 위치 정보가 불확실해집니다. 이러한 특성 때문에, 정밀한 경계선 및 세부적인 위치를 못 찾게 됩니다.
+- 다운샘플링 과정에서 위치 정보가 불확실해집니다. 이러한 특성 때문에, 정밀한 경계선 및 세부적인 위치를 못 찾게 됩니다.
 
 논문의 저자는 2가지의 문제점을 해결하기 위해 2가지 해결방안을 제안합니다.
 
 ## 1.2 해결방안
 
-**1) Atrous Convolution (Dilation convolution)**
+### **1) Atrous Convolution (Dilation convolution)**
 
-**2) Fully-Connected Conditional Random Field / Dense Conditional Random Field (CRF)**
+### **2) Fully-Connected Conditional Random Field / Dense Conditional Random Field (CRF)**
 
 
 ## 2. Atrous Convolution (Dilation convolution)
@@ -56,9 +60,11 @@ dilation이 2라면 커널 사이의 간격이 2가 되고, 커널의 크기가 
 
 ## 2.1 Dilation convolution의 계산 방법
 
-아래 그림에서 파란색 weight가 있는 픽셀 사이에 0이 들어간다고 생각하면 되는데, 여기서 rate parameter = 2이면 계산은 다음과 같다.
-k = 3 (일반적인 CNN 커널사이즈 3)
-r = 2
+아래 그림에서 파란색 weight가 있는 픽셀 사이에 0이 들어간다고 생각하면 되는데, 여기서 rate parameter = 2이면 계산은 다음과 같습니다.
+
+$k$ = 3 (일반적인 CNN 커널사이즈 3)
+
+$r$ = 2
 
 $k_e$ = $k$ + ($k$ - 1)($r$ - 1)
 5 = 3 + (3 - 1)(2 - 1)
