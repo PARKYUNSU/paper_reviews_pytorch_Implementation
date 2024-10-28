@@ -1,92 +1,88 @@
 import torch
-from torch.utils.data import DataLoader, ConcatDataset
-import torch.optim as optim
-from torch.nn import CrossEntropyLoss
+from torch.utils.data import DataLoader
+import torch.nn as nn
+from dataset import *
+from model import VGG16_FCN, init_weights
+from train import train_model, plot_metrics, visualize_segmentation  # 시각화 함수 추가
+from evaluation import evaluate_model  # calculate_metrics 제거
+import os
 
-from dataset import VOCDataset
-from model import FCN32s
-from train import train, validate_per_class_iou
+# 데이터셋 경로 설정
+base_dir = '/kaggle/input/camvid/CamVid/'
+train_dir = base_dir + 'train'
+train_labels_dir = base_dir + 'train_labels'
+val_dir = base_dir + 'val'
+val_labels_dir = base_dir + 'val_labels'
+test_dir = base_dir + 'test'
+test_labels_dir = base_dir + 'test_labels'
 
-import albumentations as A
-from albumentations.pytorch import ToTensorV2
-from albumentations import HorizontalFlip, RandomScale, ShiftScaleRotate, RandomBrightnessContrast
+# 파일 리스트 가져오기
+train_files = os.listdir(train_dir)
+train_labels_files = os.listdir(train_labels_dir)
+val_files = os.listdir(val_dir)
+val_labels_files = os.listdir(val_labels_dir)
+test_files = os.listdir(test_dir)
+test_labels_files = os.listdir(test_labels_dir)
 
-# 트레이닝용 이미지 변환 (이미지 크기 통일)
-train_transform = A.Compose([
-    A.RandomScale(scale_limit=0.2, p=0.5),       # 이미지 크기를 80%~120% 범위에서 랜덤으로 조정
-    A.ShiftScaleRotate(shift_limit=0.0625,       # 약간의 이동 및 회전 (회전 각도와 이동을 작게 설정)
-                       scale_limit=0.1, 
-                       rotate_limit=15, 
-                       p=0.5),
-    A.HorizontalFlip(p=0.5),                     # 좌우 반전
-    A.RandomBrightnessContrast(brightness_limit=0.2,  # 밝기 및 대비 랜덤 조정
-                               contrast_limit=0.2, 
-                               p=0.5),
-    A.Resize(224, 224),                          # 이미지 크기를 224x224로 고정
-    A.Normalize(mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225)),
-    ToTensorV2(),
-])
+# 파일 정렬
+train_files.sort()
+train_labels_files.sort()
+val_files.sort()
+val_labels_files.sort()
+test_files.sort()
+test_labels_files.sort()
 
-# 검증용 이미지 변환 (이미지 크기 통일)
-val_transform = A.Compose([
-    A.Resize(224, 224),  # 이미지 크기를 224x224로 고정
-    A.Normalize(mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225)),
-    ToTensorV2(),
-])
+# 데이터셋 파일 수 검증
+assert len(train_files) == len(train_labels_files) == 369
+assert len(val_files) == len(val_labels_files) == 100
+assert len(test_files) == len(test_labels_files) == 232
 
+for i in train_files:
+    assert i[:-4] + '_L.png' in train_labels_files, f'{i} not found'
+for i in val_files:
+    assert i[:-4] + '_L.png' in val_labels_files, f'{i} not found'
+for i in test_files:
+    assert i[:-4] + '_L.png' in test_labels_files, f'{i} not found'
 
-def main():
-    # CUDA 사용 가능 여부 확인
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    print(f"Using device: {device}")
-    if device.type == "cuda":
-        print(f"Number of CUDA devices: {torch.cuda.device_count()}")
-        print(f"Current device: {torch.cuda.current_device()}")
-        print(f"Device name: {torch.cuda.get_device_name(device)}")
+print('ok')
 
-    # 파라미터
-    epochs = 100
-    batch_size = 16
-    learning_rate = 1e-5
-    num_classes = 21
-    voc_root_2007 = '/kaggle/input/voc0712/VOC_dataset/VOCdevkit/VOC2007'
-    voc_root_2012 = '/kaggle/input/voc0712/VOC_dataset/VOCdevkit/VOC2012'
-    save_path = "/kaggle/working/best_model.pt"
-    
-    # 2007과 2012 데이터를 각각 로드
-    # VOCDataset 로드 시 변환 적용
-    train_dataset_2007 = VOCDataset(root=voc_root_2007, is_train=True, transform=train_transform)
-    train_dataset_2012 = VOCDataset(root=voc_root_2012, is_train=True, transform=train_transform)
-    val_dataset_2007 = VOCDataset(root=voc_root_2007, is_train=False, transform=val_transform)
-    val_dataset_2012 = VOCDataset(root=voc_root_2012, is_train=False, transform=val_transform)
+# 클래스 딕셔너리 로드 및 변환 사전 생성
+class_dict_path = "/kaggle/input/camvid/CamVid/class_dict.csv"
+class_dict = load_class_dict(class_dict_path)
+rgb_to_label_dict, label_to_rgb_dict = create_conversion_dicts(class_dict)
 
-    
-    # 두 데이터셋을 결합
-    train_dataset = ConcatDataset([train_dataset_2007, train_dataset_2012])
-    val_dataset = ConcatDataset([val_dataset_2007, val_dataset_2012])
+# 데이터셋 생성 시 rgb_to_label_dict 전달
+train_dataset = CamVidDataset(img_dir=train_dir, label_dir=train_labels_dir, augment=True, rgb_to_label_dict=rgb_to_label_dict)
+val_dataset = CamVidDataset(img_dir=val_dir, label_dir=val_labels_dir, rgb_to_label_dict=rgb_to_label_dict)
+test_dataset = CamVidDataset(img_dir=test_dir, label_dir=test_labels_dir, rgb_to_label_dict=rgb_to_label_dict)
 
-    # DataLoader 생성
-    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
-    val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False)
+train_loader = DataLoader(train_dataset, batch_size=4, shuffle=True)
+val_loader = DataLoader(val_dataset, batch_size=4, shuffle=False)
+test_loader = DataLoader(test_dataset, batch_size=4, shuffle=False)
 
-    # 모델 초기화
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    model = FCN32s(num_classes=num_classes).to(device)
-    optimizer = optim.SGD(model.parameters(), lr=learning_rate, momentum=0.9, weight_decay=1e-4)
-    criterion = CrossEntropyLoss()
-    
-    best_miou = float('-inf')  # mIoU를 초기화
+# 모델 설정
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+model = VGG16_FCN(num_classes=32).to(device)
+model.apply(init_weights)
+criterion = nn.CrossEntropyLoss()
+optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
 
-    for epoch in range(epochs):
-        train_loss = train(model, train_loader, optimizer, criterion, device)
-        miou = validate_per_class_iou(model, val_loader, criterion, num_classes, device)
-        print(f"Epoch {epoch+1}/{epochs}, Train Loss: {train_loss:.4f}, mIoU: {miou:.4f}")
+# 모델 학습 및 조기 종료 설정
+model, history = train_model(
+    model,
+    train_loader,
+    val_loader,
+    criterion,
+    optimizer,
+    num_epochs=100,
+    device=device,
+    patience=5,
+    delta=0.01
+)
 
-        # mIoU를 기준으로 모델 저장
-        if miou > best_miou:
-            best_miou = miou
-            print(f"New best model found at epoch {epoch+1}. Saving model...")
-            torch.save(model.state_dict(), save_path)
+# 학습 결과 시각화
+plot_metrics(history)
 
-if __name__ == "__main__":
-    main()
+# 테스트 데이터셋을 사용한 모델 평가
+print("Evaluating on test set...")
+avg_pixel_acc, accuracy, iou, precision, recall, f1 = evaluate_model(model, test_loader, device, num_classes=32)
