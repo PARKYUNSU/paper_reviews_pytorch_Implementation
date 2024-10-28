@@ -11,11 +11,11 @@ https://arxiv.org/pdf/1412.7062
 ## 1. Introduction
 **Deep Convolutional Neural Networks** (DCNN)은 image classification, object detection, fine-grained categorization 등 컴퓨터 비전의 여러 방면으로 시스템을 향상시켰습니다.
 
-   - 이러한 성공의 주된 부분은 Image의 Spatial invariance으로 인해 단계적으로 학습할 수 있다는 점으로 볼 수 있겠습니다. 
+이러한 성공의 주된 부분은 Image의 Spatial invariance으로 인해 단계적으로 학습할 수 있다는 점으로 볼 수 있겠습니다. 
    
-     그러나 이러한 Saptial Invariace는 자세 추정 및 Segmentation 등 정확한 위치 지정이 필요한 작업에서는 불 필요할 수 있습니다.
+그러나 이러한 Saptial Invariace는 자세 추정 및 Segmentation 등 정확한 위치 지정이 필요한 작업에서는 불 필요할 수 있습니다.
    
-     논문에서는 2가지의 문제점을 거론합니다.
+논문에서는 2가지의 문제점을 거론합니다.
 
 ## 1.1 문제점
 
@@ -132,11 +132,11 @@ Spatial Invariance는 어떤 이미제 물체가 나타나면 그 위치에 관�
 
 <img src="https://github.com/user-attachments/assets/e6b97a48-6ad2-49ba-b976-e20bbc563c27" width="800">
 
-$x$ 는 Pixels에 대한 label assignment입니다. Unray Term은 $θ_i(x_i)$ = $-logP(x_i)$를 사용하며 $P(x_i)$는 DCNN으로 계산된 개별 픽셀의 클래스 확률입니다.
+   $x$ 는 Pixels에 대한 label assignment입니다. Unray Term은 $θ_i(x_i)$ = $-logP(x_i)$를 사용하며 $P(x_i)$는 DCNN으로 계산된 개별 픽셀의 클래스 확률입니다.
 
-$θ_{i,j}(x_i, x_j)$ = $µ(x_i, x_j)Σ^K_{m=1}w_m⋅k^m(f_i, f_j)$ 이며 $x_i$와 $x_j$이 일치하지 않을 때 $µ(x_i ,x_j)$ = $1$ 이고 아니면 0이다(즉 Potts Model). pixel $i$, $j$가 얼마나 멀리 있든 각 pair에 대한 하나의 pairwise term이 있다.
+   $θ_{i,j}(x_i, x_j)$ = $µ(x_i, x_j)Σ^K_{m=1}w_m⋅k^m(f_i, f_j)$ 이며 $x_i$와 $x_j$이 일치하지 않을 때 $µ(x_i ,x_j)$ = $1$ 이고 아니면 0이다(즉 Potts Model). pixel $i$, $j$가 얼마나 멀리 있든 각 pair에 대한 하나의 pairwise term이 있다.
 
-각 $K^m$은 Gaussian Kernel이고 Pixel $i$와 $j$로 부터 추출된 Features f에 의존하며 pararmeter &w_m&으로 weight가 된다. Bilateral position와 colore terms를 사용하면 kernel은 다음과 같습니다.
+   각 $K^m$은 Gaussian Kernel이고 Pixel $i$와 $j$로 부터 추출된 Features f에 의존하며 pararmeter &w_m&으로 weight가 된다. Bilateral position와 colore terms를 사용하면 kernel은 다음과 같습니다.
 
 
 <img src="https://github.com/user-attachments/assets/0210421c-ab67-4f29-911b-e22229fb3c9e" width="800">
