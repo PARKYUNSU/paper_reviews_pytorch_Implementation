@@ -142,6 +142,7 @@ $θ_{i,j}(x_i, x_j)$ = $µ(x_i, x_j)Σ^K_{m=1}w_m⋅k^m(f_i, f_j)$ 이며 $x_i$�
 <img src="https://github.com/user-attachments/assets/0210421c-ab67-4f29-911b-e22229fb3c9e" width="800">
 
 
+
 첫 번째 항 (appearance kernel): Gaussian Pairwise Term
 
 $w_1 \exp \left( -\frac{\|p_i - p_j\|^2}{2\sigma_\alpha^2} - \frac{\|I_i - I_j\|^2}{2\sigma_\beta^2} \right)$
