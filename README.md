@@ -29,11 +29,9 @@ https://arxiv.org/pdf/1412.7062
 
 논문의 저자는 2가지의 문제점을 해결하기 위해 2가지 해결방안을 제안합니다.
 
-## 1.2 해결방안
+- 1) Atrous Convolution (Dilation convolution)
 
-### **1) Atrous Convolution (Dilation convolution)**
-
-### **2) Fully-Connected Conditional Random Field / Dense Conditional Random Field (CRF)**
+- 2) Fully-Connected Conditional Random Field / Dense Conditional Random Field (CRF)
 
 
 ## 2. Atrous Convolution (Dilation convolution)
