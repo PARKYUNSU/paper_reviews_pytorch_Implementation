@@ -3,7 +3,8 @@
 Semantic Image Segmentation with Deep Convolutional Nets and Fully Connected CRFs
 https://arxiv.org/pdf/1412.7062
 
-저자 : Liang-Chieh Chen, George Papandreou, Iasonas Kokkinos, Kevin Murphy, Alan L. Yuille
+Liang-Chieh Chen, George Papandreou, Iasonas Kokkinos, Kevin Murphy, Alan L. Yuille
+
 ---
 
 
