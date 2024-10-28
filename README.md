@@ -21,7 +21,7 @@ https://arxiv.org/pdf/1412.7062
 
 ### **1) DCNN에서 수행되는 MaxPooling과 Stride로 인한 이미지 해상도 저하**
  
- = 특징 맵(feature map)의 해상도가 점점 줄어들면서 자세한 부분을 놓칠 수 있고, 서로 다른 크기의 객체를 인식하는 것이 어려워집니다.
+ - 특징 맵(feature map)의 해상도가 점점 줄어들면서 자세한 부분을 놓칠 수 있고, 서로 다른 크기의 객체를 인식하는 것이 어려워집니다.
 
 ### **2) DCNN의 Spatial Invariance의 문제점**
    
