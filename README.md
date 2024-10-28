@@ -27,6 +27,8 @@ https://arxiv.org/pdf/1412.7062
    
 - 다운샘플링 과정에서 위치 정보가 불확실해집니다. 이러한 특성 때문에, 정밀한 경계선 및 세부적인 위치를 못 찾게 됩니다.
 
+---
+
 논문의 저자는 2가지의 문제점을 해결하기 위해 2가지 해결방안을 제안합니다.
 
 - 1) Atrous Convolution (Dilation convolution)
@@ -127,6 +129,12 @@ Spatial Invariance는 어떤 이미제 물체가 나타나면 그 위치에 관�
   - 2) Smoothness Pairwise Term**
 
        인접한 픽셀이 같은 클래스로 분류되도록 유도합니다. 두 픽셀이 가까울수록 같은 클래스로 분류될 가능성이 높아지며, 경계선 주변의 픽셀을 부드럽게 연결하는 효과를 줍니다.
+
+
+<img src="https://github.com/user-attachments/assets/8fdbdbe1-1953-44fd-8378-08f3b89e7b8e" width="800">
+
+<img src="https://github.com/user-attachments/assets/efd9bc5d-e4f0-45da-924b-0d5392c664bf" width="800">
+
    
 ## 3.2.1 수식
 
@@ -156,4 +164,9 @@ Spatial Invariance는 어떤 이미제 물체가 나타나면 그 위치에 관�
    
      오른쪽 항은 위치 정보만을 고려하며, 인접한 픽셀들이 같은 클래스로 분류되도록 유도합니다.
 
+## 4. DeeplabV1 동작 방식
+
+Input > DCNN(Deep Convolutional Neural Network) > Coarse Socre Map > Upsampling(Bilinear Interpolation) > CRF > Output
+
+<img src="https://github.com/user-attachments/assets/6706e409-d0d7-4aa2-a600-f74131ca4045" width="800">
 
