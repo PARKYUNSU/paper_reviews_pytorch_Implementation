@@ -3,11 +3,11 @@ from torch.utils.data import DataLoader
 import torch.nn as nn
 from dataset import *
 from model import VGG16_FCN, init_weights
-from train import train_model, plot_metrics, visualize_segmentation  # 시각화 함수 추가
-from evaluation import evaluate_model  # calculate_metrics 제거
+from train import train_model, plot_metrics
+from evaluation import evaluate_model
 import os
 
-# 데이터셋 경로 설정
+# 데이터셋 경로
 base_dir = '/kaggle/input/camvid/CamVid/'
 train_dir = base_dir + 'train'
 train_labels_dir = base_dir + 'train_labels'
@@ -16,7 +16,7 @@ val_labels_dir = base_dir + 'val_labels'
 test_dir = base_dir + 'test'
 test_labels_dir = base_dir + 'test_labels'
 
-# 파일 리스트 가져오기
+# 파일 lists
 train_files = os.listdir(train_dir)
 train_labels_files = os.listdir(train_labels_dir)
 val_files = os.listdir(val_dir)
@@ -24,7 +24,7 @@ val_labels_files = os.listdir(val_labels_dir)
 test_files = os.listdir(test_dir)
 test_labels_files = os.listdir(test_labels_dir)
 
-# 파일 정렬
+# 파일 sorting
 train_files.sort()
 train_labels_files.sort()
 val_files.sort()
@@ -54,14 +54,14 @@ train_loader = DataLoader(train_dataset, batch_size=4, shuffle=True)
 val_loader = DataLoader(val_dataset, batch_size=4, shuffle=False)
 test_loader = DataLoader(test_dataset, batch_size=4, shuffle=False)
 
-# 모델 설정
+# 설정
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model = VGG16_FCN(num_classes=32).to(device)
 model.apply(init_weights)
 criterion = nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
 
-# 모델 학습 및 조기 종료 설정
+# Train
 model, history = train_model(
     model,
     train_loader,
