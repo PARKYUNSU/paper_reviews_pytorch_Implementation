@@ -10,7 +10,7 @@ from PIL import Image
 def train_model(model, train_loader, val_loader, criterion, optimizer, num_epochs, device, patience, delta):
     model = model.to(device)
     history = {'train_loss': [], 'val_loss': [], 'train_acc': [], 'val_acc': []}
-    early_stopping = EarlyStopping(patience=patience, delta=delta)
+    # early_stopping = EarlyStopping(patience=patience, delta=delta)
 
     for epoch in range(num_epochs):
         start_time = time.time()
@@ -55,11 +55,11 @@ def train_model(model, train_loader, val_loader, criterion, optimizer, num_epoch
         if (epoch + 1) % 10 == 0:
             visualize_segmentation(model, val_loader, device, epoch + 1)
 
-        # 조기 종료 확인
-        early_stopping(val_loss)
-        if early_stopping.early_stop:
-            print("Early stopping triggered")
-            break
+        # # early stopping
+        # early_stopping(val_loss)
+        # if early_stopping.early_stop:
+        #     print("Early stopping triggered")
+        #     break
 
     return model, history
 
