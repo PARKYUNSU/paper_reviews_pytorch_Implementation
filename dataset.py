@@ -8,10 +8,9 @@ import pandas as pd
 
 class_dict_path = '/kaggle/input/camvid/CamVid/class_dict.csv'
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-# Load class dictionary
+
 class_dict: pd.DataFrame = pd.read_csv(class_dict_path)
 
-# Create conversion dictionaries
 rgb_to_label_dict: dict[tuple, int] = {
     (row['r'], row['g'], row['b']): idx
     for idx, row in class_dict.iterrows()
@@ -26,7 +25,6 @@ def rgb_to_label(image: torch.Tensor) -> torch.Tensor:
     width, height, _ = image.shape
     label_image = torch.zeros(width, height, device=device)
 
-    # Transformar para inteiro, se necessário, para garantir comparação correta
     image = (image * 255).int()
 
     for rgb, label in rgb_to_label_dict.items():
@@ -69,7 +67,7 @@ class CamVidDataset(Dataset):
 
     def __getitem__(self, idx):
         img_file = self.img_files[idx]
-        label_file = img_file.replace(".png", "_L.png")  # Supondo que o sufixo das máscaras seja '_L'
+        label_file = img_file.replace(".png", "_L.png")
 
         img_path = os.path.join(self.img_dir, img_file)
         label_path = os.path.join(self.label_dir, label_file)
@@ -80,23 +78,19 @@ class CamVidDataset(Dataset):
         img = self.transform(img)
         label = self.transform(label)
         
+        # augmentation
         if self.augment:
-            # Apply the same random transformations to both image and label
             if torch.rand(1) > 0.5:
                 img = transf_F.hflip(img)
                 label = transf_F.hflip(label)
             
-            # Pad the image and label with the same padding value (using a tuple)
-            img = transf_F.pad(img, (10, 10, 10, 10))  # padding on all sides
-            label = transf_F.pad(label, (10, 10, 10, 10))  # padding on all sides
+            img = transf_F.pad(img, (10, 10, 10, 10))
+            label = transf_F.pad(label, (10, 10, 10, 10))
         
-
-            # Apply the same cropping to both image and label
             i, j, h, w = transforms.RandomCrop.get_params(img, output_size=(360, 480))
             img = transf_F.crop(img, i, j, h, w)
             label = transf_F.crop(label, i, j, h, w)
             
-            # Color jitter only applies to the image
             img = transforms.ColorJitter(brightness=0.1, contrast=0, saturation=0, hue=0.2)(img)
         
         
