@@ -189,7 +189,7 @@ Input > DCNN(Deep Convolutional Neural Network) > Coarse Socre Map > Upsampling(
 
 
 
-### Backbobe: VGG16 Large Field of View with dilation convolutional
+### Backbone: VGG16 Large Field of View with dilation convolutional
 ```python
 import torch
 from torch import nn
