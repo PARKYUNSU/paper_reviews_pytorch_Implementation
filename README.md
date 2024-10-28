@@ -142,8 +142,7 @@ $θ_{i,j}(x_i, x_j)$ = $µ(x_i, x_j)Σ^K_{m=1}w_m⋅k^m(f_i, f_j)$ 이며 $x_i$�
 <img src="https://github.com/user-attachments/assets/0210421c-ab67-4f29-911b-e22229fb3c9e" width="800">
 
 
-
-첫 번째 항 (appearance kernel): Gaussian Pairwise Term
+- 첫 번째 항 (appearance kernel): Gaussian Pairwise Term
 
 $w_1 \exp \left( -\frac{\|p_i - p_j\|^2}{2\sigma_\alpha^2} - \frac{\|I_i - I_j\|^2}{2\sigma_\beta^2} \right)$
 
@@ -151,7 +150,7 @@ $w_1 \exp \left( -\frac{\|p_i - p_j\|^2}{2\sigma_\alpha^2} - \frac{\|I_i - I_j\|
 
    왼쪽 항은 위치와 색상 정보 모두를 고려하여 인접 픽셀의 유사성을 측정합니다. 유사한 색상과 가까운 위치에 있는 픽셀들은 같은 클래스로 분류되도록 유도합니다.
 
-두 번째 항 (smoothness kernel): Smoothness Pairwise Term**
+- 두 번째 항 (smoothness kernel): Smoothness Pairwise Term**
 
 $w_2 \exp \left( -\frac{\|p_i - p_j\|^2}{2\sigma_\gamma^2} \right)$
 
