@@ -2,10 +2,9 @@ import torch
 import time
 import matplotlib.pyplot as plt
 import random
-from metrics import compute_accuracy, compute_iou, compute_precision_recall_f1
 from dataset import label_to_rgb_tensor
 from early_stopping import EarlyStopping
-from PIL import Image
+
 
 def train_model(model, train_loader, val_loader, criterion, optimizer, num_epochs, device, patience, delta):
     model = model.to(device)
