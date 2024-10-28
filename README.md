@@ -381,14 +381,14 @@ class DenseCRF(object):
         # d : DenseCRF2D 객체 초기화 (이미지 크기 및 클래스 수 지정)
         d = dcrf.DenseCRF2D(W, H, C)
         
-        # Unary Energy 설정
+        # Unary Term 설정
         d.setUnaryEnergy(U)
         
-        # Pairwise Energy 추가: 가우시안 커널을 사용하여 공간적 관계를 고려
+        # Pairwise Term 추가: 가우시안 커널을 사용하여 공간적 관계를 고려
         # 공간적으로 가까운 픽셀들이 비슷한 클래스로 분류되도록 유도
         d.addPairwiseGaussian(sxy=self.pos_xy_std, compat=self.pos_w)
         
-        # Pairwise Energy 추가: 양방향 필터 사용 (공간적 거리 및 색상 정보를 동시에 고려)
+        # Pairwise Term 추가: 양방향 필터 사용 (공간적 거리 및 색상 정보를 동시에 고려)
         # 공간적으로 가깝고 색상이 비슷한 픽셀들이 같은 클래스로 분류되도록 유도        
         d.addPairwiseBilateral(
             sxy=self.bi_xy_std, # 거리 차이의 표준편차
