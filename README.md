@@ -190,8 +190,7 @@ Input > DCNN(Deep Convolutional Neural Network) > Coarse Socre Map > Upsampling(
 
 
 ### Backbobe: VGG16 Large Field of View with dilation convolutional
-```
-python
+```python
 import torch
 from torch import nn
 import torch.nn.functional as F
@@ -301,8 +300,7 @@ if __name__ == "__main__":
 
 
 ### DeeplabV1
-```
-python
+```python
 import torch
 import torch.nn as nn
 from model.VGG16_LargeFV import VGG16_LargeFV
@@ -326,8 +324,7 @@ class DeepLabV1(nn.Module):
 ```
 
 ### CRF
-```
-python
+```python
 #!/usr/bin/env python
 # coding: utf-8
 #
