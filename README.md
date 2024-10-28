@@ -10,8 +10,17 @@ Link to Paper:
 https://arxiv.org/pdf/1412.7062
 
 ---
+Table of Contents
 
+1. Introduction
+2. Atrous Convolution (Dilation convolution)
+3. Fully-Connected Conditional Random Field / Dense Conditional Random Field (CRF)
+4. DeeplabV1 동작 방식
+5. Code
+6. Experiment
+7. Result
 
+---
 
 ## 1. Introduction
 **Deep Convolutional Neural Networks** (DCNN)은 image classification, object detection, fine-grained categorization 등 컴퓨터 비전의 여러 방면으로 시스템을 향상시켰습니다.
@@ -175,3 +184,225 @@ Input > DCNN(Deep Convolutional Neural Network) > Coarse Socre Map > Upsampling(
 
 <img src="https://github.com/user-attachments/assets/6706e409-d0d7-4aa2-a600-f74131ca4045" width="800">
 
+
+## 5. Code
+
+
+
+### Backbobe: VGG16 Large Field of View with dilation convolutional
+```
+python
+import torch
+from torch import nn
+import torch.nn.functional as F
+
+class VGG16_LargeFV(nn.Module):
+    def __init__(self, num_classes=21, input_size=224, init_weights=True):
+        super(VGG16_LargeFV, self).__init__()
+        self.input_size = input_size
+        
+        self.features = nn.Sequential(
+            # Conv1
+            nn.Conv2d(3, 64, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(64),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(64, 64, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(64),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(kernel_size=3, stride=2, padding=1),
+
+            # Conv2
+            nn.Conv2d(64, 128, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(128),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(128, 128, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(128),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(kernel_size=3, stride=2, padding=1),
+
+            # Conv3
+            nn.Conv2d(128, 256, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(256),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(256, 256, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(256),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(256, 256, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(256),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(kernel_size=3, stride=2, padding=1),
+
+            # Conv4
+            nn.Conv2d(256, 512, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(512),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(512, 512, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(512),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(512, 512, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(512),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(kernel_size=3, stride=1, padding=1),
+
+            # Conv5 (Dilatied Convolution)
+            nn.Conv2d(512, 512, kernel_size=3, stride=1, padding=2, dilation=2),
+            nn.BatchNorm2d(512),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(512, 512, kernel_size=3, stride=1, padding=2, dilation=2),
+            nn.BatchNorm2d(512),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(512, 512, kernel_size=3, stride=1, padding=2, dilation=2),
+            nn.BatchNorm2d(512),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(kernel_size=3, stride=1, padding=1)
+        )
+
+        # Fully convolutional layers (fc6 and fc7)
+        self.fc6 = nn.Sequential(
+            nn.Conv2d(512, 1024, kernel_size=3, padding=12, dilation=12),
+            nn.ReLU(inplace=True),
+            nn.Dropout2d(0.5)
+        )
+        self.fc7 = nn.Sequential(
+            nn.Conv2d(1024, 1024, kernel_size=1),
+            nn.ReLU(inplace=True),
+            nn.Dropout2d(0.5)
+        )
+        
+        # Classification layer
+        self.classifier = nn.Conv2d(1024, num_classes, kernel_size=1)
+
+        if init_weights:
+            self._initialize_weights()
+
+    def forward(self, x):
+        x = self.features(x)
+        x = self.fc6(x)
+        x = self.fc7(x)
+        x = self.classifier(x)
+
+        # Upsampling (input에 맞게 자동으로 업샘플링, 선형보간법)
+        x = F.interpolate(x, size=(self.input_size, self.input_size), mode='bilinear', align_corners=True)
+        return x
+
+    def _initialize_weights(self):
+        for m in self.modules():
+            if isinstance(m, nn.Conv2d):
+                nn.init.kaiming_uniform_(m.weight, mode='fan_in', nonlinearity='relu')
+                if m.bias is not None:
+                    nn.init.constant_(m.bias, 0)
+
+if __name__ == "__main__":
+    model = VGG16_LargeFV()
+    input = torch.ones([2, 3, 224, 224])
+    output = model(input)
+    print(output.shape)
+```
+
+
+### DeeplabV1
+```
+python
+import torch
+import torch.nn as nn
+from model.VGG16_LargeFV import VGG16_LargeFV
+from utils.crf import DenseCRF
+
+class DeepLabV1(nn.Module):
+    def __init__(self, num_classes=21, input_size=224):
+        super(DeepLabV1, self).__init__()
+        self.backbone = VGG16_LargeFV(num_classes=num_classes, input_size=input_size)
+        self.crf = DenseCRF(iter_max=10, 
+                            pos_w=3, 
+                            pos_xy_std=3, 
+                            bi_w=5, 
+                            bi_xy_std=140, 
+                            bi_rgb_std=5)
+        
+    def forward(self, x):
+        x = self.backbone(x)
+        
+        return x
+```
+
+### CRF
+```
+python
+#!/usr/bin/env python
+# coding: utf-8
+#
+# Author: Kazuto Nakashima
+# URL:    https://kazuto1011.github.io
+# Date:   09 January 2019
+
+
+import numpy as np
+import pydensecrf.densecrf as dcrf
+import pydensecrf.utils as utils
+
+
+class DenseCRF(object):
+    def __init__(self, iter_max, pos_w, pos_xy_std, bi_w, bi_xy_std, bi_rgb_std):
+        """
+        DenseCRF 클래스 초기화.
+        
+        Args:
+        iter_max (int): CRF 추론 반복 횟수
+        pos_w (float): 가우시안 페어와이즈 항 가중치
+        pos_xy_std (float): 가우시안 필터에서 위치 차이 표준 편차 (spatial distance standard deviation)
+        bi_w (float): 양방향 필터 가중치
+        bi_xy_std (float): 양방향 필터에서 위치 차이 표준 편차
+        bi_rgb_std (float): 양방향 필터에서 색상 차이 표준 편차
+        """        
+        self.iter_max = iter_max
+        self.pos_w = pos_w
+        self.pos_xy_std = pos_xy_std
+        self.bi_w = bi_w
+        self.bi_xy_std = bi_xy_std
+        self.bi_rgb_std = bi_rgb_std
+
+    def __call__(self, image, probmap):
+        """
+        CRF 추론 수행. 입력 이미지와 모델의 소프트맥스 확률 맵을 사용해 픽셀 단위 클래스 확률을 계산.
+        
+        Args:
+        image (np.ndarray): 원본 이미지 (H, W, 3)
+        probmap (np.ndarray): 모델이 출력한 소프트맥스 확률 맵 (C, H, W) - 클래스별 확률
+
+        Returns:
+        Q (np.ndarray): CRF 후처리된 확률 맵 (C, H, W)
+        """
+        C, H, W = probmap.shape
+
+        # U : Unray Energy
+        U = utils.unary_from_softmax(probmap)
+        U = np.ascontiguousarray(U) # memory 레이아웃을 연속적인 배열로 변환 (CRF에 맞게 사용)
+
+        # 입력 이미지를 연속된 배열로 변환
+        image = np.ascontiguousarray(image)
+
+        # d : DenseCRF2D 객체 초기화 (이미지 크기 및 클래스 수 지정)
+        d = dcrf.DenseCRF2D(W, H, C)
+        
+        # Unary Energy 설정
+        d.setUnaryEnergy(U)
+        
+        # Pairwise Energy 추가: 가우시안 커널을 사용하여 공간적 관계를 고려
+        # 공간적으로 가까운 픽셀들이 비슷한 클래스로 분류되도록 유도
+        d.addPairwiseGaussian(sxy=self.pos_xy_std, compat=self.pos_w)
+        
+        # Pairwise Energy 추가: 양방향 필터 사용 (공간적 거리 및 색상 정보를 동시에 고려)
+        # 공간적으로 가깝고 색상이 비슷한 픽셀들이 같은 클래스로 분류되도록 유도        
+        d.addPairwiseBilateral(
+            sxy=self.bi_xy_std, # 거리 차이의 표준편차
+            srgb=self.bi_rgb_std, # 색깔 차이의 표준편차
+            rgbim=image, # 원본이미지
+            compat=self.bi_w # 양방향 필터 가중치
+        )
+        # Q : 확률 분포 (최종 CRF 추론 결과)
+        # 픽셀마다 각 클래스에 대한 확률 분포)
+        Q = d.inference(self.iter_max) # 추론 반복 횟수
+        Q = np.array(Q).reshape((C, H, W)) # C H W 재배열
+
+        return Q
+```
