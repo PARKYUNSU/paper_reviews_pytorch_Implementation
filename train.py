@@ -60,7 +60,7 @@ def train_model(model, train_loader, val_loader, criterion, optimizer, num_epoch
         if early_stopping.early_stop:
             print("Early stopping triggered")
             break
-        
+
     return model, history
 
 def validate_model(model, val_loader, criterion, device='cuda'):
@@ -102,15 +102,15 @@ def visualize_segmentation(model, val_loader, device, epoch):
     img = images[img_idx].cpu().numpy().transpose(1, 2, 0)
     label = labels[img_idx].cpu().numpy()
     pred = preds[img_idx].cpu().numpy()
-    pred_rgb = label_to_rgb_tensor(torch.tensor(pred), label_to_rgb_dict={}).cpu().numpy().transpose(1, 2, 0)
-    label_rgb = label_to_rgb_tensor(torch.tensor(label), label_to_rgb_dict={}).cpu().numpy().transpose(1, 2, 0)
+    pred_rgb = label_to_rgb_tensor(pred).cpu().numpy().transpose(1, 2, 0)
 
-    # 시각화 및 이미지 저장
     fig, axes = plt.subplots(1, 3, figsize=(15, 5))
     axes[0].imshow(img)
     axes[0].set_title('Original Image')
-    axes[1].imshow(label_rgb)
+    
+    axes[1].imshow(label_to_rgb_tensor(label).permute(1, 2, 0).cpu().numpy())
     axes[1].set_title('Ground Truth')
+
     axes[2].imshow(pred_rgb)
     axes[2].set_title('Predicted Mask')
 
@@ -120,6 +120,7 @@ def visualize_segmentation(model, val_loader, device, epoch):
     plt.close()
 
     print(f"Segmentation visualization saved at {output_path}")
+
 
 def plot_metrics(history, output_filename='/kaggle/working/training_metrics.png'):
     epochs = range(1, len(history['train_loss']) + 1)
