@@ -89,7 +89,7 @@ $k_e$ = 5 (5 X 5 커널)
 
 <img src="https://github.com/user-attachments/assets/7b0dfabe-4625-49e4-b01a-05dae4273722" width="600">
 
-논문에서는 Dilation convolution를 Conv5와 FC6에서 rate=2, rat2 12로 지정해서 사용했다.
+논문에서는 Dilation convolution를 Conv5와 FC6에서 rate=2, rate=12로 지정해서 사용했다.
 
 ## 2.2 Bilinear Intrepolation
 
