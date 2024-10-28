@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 
 class VGG16_FCN(nn.Module):
     def __init__(self, num_classes=21):
@@ -70,12 +71,12 @@ class VGG16_FCN(nn.Module):
         self.conv6 = nn.Sequential(
             nn.Conv2d(512, 4096, kernel_size=1),
             nn.ReLU(inplace=True),
-            nn.Dropout2d(p=0.5)  # [1, 4096, 7, 7]
+            nn.Dropout2d(0.5) # [1, 4096, 7, 7]
         )
         self.conv7 = nn.Sequential(
             nn.Conv2d(4096, 4096, kernel_size=1),
             nn.ReLU(inplace=True),
-            nn.Dropout2d(p=0.5)  # [1, 4096, 7, 7]
+            nn.Dropout2d(0.5) # [1, 4096, 7, 7]
         )
         self.score = nn.Conv2d(4096, num_classes, kernel_size=1)  # [1, 21, 7, 7]
 
@@ -118,13 +119,16 @@ class VGG16_FCN(nn.Module):
         # FCN-8s
         score3 = self.score3(x3)  # [1, 21, 28, 28]
         score4_2 = self.score_upsample2(score4_1)  # [1, 21, 28, 28]
+
+        # Adjust score4_2 to match the dimensions of score3
+        score4_2 = F.interpolate(score4_2, size=score3.shape[2:], mode='bilinear', align_corners=False)
+        
         score3_1 = score3 + score4_2  # [1, 21, 28, 28]
         fcn8 = self.deconv8(score3_1)  # [1, 21, 224, 224]
 
         return fcn8
 
-
-# 거중치 초기화 함수
+# Initialize weights function
 def init_weights(m):
     if isinstance(m, nn.Conv2d):
         nn.init.xavier_uniform_(m.weight)
@@ -135,9 +139,10 @@ def init_weights(m):
         if m.bias is not None:
             nn.init.constant_(m.bias, 0)
 
-# 모델 초기화 및 테스트
+# Test the model
 if __name__ == "__main__":
     model = VGG16_FCN(num_classes=21)
-    model.apply(init_weights)  # Xavier 초기화 적용
+    model.apply(init_weights)
     input = torch.ones([1, 3, 224, 224])
     fcn8 = model(input)
+    print(fcn8.shape)
