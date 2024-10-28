@@ -4,7 +4,7 @@ import torch.nn as nn
 from dataset import *
 from model import VGG16_FCN, init_weights
 from train import train_model, plot_metrics
-from evaluation import evaluate_model
+from eval import evaluate_model
 import os
 
 # 데이터셋 경로
