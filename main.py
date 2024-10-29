@@ -52,15 +52,17 @@ if __name__ == "__main__":
     val_dataset = CamVidDataset(img_dir=val_dir, label_dir=val_labels_dir)
     test_dataset = CamVidDataset(img_dir=test_dir, label_dir=test_labels_dir)
 
-    train_loader = DataLoader(train_dataset, batch_size=4, shuffle=True)
-    val_loader = DataLoader(val_dataset, batch_size=4, shuffle=False)
-    test_loader = DataLoader(test_dataset, batch_size=4, shuffle=False)
+    train_loader = DataLoader(train_dataset, batch_size=2, shuffle=True)
+    val_loader = DataLoader(val_dataset, batch_size=2, shuffle=False)
+    test_loader = DataLoader(test_dataset, batch_size=2, shuffle=False)
 
     # 설정
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = DeepLabV1(num_classes=32, init_weights=True).to(device)
     criterion = nn.CrossEntropyLoss()
-    optimizer = torch.optim.Adam(model.parameters(), lr=1e-3, weight_decay=1e-4)
+    optimizer = torch.optim.Adam(model.parameters(), lr=1e-4, weight_decay=1e-5)
+    scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=10, gamma=0.1)
+
 
     # Train
     model, history = train_model(
@@ -69,7 +71,7 @@ if __name__ == "__main__":
         val_loader,
         criterion,
         optimizer,
-        num_epochs=100,
+        num_epochs=150,
         device=device
     )
 
@@ -77,5 +79,5 @@ if __name__ == "__main__":
     plot_metrics(history)
 
     # 테스트 데이터셋을 사용한 모델 평가
-    print("Evaluating on test set...")
-    avg_pixel_acc, accuracy, iou, precision, recall, f1 = evaluate_model(model, test_loader, device, num_classes=32)
+    print("Evaluating on test set with CRF...")
+    avg_pixel_acc, accuracy, iou, precision, recall, f1 = evaluate_model(model, test_loader, device, num_classes=32, use_crf=True)
