@@ -1,20 +1,15 @@
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 from model.VGG16_LargeFV import VGG16_LargeFV
-from utils.crf import DenseCRF
 
 class DeepLabV1(nn.Module):
-    def __init__(self, num_classes=21, input_size=224):
+    def __init__(self, num_classes=21, init_weights=True):
         super(DeepLabV1, self).__init__()
-        self.backbone = VGG16_LargeFV(num_classes=num_classes, input_size=input_size)
-        self.crf = DenseCRF(iter_max=10, 
-                            pos_w=3, 
-                            pos_xy_std=3, 
-                            bi_w=5, 
-                            bi_xy_std=140, 
-                            bi_rgb_std=5)
-        
+        self.backbone = VGG16_LargeFV(num_classes=num_classes, init_weights=init_weights)
+
     def forward(self, x):
         x = self.backbone(x)
+        probmap = F.softmax(x, dim=1)
         
-        return x
+        return probmap
