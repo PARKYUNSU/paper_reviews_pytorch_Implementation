@@ -4,7 +4,7 @@ import torch.nn.functional as F
 from model.VGG16_LargeFV import VGG16_LargeFV
 
 class DeepLabV1(nn.Module):
-    def __init__(self, num_classes=21, init_weights=True):
+    def __init__(self, num_classes=32, init_weights=True):
         super(DeepLabV1, self).__init__()
         self.backbone = VGG16_LargeFV(num_classes=num_classes, init_weights=init_weights)
 
