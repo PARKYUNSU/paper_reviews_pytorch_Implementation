@@ -71,7 +71,7 @@ if __name__ == "__main__":
         val_loader,
         criterion,
         optimizer,
-        num_epochs=150,
+        num_epochs=200,
         device=device
     )
 
