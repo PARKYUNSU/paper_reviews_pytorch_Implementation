@@ -112,9 +112,10 @@ FCN-8s: 더 많은 세부 정보를 보존하기 위해 8배 업샘플링합니�
 
 ### 8. Experiment
 
-dataset : https://www.kaggle.com/datasets/carlolepelaars/camvid (CamVid (Cambridge-Driving Labeled Video Database)
-num_epochs = 100
-lerarning rate = 0.001
+- Dataset : https://www.kaggle.com/datasets/carlolepelaars/camvid (CamVid (Cambridge-Driving Labeled Video Database)
+- Num Classes = 32
+- Num_epochs = 100
+- Lerarning rate = 0.001
 
 ### Result
 
