@@ -1,7 +1,7 @@
 import torch
 import numpy as np
 from metrics import compute_accuracy, compute_iou, compute_precision_recall_f1
-from utils.crf import DenseCRF
+from densecrf_gpu import DenseCRFLayer
 
 def evaluate_model(model, dataloader, device, num_classes, use_crf=False):
     model.eval()
@@ -12,49 +12,30 @@ def evaluate_model(model, dataloader, device, num_classes, use_crf=False):
     with torch.no_grad():
         for images, labels in dataloader:
             images, labels = images.to(device), labels.to(device)
-
-            # 모델 예측
             outputs = model(images)
             preds = torch.argmax(outputs, dim=1)
 
-            # CRF 적용 여부 확인
             if use_crf:
-                outputs = outputs.cpu().numpy()
-                crf = DenseCRF(iter_max=10, pos_w=3, pos_xy_std=3, bi_w=5, bi_xy_std=140, bi_rgb_std=5)
-                refined_preds = []
-                
-                for i in range(outputs.shape[0]):
-                    # 이미지를 numpy 형식으로 변환하여 CRF 적용
-                    image_np = images[i].cpu().numpy().transpose(1, 2, 0)
-                    probmap = outputs[i]
-                    refined_probmap = crf(image_np, probmap)
-                    refined_pred = torch.from_numpy(refined_probmap).argmax(dim=0)
-                    refined_preds.append(refined_pred)
+                W, H = images.shape[3], images.shape[2]  # 이미지의 너비와 높이 동적 설정
+                crf_layer = DenseCRFLayer(W=W, H=H, num_classes=num_classes).to(device)
+                unary = torch.nn.functional.softmax(outputs, dim=1)
+                preds = crf_layer(unary, images)  # GPU 기반 CRF 적용
 
-                # refined_preds를 하나의 텐서로 변환
-                preds = torch.stack(refined_preds)
-
-            # 예측 결과와 레이블을 리스트에 추가
             all_preds.append(preds.cpu())
             all_labels.append(labels.cpu())
 
-            # 픽셀 정확도 계산 (배치 크기 고려)
             correct = (preds == labels).sum().item()
             total = labels.numel()
             pixel_acc = correct / total
             pixel_accuracies.append(pixel_acc)
 
-    # 모든 배치의 예측 결과를 하나로 결합
     all_preds = torch.cat(all_preds, dim=0)
     all_labels = torch.cat(all_labels, dim=0)
-
-    # 성능 지표 계산
     accuracy = compute_accuracy(all_preds, all_labels)
     iou = compute_iou(all_preds, all_labels, num_classes)
     precision, recall, f1 = compute_precision_recall_f1(all_preds, all_labels)
     avg_pixel_acc = np.mean(pixel_accuracies)
 
-    # 결과 출력
     print(f'Pixel Accuracy: {avg_pixel_acc * 100:.2f}%')
     print(f'Overall Accuracy: {accuracy * 100:.2f}%')
     print(f'Mean IoU: {iou:.4f}')
