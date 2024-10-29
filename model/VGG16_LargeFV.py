@@ -3,9 +3,8 @@ from torch import nn
 import torch.nn.functional as F
 
 class VGG16_LargeFV(nn.Module):
-    def __init__(self, num_classes=21, input_size=224, init_weights=True):
+    def __init__(self, num_classes=32, init_weights=True):
         super(VGG16_LargeFV, self).__init__()
-        self.input_size = input_size
         
         self.features = nn.Sequential(
             # Conv1
@@ -50,7 +49,7 @@ class VGG16_LargeFV(nn.Module):
             nn.ReLU(inplace=True),
             nn.MaxPool2d(kernel_size=3, stride=1, padding=1),
 
-            # Conv5 (Dilatied Convolution)
+            # Conv5 (Dilated Convolution)
             nn.Conv2d(512, 512, kernel_size=3, stride=1, padding=2, dilation=2),
             nn.BatchNorm2d(512),
             nn.ReLU(inplace=True),
@@ -82,13 +81,16 @@ class VGG16_LargeFV(nn.Module):
             self._initialize_weights()
 
     def forward(self, x):
+        # 입력 크기를 저장합니다.
+        input_size = x.shape[2:]  # (H, W)
+
         x = self.features(x)
         x = self.fc6(x)
         x = self.fc7(x)
         x = self.classifier(x)
 
-        # Upsampling (input에 맞게 자동으로 업샘플링, 선형보간법)
-        x = F.interpolate(x, size=(self.input_size, self.input_size), mode='bilinear', align_corners=True)
+        # 원래 입력 크기로 업샘플링 (bilinear interpolation)
+        x = F.interpolate(x, size=input_size, mode='bilinear', align_corners=True)
         return x
 
     def _initialize_weights(self):
@@ -100,6 +102,6 @@ class VGG16_LargeFV(nn.Module):
 
 if __name__ == "__main__":
     model = VGG16_LargeFV()
-    input = torch.ones([2, 3, 224, 224])
+    input = torch.ones([2, 3, 256, 256])  # 입력 크기를 자유롭게 설정
     output = model(input)
-    print(output.shape)
+    print(output.shape)  # 입력 크기와 동일하게 출력
