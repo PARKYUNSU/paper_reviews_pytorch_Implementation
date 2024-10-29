@@ -101,7 +101,7 @@ FCN-8s: 더 많은 세부 정보를 보존하기 위해 8배 업샘플링합니�
 
 <img src="https://github.com/user-attachments/assets/972f2712-2536-45bf-b74c-64988a9cc911" width="600px">
 
-### FCN의 한계
+### 9. FCN의 한계
 
 1) 큰 object의 경우 지역적인 정보만 예측
 2) 같은 object의 경우 다르게 labeling
@@ -110,14 +110,14 @@ FCN-8s: 더 많은 세부 정보를 보존하기 위해 8배 업샘플링합니�
 <img src="https://github.com/user-attachments/assets/81c8aa2b-2693-4666-9979-21d387a7070f" width="500px">
 
 
-### 8. Experiment
+### 10. Experiment
 
 - Dataset : https://www.kaggle.com/datasets/carlolepelaars/camvid (CamVid (Cambridge-Driving Labeled Video Database)
 - Num Classes = 32
 - Num_epochs = 100
 - Lerarning rate = 0.001
 
-### Result
+### 11. Result
 
 #### Model Performance Metrics
 
