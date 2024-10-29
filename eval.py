@@ -1,7 +1,7 @@
 import torch
 import numpy as np
 from metrics import compute_accuracy, compute_iou, compute_precision_recall_f1
-from densecrf_gpu import DenseCRFLayer
+from utils.crf import DenseCRFLayer
 
 def evaluate_model(model, dataloader, device, num_classes, use_crf=False):
     model.eval()
@@ -16,10 +16,10 @@ def evaluate_model(model, dataloader, device, num_classes, use_crf=False):
             preds = torch.argmax(outputs, dim=1)
 
             if use_crf:
-                W, H = images.shape[3], images.shape[2]  # 이미지의 너비와 높이 동적 설정
-                crf_layer = DenseCRFLayer(W=W, H=H, num_classes=num_classes).to(device)
+                W, H = images.shape[3], images.shape[2]
+                crf_layer = DenseCRFLayer(iter_max=5, pos_w=3, pos_xy_std=3, bi_w=5, bi_xy_std=3, bi_rgb_std=10, device=device)
                 unary = torch.nn.functional.softmax(outputs, dim=1)
-                preds = crf_layer(unary, images)  # GPU 기반 CRF 적용
+                preds = crf_layer.forward(images, unary)
 
             all_preds.append(preds.cpu())
             all_labels.append(labels.cpu())
