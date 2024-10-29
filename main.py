@@ -58,9 +58,9 @@ if __name__ == "__main__":
 
     # 설정
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    model = DeepLabV1(num_classes=32).to(device)
+    model = DeepLabV1(num_classes=32, init_weights=True).to(device)
     criterion = nn.CrossEntropyLoss()
-    optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
+    optimizer = torch.optim.Adam(model.parameters(), lr=1e-3, weight_decay=1e-4)
 
     # Train
     model, history = train_model(
@@ -70,9 +70,7 @@ if __name__ == "__main__":
         criterion,
         optimizer,
         num_epochs=100,
-        device=device,
-        patience=5,
-        delta=0.01,
+        device=device
     )
 
     # 학습 결과 시각화
