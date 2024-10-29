@@ -2,7 +2,7 @@ import torch
 from torch.utils.data import DataLoader
 import torch.nn as nn
 from dataset import *
-from model import VGG16_FCN, init_weights
+from model import DeepLabV1
 from train import train_model, plot_metrics
 from eval import evaluate_model
 import os
@@ -58,8 +58,7 @@ if __name__ == "__main__":
 
     # 설정
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    model = VGG16_FCN(num_classes=32).to(device)
-    model.apply(init_weights)
+    model = DeepLabV1(num_classes=32).to(device)
     criterion = nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
 
