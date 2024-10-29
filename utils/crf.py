@@ -1,56 +1,61 @@
-import numpy as np
-import cv2
+import torch
+import torch.nn.functional as F
 
-class DenseCRF(object):
-    def __init__(self, iter_max, pos_w, pos_xy_std, bi_w, bi_xy_std, bi_rgb_std):
-        """
-        Args:
-        iter_max (int): CRF-like 추론 반복 횟수
-        pos_w (float): 가우시안 페어와이즈 항 가중치
-        pos_xy_std (float): 가우시안 필터에서 위치 차이 표준 편차 (spatial distance standard deviation)
-        bi_w (float): 양방향 필터 가중치
-        bi_xy_std (float): 양방향 필터에서 위치 차이 표준 편차
-        bi_rgb_std (float): 양방향 필터에서 색상 차이 표준 편차
-        """        
+class DenseCRFLayer:
+    def __init__(self, iter_max, pos_w, pos_xy_std, bi_w, bi_xy_std, bi_rgb_std, device='cuda'):
         self.iter_max = iter_max
         self.pos_w = pos_w
         self.pos_xy_std = pos_xy_std
         self.bi_w = bi_w
         self.bi_xy_std = bi_xy_std
         self.bi_rgb_std = bi_rgb_std
+        self.device = device
 
-    def __call__(self, image, probmap):
-        """
-        CRF-like 후처리 수행. 입력 이미지와 모델의 소프트맥스 확률 맵을 사용해 픽셀 단위 클래스 확률을 계산.
-        
-        Args:
-        image (np.ndarray): 원본 이미지 (H, W, 3)
-        probmap (np.ndarray): 모델이 출력한 소프트맥스 확률 맵 (C, H, W) - 클래스별 확률
+    def apply_gaussian_filter(self, class_map):
+        # 가우시안 커널 정의
+        kernel_size = int(2 * self.pos_xy_std + 1)
+        sigma = self.pos_xy_std
+        gaussian_kernel = torch.tensor(
+            [1.0 / (2.0 * torch.pi * sigma**2) * torch.exp(-((x - kernel_size//2)**2) / (2 * sigma**2))
+             for x in range(kernel_size)],
+            dtype=torch.float32, device=self.device
+        )
+        gaussian_kernel = gaussian_kernel / gaussian_kernel.sum()  # 정규화
+        gaussian_kernel = gaussian_kernel.view(1, 1, -1, -1)  # conv2d에 맞게 reshape
 
-        Returns:
-        Q (np.ndarray): CRF-like 후처리된 확률 맵 (C, H, W)
-        """
+        # 가우시안 필터 적용
+        class_map = class_map.unsqueeze(0).unsqueeze(0)  # 배치와 채널 차원 추가
+        gaussian_filtered = F.conv2d(class_map, gaussian_kernel, padding=kernel_size//2)
+        return gaussian_filtered.squeeze() * self.pos_w
+
+    def apply_bilateral_filter(self, class_map, image):
+        # 양방향 필터 근사화
+        class_map = class_map.unsqueeze(0).unsqueeze(0)  # 배치와 채널 차원 추가
+        image = image.float().unsqueeze(0).permute(0, 3, 1, 2) / 255.0  # 이미지 정규화
+
+        # 양방향 필터 적용 (여기서는 단순히 conv2d로 처리)
+        bilateral_filtered = F.conv2d(class_map * 255, kernel_size=0, stride=self.bi_xy_std)  # 임시 적용
+        bilateral_filtered = bilateral_filtered / 255.0 * self.bi_w
+
+        return bilateral_filtered.squeeze()
+
+    def forward(self, image, probmap):
         C, H, W = probmap.shape
-        refined_probmap = np.zeros_like(probmap)
+        refined_probmap = torch.zeros_like(probmap)
 
-        # 각 클래스에 대해 CRF-like 후처리 적용
+        # 각 클래스에 대해 CRF-like 후처리 수행
         for c in range(C):
             class_map = probmap[c]
             
             # 가우시안 필터 적용
-            gaussian_filtered = cv2.GaussianBlur(class_map, (0, 0), self.pos_xy_std) * self.pos_w
-            
+            gaussian_filtered = self.apply_gaussian_filter(class_map)
+
             # 양방향 필터 적용
-            bilateral_filtered = cv2.bilateralFilter((class_map * 255).astype(np.uint8), 
-                                                     d=0, 
-                                                     sigmaColor=self.bi_rgb_std, 
-                                                     sigmaSpace=self.bi_xy_std)
-            bilateral_filtered = (bilateral_filtered / 255.0) * self.bi_w
-            
-            # 두 필터 결과를 합산하여 후처리 결과 생성
+            bilateral_filtered = self.apply_bilateral_filter(class_map, image)
+
+            # 두 필터 결과를 합산하여 후처리 생성
             refined_probmap[c] = gaussian_filtered + bilateral_filtered
 
-        # 클래스별 확률 맵을 softmax-like 형태로 조정
-        Q = np.exp(refined_probmap) / np.sum(np.exp(refined_probmap), axis=0)
-        
+        # 확률 맵 정규화를 위한 softmax 적용
+        Q = torch.exp(refined_probmap) / torch.sum(torch.exp(refined_probmap), dim=0)
         return Q
