@@ -158,7 +158,7 @@ Spatial Invariance는 어떤 이미제 물체가 나타나면 그 위치에 관�
 
    $θ_{i,j}(x_i, x_j)$ = $µ(x_i, x_j)Σ^K_{m=1}w_m⋅k^m(f_i, f_j)$ 이며 $x_i$와 $x_j$이 일치하지 않을 때 $µ(x_i ,x_j)$ = $1$ 이고 아니면 0이다(즉 Potts Model). pixel $i$, $j$가 얼마나 멀리 있든 각 pair에 대한 하나의 pairwise term이 있다.
 
-   각 $K^m$은 Gaussian Kernel이고 Pixel $i$와 $j$로 부터 추출된 Features f에 의존하며 pararmeter &w_m&으로 weight가 된다. Bilateral position와 colore terms를 사용하면 kernel은 다음과 같습니다.
+   각 $K^m$은 Gaussian Kernel이고 Pixel $i$와 $j$로 부터 추출된 Features f에 의존하며 pararmeter $w_m$으로 weight가 된다. Bilateral position와 colore terms를 사용하면 kernel은 다음과 같습니다.
 
 
 <img src="https://github.com/user-attachments/assets/0210421c-ab67-4f29-911b-e22229fb3c9e" width="800">
