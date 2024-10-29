@@ -6,7 +6,7 @@ from dataset import label_to_rgb_tensor
 from early_stopping import EarlyStopping
 
 
-def train_model(model, train_loader, val_loader, criterion, optimizer, num_epochs, device, patience, delta):
+def train_model(model, train_loader, val_loader, criterion, optimizer, num_epochs, device):
     model = model.to(device)
     history = {'train_loss': [], 'val_loss': [], 'train_acc': [], 'val_acc': []}
     # early_stopping = EarlyStopping(patience=patience, delta=delta)
