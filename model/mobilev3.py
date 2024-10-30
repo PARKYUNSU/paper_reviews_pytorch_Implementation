@@ -1,5 +1,7 @@
 import torch
 import torch.nn as nn
+from torchinfo import summary
+
 from in_block import InvertedResBlock
 
 class MobilenetV3(nn.Module):
@@ -46,3 +48,45 @@ class MobilenetV3(nn.Module):
         x = self.fc1(x)
         x = self.fc2(x)
         return x
+    
+def mobilenet_v3_large():
+    cfgs = [
+        [3,  16,  16, False, False, 1],
+        [3,  64,  24, False, False, 2],
+        [3,  72,  24, False, False, 1],
+        [5,  72,  40,  True, False, 2],
+        [5, 120,  40,  True, False, 1],
+        [5, 120,  40,  True, False, 1],
+        [3, 240,  80, False,  True, 2],
+        [3, 200,  80, False,  True, 1],
+        [3, 184,  80, False,  True, 1],
+        [3, 184,  80, False,  True, 1],
+        [3, 480, 112,  True,  True, 1],
+        [3, 672, 112,  True,  True, 1],
+        [5, 672, 160,  True,  True, 2],
+        [5, 960, 160,  True,  True, 1],
+        [5, 960, 160,  True,  True, 1],
+    ]
+
+    return MobilenetV3(cfgs, last_channels = 1280, num_classes = 1000)
+
+def mobilenet_v3_small():
+    cfgs = [
+        [3,  16, 16,  True, False, 2],
+        [3,  72, 24, False, False, 2],
+        [3,  88, 24, False, False, 1],
+        [5,  96, 40,  True,  True, 2],
+        [5, 240, 40,  True,  True, 1],
+        [5, 240, 40,  True,  True, 1],
+        [5, 120, 48,  True,  True, 1],
+        [5, 144, 48,  True,  True, 1],
+        [5, 288, 96,  True,  True, 2],
+        [5, 576, 96,  True,  True, 1],
+        [5, 576, 96,  True,  True, 1],
+        ]
+   
+    return MobilenetV3(cfgs, last_channels = 1024, num_classes = 1000)
+model = mobilenet_v3_large()
+#model = mobilenet_v3_small()
+
+summary(model, input_size = (2, 3, 224, 224), device = "cpu")
