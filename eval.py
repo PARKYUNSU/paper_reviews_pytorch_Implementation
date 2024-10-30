@@ -19,6 +19,11 @@ def evaluate_model(model, dataloader, device, num_classes, use_crf=False):
                 W, H = images.shape[3], images.shape[2]
                 crf_layer = DenseCRFLayer(iter_max=5, pos_w=3, pos_xy_std=3, bi_w=5, bi_xy_std=3, bi_rgb_std=10, device=device)
                 unary = torch.nn.functional.softmax(outputs, dim=1)
+    
+                # 배치 차원 제거
+                unary = unary.squeeze(0)
+                images = images.squeeze(0)
+                
                 preds = crf_layer.forward(images, unary)
 
             all_preds.append(preds.cpu())
