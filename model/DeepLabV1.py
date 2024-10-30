@@ -116,7 +116,7 @@ class DeepLabv1(nn.Module):
                     print(state)
                     
     def inference(self, image_dir, iter_max, bi_w, bi_xy_std, bi_rgb_std, pos_w, pos_xy_std):
-        self.model.eval()
+        self.eval()
         with torch.no_grad():
             image = Image.open(image_dir).convert('RGB')
             
@@ -129,8 +129,8 @@ class DeepLabv1(nn.Module):
             
             image_norm_tensor = image_norm_tensor.sub_(self.mean).div_(self.std)
             
-            output = self.model(image_norm_tensor)
-            output = F.resize(output, (h, w), Image.BILINEAR)
+            output = self(image_norm_tensor)
+            output = F.interpolate(output, (h, w), mode='bilinear', align_corners=False)
             output = nn.Softmax2d()(output)
             output = output[0]
             
