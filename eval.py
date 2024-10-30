@@ -1,9 +1,8 @@
 import torch
 import numpy as np
 from metrics import compute_accuracy, compute_iou, compute_precision_recall_f1
-from utils.crf import DenseCRFLayer
 
-def evaluate_model(model, dataloader, device, num_classes, use_crf=False):
+def evaluate_model(model, dataloader, device, num_classes):
     model.eval()
     all_preds = []
     all_labels = []
@@ -14,17 +13,6 @@ def evaluate_model(model, dataloader, device, num_classes, use_crf=False):
             images, labels = images.to(device), labels.to(device)
             outputs = model(images)
             preds = torch.argmax(outputs, dim=1)
-
-            if use_crf:
-                W, H = images.shape[3], images.shape[2]
-                crf_layer = DenseCRFLayer(iter_max=5, pos_w=3, pos_xy_std=3, bi_w=5, bi_xy_std=3, bi_rgb_std=10, device=device)
-                unary = torch.nn.functional.softmax(outputs, dim=1)
-    
-                # 배치 차원 제거
-                unary = unary.squeeze(0)
-                images = images.squeeze(0)
-                
-                preds = crf_layer.forward(images, unary)
 
             all_preds.append(preds.cpu())
             all_labels.append(labels.cpu())
