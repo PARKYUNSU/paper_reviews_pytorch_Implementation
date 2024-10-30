@@ -1,12 +1,12 @@
 import torch
-import torch.nn as nn
+from torch import nn
 from torchinfo import summary
 
 from in_block import InvertedResBlock
 
 class MobilenetV3(nn.Module):
     def __init__(self, bottleneck, last_channels, num_classes):
-        super(MobilenetV3).__init__()
+        super(MobilenetV3, self).__init__()
 
         self.first_conv = nn.Sequential(
             nn.Conv2d(3, 16, 3, stride = 2, padding = 1, bias = False),
