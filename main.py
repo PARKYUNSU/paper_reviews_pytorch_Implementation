@@ -123,7 +123,7 @@ def main():
 
     # CRF 파라미터 설정
     iter_max = 10
-    bi_w, bi_xy_std, bi_rgb_std, pos_w, pos_xy_std = 5, 67, 3, 4, 3
+    pos_w, pos_xy_std, bi_w, bi_xy_std, bi_rgb_std = 3, 3, 5, 140, 5
 
     # 이미지 경로 설정 (원하는 테스트 이미지의 경로)
     test_image_path = "/kaggle/input/camvid/CamVid/test/0001TP_008550.png"
@@ -131,7 +131,7 @@ def main():
 
     # CRF 후처리 결과 시각화 및 저장
     print("CRF 후처리 결과 시각화 및 저장 중...")
-    visualize_result(test_image_path, model, iter_max, bi_w, bi_xy_std, bi_rgb_std, pos_w, pos_xy_std, save_path=save_path)
+    visualize_result(test_image_path, model, iter_max, pos_w, pos_xy_std, bi_w, bi_xy_std, bi_rgb_std, save_path=save_path)
 
 if __name__ == "__main__":
     main()
