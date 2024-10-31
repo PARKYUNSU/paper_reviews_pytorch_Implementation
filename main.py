@@ -50,16 +50,16 @@ train_dataset = CamVidDataset(img_dir=train_dir, label_dir=train_labels_dir)
 val_dataset = CamVidDataset(img_dir=val_dir, label_dir=val_labels_dir)
 test_dataset = CamVidDataset(img_dir=test_dir, label_dir=test_labels_dir)
 
-train_loader = DataLoader(train_dataset, batch_size=4, shuffle=True)
-val_loader = DataLoader(val_dataset, batch_size=4, shuffle=False)
-test_loader = DataLoader(test_dataset, batch_size=4, shuffle=False)
+train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
+val_loader = DataLoader(val_dataset, batch_size=32, shuffle=False)
+test_loader = DataLoader(test_dataset, batch_size=32, shuffle=False)
 
 # 설정
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model = VGG16_FCN(num_classes=32).to(device)
 model.apply(init_weights)
 criterion = nn.CrossEntropyLoss()
-optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
+optimizer = torch.optim.Adam(model.parameters(), lr=1e-4)
 
 # Train
 model, history = train_model(
