@@ -134,7 +134,10 @@ FCN은 업샘플링에 bilinear interpolation을 사용하나, 이 방법은 성
 
 ### 10. Experiment
 
+#### 1. Experiment 1
+
 - Dataset : https://www.kaggle.com/datasets/carlolepelaars/camvid (CamVid (Cambridge-Driving Labeled Video Database)
+- Model : FCN 8s
 - Num Classes = 32
 - Num_epochs = 100
 - Lerarning rate = 0.001
@@ -160,3 +163,28 @@ FCN은 업샘플링에 bilinear interpolation을 사용하나, 이 방법은 성
 
 <img src="https://github.com/user-attachments/assets/08763fbb-4c3b-4431-b6f0-68a0b7b5d4b2" width="800">
 
+
+#### Experiment 2
+- Dataset : VOC 2012
+- Model : FCN 8s
+- - Num Classes : 21
+- num epoch : 100
+- Criterion : Cross Entropy Loss
+- Optimizer : Adam
+- lr : 0.001
+
+#### Segmentaion Result
+
+<img src="https://github.com/user-attachments/assets/cb77cabf-c50e-4587-9498-6b32a055c60d" width="800">
+
+<img src="https://github.com/user-attachments/assets/c661be13-94fe-4f86-bda7-30650dc63eec" width="800">
+
+<img src="https://github.com/user-attachments/assets/0229be9a-f4fe-485e-8f18-f7abf4d8dc45" width="800">
+
+<img src="https://github.com/user-attachments/assets/0c68d4d5-a55d-47db-9cc4-6ac635bdcb16" width="800">
+
+<img src="https://github.com/user-attachments/assets/d29d3132-40ba-49a2-985d-2ea41c9eb6da" width="800">
+
+<img src="https://github.com/user-attachments/assets/d29d3132-40ba-49a2-985d-2ea41c9eb6da" width="800">
+
+<img src="https://github.com/user-attachments/assets/e2173684-639e-41a9-8d02-b4f56edca21e" width="800">
