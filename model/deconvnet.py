@@ -13,7 +13,7 @@ class DeconvNet(nn.Module):
             nn.BatchNorm2d(64),
             nn.ReLU(inplace=True)
         )            
-        self.pool1 = nn.MaxPool2d(kernel_size=2, stride=2, return_indices=True)  # 1/2 크기
+        self.pool1 = nn.MaxPool2d(kernel_size=2, stride=2, return_indices=True)  # return_indices로 maxpooling 위치 값 기억 -> Unpooling에서 그 위치 사용
         
         self.encode2 = nn.Sequential(
             nn.Conv2d(64, 128, kernel_size=3, stride=1, padding=1),
@@ -23,7 +23,7 @@ class DeconvNet(nn.Module):
             nn.BatchNorm2d(128),
             nn.ReLU(inplace=True)            
         )
-        self.pool2 = nn.MaxPool2d(kernel_size=2, stride=2, return_indices=True)  # 1/4 크기
+        self.pool2 = nn.MaxPool2d(kernel_size=2, stride=2, return_indices=True)
         
         self.encode3 = nn.Sequential(
             nn.Conv2d(128, 256, kernel_size=3, stride=1, padding=1),
@@ -36,7 +36,7 @@ class DeconvNet(nn.Module):
             nn.BatchNorm2d(256),
             nn.ReLU(inplace=True)                       
         )
-        self.pool3 = nn.MaxPool2d(kernel_size=2, stride=2, return_indices=True)  # 1/8 크기
+        self.pool3 = nn.MaxPool2d(kernel_size=2, stride=2, return_indices=True)
         
         self.encode4 = nn.Sequential(
             nn.Conv2d(256, 512, kernel_size=3, stride=1, padding=1),
@@ -49,7 +49,7 @@ class DeconvNet(nn.Module):
             nn.BatchNorm2d(512),
             nn.ReLU(inplace=True)            
         )
-        self.pool4 = nn.MaxPool2d(kernel_size=2, stride=2, return_indices=True)  # 1/16 크기
+        self.pool4 = nn.MaxPool2d(kernel_size=2, stride=2, return_indices=True)
         
         self.encode5 = nn.Sequential(
             nn.Conv2d(512, 512, kernel_size=3, stride=1, padding=1),
@@ -62,7 +62,7 @@ class DeconvNet(nn.Module):
             nn.BatchNorm2d(512),
             nn.ReLU(inplace=True)                        
         )
-        self.pool5 = nn.MaxPool2d(kernel_size=2, stride=2, return_indices=True)  # 1/32 크기
+        self.pool5 = nn.MaxPool2d(kernel_size=2, stride=2, return_indices=True)
 
         # Fully connected layers
         self.conv6 = nn.Sequential(
