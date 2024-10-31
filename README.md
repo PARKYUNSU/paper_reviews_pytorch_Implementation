@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/8306c0d2-c174-4264-80e8-eaa6993b6891)# DeConvNet
+# DeConvNet
  
 ---
 
