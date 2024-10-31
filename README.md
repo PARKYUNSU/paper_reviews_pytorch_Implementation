@@ -103,9 +103,25 @@ FCN-8s: 더 많은 세부 정보를 보존하기 위해 8배 업샘플링합니�
 
 ### 9. FCN의 한계
 
-1) 큰 object의 경우 지역적인 정보만 예측
-2) 같은 object의 경우 다르게 labeling
-3) 작은 object가 무시되는 문제가 있음
+1. Fixed-size receptive field
+
+FCN은 고정된 receptive field로 인해 오직 하나의 스케일 이미지만 처리할 수 있어, 객체 크기에 따라 오분류가 발생할 수 있습니다.
+
+큰 객체는 여러 개의 작은 객체로 쪼개지고, 작은 객체는 무시되거나 배경으로 간주됩니다.
+
+예시:
+아래 그림 (a)에서 큰 객체가 작은 객체로 분해됨.
+
+아래 그림 (b)에서 작은 객체가 거의 검출되지 않음.
+
+그래서 FCN은 skip architecture를 통해 보완하려 했으나 근본적인 해결은 어려웠습니다.
+
+2. 간단한 Deconvolution 과정
+
+FCN은 업샘플링에 bilinear interpolation을 사용하나, 이 방법은 성능 향상에 한계가 있습니다.
+
+후처리인 CRF를 사용해 성능을 개선하려 하지만, 논문에서도 bilinear interpolation을 통한 업샘플링의 한계를 지적했습니다.
+
 
 <img src="https://github.com/user-attachments/assets/81c8aa2b-2693-4666-9979-21d387a7070f" width="500px">
 
