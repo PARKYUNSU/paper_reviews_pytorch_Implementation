@@ -10,7 +10,7 @@ from PIL import Image
 
 import pydensecrf.densecrf as dcrf
 import pydensecrf.utils
-
+import pydensecrf.utils as crf_utils
 
 class DeepLabv1(nn.Module):
     def __init__(self, num_classes=32, init_weights=True, gpu_id=0, weight_file=None):
@@ -105,7 +105,7 @@ class DeepLabv1(nn.Module):
         with torch.no_grad():
             image = Image.open(image_dir).convert('RGB')
             
-            image_tensor = torch.as_tensor(np.asarray(image))
+            image_tensor = torch.as_tensor(np.asarray(image).copy())
             image_tensor = image_tensor.view(image.size[1], image.size[0], len(image.getbands()))
             image_tensor = image_tensor.permute((2, 0, 1))
             
@@ -158,9 +158,11 @@ class DenseCRF(object):
         Q (np.ndarray): CRF 후처리된 확률 맵 (C, H, W)
         """
         C, H, W = probmap.shape
+        image = image.permute((1, 2, 0))
+        probmap = probmap.cpu().numpy()
 
         # U : Unray Energy
-        U = utils.unary_from_softmax(probmap)
+        U = crf_utils.unary_from_softmax(probmap)
         U = np.ascontiguousarray(U) # memory 레이아웃을 연속적인 배열로 변환 (CRF에 맞게 사용)
 
         # 입력 이미지를 연속된 배열로 변환
