@@ -127,4 +127,4 @@ Deconvolution 층을 통해서 특징이 전달되면서 객체의 세부 정보
 
 <img src="https://github.com/user-attachments/assets/358ae2b1-002e-4474-a692-b241c4f95253" width="800">
 
-<img src="https://github.com/user-attachments/assets/75e08160-8ab6-4be8-9a98-cd0c7f1ed780" width="400">
+<img src="https://github.com/user-attachments/assets/75e08160-8ab6-4be8-9a98-cd0c7f1ed780" width="600">
