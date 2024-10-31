@@ -131,6 +131,7 @@ FCN은 업샘플링에 bilinear interpolation을 사용하나, 이 방법은 성
 
 <img src="https://github.com/user-attachments/assets/81c8aa2b-2693-4666-9979-21d387a7070f" width="500px">
 
+---
 
 ### 10. Experiment
 
@@ -163,6 +164,7 @@ FCN은 업샘플링에 bilinear interpolation을 사용하나, 이 방법은 성
 
 <img src="https://github.com/user-attachments/assets/08763fbb-4c3b-4431-b6f0-68a0b7b5d4b2" width="800">
 
+---
 
 #### Experiment 2
 - Dataset : VOC 2012
