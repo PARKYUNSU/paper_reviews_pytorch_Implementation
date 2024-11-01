@@ -148,79 +148,33 @@ class DeconvNet(nn.Module):
     def forward(self, x):
         # Encoding path
         x = self.encode1(x)
-        print(f"x.shape after encode1: {x.shape}")
-        
         x, indices1 = self.pool1(x)
-        print(f"x.shape after pool1: {x.shape}")
-        
         x = self.encode2(x)
-        print(f"x.shape after encode2: {x.shape}")
-        
         x, indices2 = self.pool2(x)
-        print(f"x.shape after pool2: {x.shape}")
-        
         x = self.encode3(x)
-        print(f"x.shape after encode3: {x.shape}")
-        
         x, indices3 = self.pool3(x)
-        print(f"x.shape after pool3: {x.shape}")
-        
         x = self.encode4(x)
-        print(f"x.shape after encode4: {x.shape}")
-        
         x, indices4 = self.pool4(x)
-        print(f"x.shape after pool4: {x.shape}")
-        
         x = self.encode5(x)
-        print(f"x.shape after encode5: {x.shape}")
-        
         x, indices5 = self.pool5(x)
-        print(f"x.shape after pool5: {x.shape}")
 
         # Fully connected layers
         x = self.conv6(x)
-        print(f"x.shape after conv6: {x.shape}")
-
         x = self.conv7(x)
-        print(f"x.shape after conv7: {x.shape}")
 
         # Decoding path
         x = self.deconv6(x)
-        print(f"x.shape after deconv6: {x.shape}")
-        
         x = self.unpool5(x, indices5)
-        print(f"x.shape after unpool5: {x.shape}")
-        
         x = self.deconv5_conv(x)
-        print(f"x.shape after deconv5_conv: {x.shape}")
-        
         x = self.unpool4(x, indices4)
-        print(f"x.shape after unpool4: {x.shape}")
-        
         x = self.deconv4_conv(x)
-        print(f"x.shape after deconv4_conv: {x.shape}")
-        
         x = self.unpool3(x, indices3)
-        print(f"x.shape after unpool3: {x.shape}")
-        
         x = self.deconv3_conv(x)
-        print(f"x.shape after deconv3_conv: {x.shape}")
-        
         x = self.unpool2(x, indices2)
-        print(f"x.shape after unpool2: {x.shape}")
-        
         x = self.deconv2_conv(x)
-        print(f"x.shape after deconv2_conv: {x.shape}")
-        
         x = self.unpool1(x, indices1)
-        print(f"x.shape after unpool1: {x.shape}")
-        
         x = self.deconv1_conv(x)
-        print(f"x.shape after deconv1_conv: {x.shape}")
-        
         x = self.score(x)
-        print(f"x.shape after score: {x.shape}")
-
         return x
 
 
