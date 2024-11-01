@@ -1,5 +1,11 @@
 # FCN
- 
+---
+"Fully Convolutional Networks for Semantic Segmentation"
+
+-Jonathan Long, Evan Shelhamer, Trevor Darrell
+
+https://arxiv.org/pdf/1411.4038
+
 ---
 ## Introduction
 FCN(Fully Convolutional Network)은 이미지 분류에 뛰어난 성능을 보인 CNN 모델(AlexNet, VGG16, GoogLeNet)을 Semantic Segmentation(이미지 분할) 작업에 맞게 변형한 모델입니다.
