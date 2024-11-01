@@ -1,5 +1,5 @@
 # FCN
----
+
 "Fully Convolutional Networks for Semantic Segmentation"
 
 -Jonathan Long, Evan Shelhamer, Trevor Darrell
