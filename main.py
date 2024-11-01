@@ -7,7 +7,6 @@ from train import train
 from eval import evaluate
 from utils import *
 
-
 model = DeconvNet(num_classes=21)
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model.to(device)
@@ -22,7 +21,7 @@ history = {'train_loss': [], 'val_loss': [], 'train_acc': [], 'val_acc': []}
 
 for epoch in range(num_epochs):
     # Train and get train loss
-    train_loss = train(model, train_loader, criterion, optimizer, num_epochs, device)
+    train_loss = train(model, train_loader, criterion, optimizer, device)
     history['train_loss'].append(train_loss)
     
     # Evaluate and get validation loss
@@ -33,9 +32,8 @@ for epoch in range(num_epochs):
     history['train_acc'].append(0.0)  # Replace with actual training accuracy
     history['val_acc'].append(0.0)    # Replace with actual validation accuracy
 
-    # Save metrics plot every 10 epochs
-    if (epoch + 1) % 10 == 0:
-        plot_metrics(history, output_filename=f'/kaggle/working/training_metrics_epoch_{epoch+1}.png')
-    
-    if (epoch + 1) % 10 == 0:
-        visualize_segmentation(model, train_loader, device, epoch + 1, save_path="/kaggle/working/")
+# Save segmentation visualization only for the final epoch
+visualize_segmentation(model, train_loader, device, num_epochs, save_path=f"/kaggle/working/segmentation_final_epoch.png")
+
+# Save metrics plot for the entire training process
+plot_metrics(history, output_filename='/kaggle/working/training_metrics_final.png')
