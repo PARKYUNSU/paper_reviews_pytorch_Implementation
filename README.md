@@ -193,6 +193,4 @@ FCN은 업샘플링에 bilinear interpolation을 사용하나, 이 방법은 성
 
 <img src="https://github.com/user-attachments/assets/d29d3132-40ba-49a2-985d-2ea41c9eb6da" width="800">
 
-<img src="https://github.com/user-attachments/assets/d29d3132-40ba-49a2-985d-2ea41c9eb6da" width="800">
-
 <img src="https://github.com/user-attachments/assets/e2173684-639e-41a9-8d02-b4f56edca21e" width="800">
