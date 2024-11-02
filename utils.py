@@ -32,80 +32,33 @@ def compute_precision_recall_f1(preds, labels):
     return precision, recall, f1
 
 
-import matplotlib.pyplot as plt
-import os
-import torch
-
 def visualize_segmentation(model, dataloader, device, epoch, save_path="/kaggle/working/"):
-    """
-    10 에포크마다 첫 번째 배치의 이미지를 저장
-    """
-    if (epoch + 1) % 10 == 0:
-        model.eval()
-        os.makedirs(save_path, exist_ok=True)
-
-        with torch.no_grad():
-            for images, targets in dataloader:
-                images, targets = images.to(device), targets.to(device)
-                outputs = model(images)
-                break  # 첫 번째 배치만 처리
-
-            image = images[0].permute(1, 2, 0).cpu().numpy()
-            true_mask = targets[0].squeeze(0).cpu().numpy()
-            pred_mask = torch.argmax(outputs[0], dim=0).cpu().numpy()
-
-            fig, axs = plt.subplots(1, 3, figsize=(18, 6))
-            axs[0].imshow(image)
-            axs[0].set_title("Original Image")
-            axs[1].imshow(true_mask, cmap="jet")
-            axs[1].set_title("True Mask")
-            axs[2].imshow(pred_mask, cmap="jet")
-            axs[2].set_title("Predicted Mask")
-
-            for ax in axs:
-                ax.axis("off")
-
-            plt.savefig(f"{save_path}/epoch_{epoch + 1}.png")
-            plt.close(fig)
-            print(f"Segmentation results saved for epoch {epoch + 1} at {save_path}")
-
-def visualize_final_segmentation(model, dataloader, device, num_images=5, save_path="/kaggle/working/"):
-    """
-    훈련이 끝난 후 데이터셋에서 랜덤으로 선택한 5개 이미지를 시각화
-    """
     model.eval()
     os.makedirs(save_path, exist_ok=True)
 
     with torch.no_grad():
-        # num_images 만큼의 이미지를 시각화
-        for idx, (images, targets) in enumerate(dataloader):
-            if idx >= num_images:
-                break
-
+        for images, targets in dataloader:
             images, targets = images.to(device), targets.to(device)
             outputs = model(images)
+            break  # Only visualize the first batch
 
-            # 첫 번째 이미지를 시각화
-            image = images[0].permute(1, 2, 0).cpu().numpy()
-            true_mask = targets[0].squeeze(0).cpu().numpy()
-            pred_mask = torch.argmax(outputs[0], dim=0).cpu().numpy()
+        image = images[0].permute(1, 2, 0).cpu().numpy()
+        true_mask = targets[0].squeeze(0).cpu().numpy()
+        pred_mask = torch.argmax(outputs[0], dim=0).cpu().numpy()
 
-            fig, axs = plt.subplots(1, 3, figsize=(18, 6))
-            axs[0].imshow(image)
-            axs[0].set_title("Original Image")
-            axs[1].imshow(true_mask, cmap="jet")
-            axs[1].set_title("True Mask")
-            axs[2].imshow(pred_mask, cmap="jet")
-            axs[2].set_title("Predicted Mask")
+        fig, axs = plt.subplots(1, 3, figsize=(18, 6))
+        axs[0].imshow(image)
+        axs[0].set_title("Original Image")
+        axs[1].imshow(true_mask, cmap="jet")
+        axs[1].set_title("True Mask")
+        axs[2].imshow(pred_mask, cmap="jet")
+        axs[2].set_title("Predicted Mask")
 
-            for ax in axs:
-                ax.axis("off")
+        for ax in axs:
+            ax.axis("off")
 
-            # 이미지 저장
-            plt.savefig(f"{save_path}/final_image_{idx + 1}.png")
-            plt.close(fig)
-            print(f"Final segmentation result saved for image {idx + 1} at {save_path}")
-
+        plt.savefig(f"{save_path}/epoch_{epoch}.png")
+        plt.close(fig)
 
 import matplotlib.pyplot as plt
 
