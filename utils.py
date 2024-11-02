@@ -33,32 +33,35 @@ def compute_precision_recall_f1(preds, labels):
 
 
 def visualize_segmentation(model, dataloader, device, epoch, save_path="/kaggle/working/"):
-    model.eval()
-    os.makedirs(save_path, exist_ok=True)
+    # 10 에포크마다 이미지를 저장
+    if (epoch + 1) % 10 == 0:
+        model.eval()
+        os.makedirs(save_path, exist_ok=True)
 
-    with torch.no_grad():
-        for images, targets in dataloader:
-            images, targets = images.to(device), targets.to(device)
-            outputs = model(images)
-            break  # Only visualize the first batch
+        with torch.no_grad():
+            for images, targets in dataloader:
+                images, targets = images.to(device), targets.to(device)
+                outputs = model(images)
+                break
 
-        image = images[0].permute(1, 2, 0).cpu().numpy()
-        true_mask = targets[0].squeeze(0).cpu().numpy()
-        pred_mask = torch.argmax(outputs[0], dim=0).cpu().numpy()
+            image = images[0].permute(1, 2, 0).cpu().numpy()
+            true_mask = targets[0].squeeze(0).cpu().numpy()
+            pred_mask = torch.argmax(outputs[0], dim=0).cpu().numpy()
 
-        fig, axs = plt.subplots(1, 3, figsize=(18, 6))
-        axs[0].imshow(image)
-        axs[0].set_title("Original Image")
-        axs[1].imshow(true_mask, cmap="jet")
-        axs[1].set_title("True Mask")
-        axs[2].imshow(pred_mask, cmap="jet")
-        axs[2].set_title("Predicted Mask")
+            fig, axs = plt.subplots(1, 3, figsize=(18, 6))
+            axs[0].imshow(image)
+            axs[0].set_title("Original Image")
+            axs[1].imshow(true_mask, cmap="jet")
+            axs[1].set_title("True Mask")
+            axs[2].imshow(pred_mask, cmap="jet")
+            axs[2].set_title("Predicted Mask")
 
-        for ax in axs:
-            ax.axis("off")
+            for ax in axs:
+                ax.axis("off")
 
-        plt.savefig(f"{save_path}/epoch_{epoch}.png")
-        plt.close(fig)
+            plt.savefig(f"{save_path}/epoch_{epoch + 1}.png")
+            plt.close(fig)
+            print(f"Segmentation results saved for epoch {epoch + 1} at {save_path}")
 
 import matplotlib.pyplot as plt
 
