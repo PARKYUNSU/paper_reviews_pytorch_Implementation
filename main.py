@@ -19,17 +19,17 @@ num_epochs = 100
 history = {'train_loss': [], 'val_loss': [], 'train_acc': [], 'val_acc': []}
 
 for epoch in range(num_epochs):
-    train_loss = train(model, train_loader, criterion, optimizer, device, epoch, num_epochs)
+    train_loss, train_acc = train(model, train_loader, criterion, optimizer, device, epoch, num_epochs)
     history['train_loss'].append(train_loss)
+    history['train_acc'].append(train_acc)
     
-    val_loss = evaluate(model, train_loader, criterion, device)
+    val_loss, val_acc = evaluate(model, train_loader, criterion, device)
     history['val_loss'].append(val_loss)
-
-    history['train_acc'].append(0.0)
-    history['val_acc'].append(0.0)
-
-
-visualize_segmentation(model, train_loader, device, num_epochs, save_path=f"/kaggle/working/segmentation_final_epoch.png")
+    history['val_acc'].append(val_acc)
+    
+    # 10 에포크마다 세그멘테이션 결과 시각화
+    visualize_segmentation(model, train_loader, device, epoch, save_path="/kaggle/working/")
 
 
+# 학습 및 검증 손실과 정확도를 저장된 경로에 시각화
 plot_metrics(history, output_filename='/kaggle/working/training_metrics_final.png')
