@@ -40,7 +40,7 @@ class ASPP(nn.Module):
         elif output_stride == 8:
             dilations = [1, 12, 24, 36]
         else:
-            raise ValueError("output_stride must be 8 or 16!")
+            raise ValueError("output_stride == 8 or 16!!")
 
         self.conv1 = ASPPConv(in_channels, out_channels, kernel_size=1, dilation=dilations[0])
         self.conv2 = ASPPConv(in_channels, out_channels, kernel_size=3, dilation=dilations[1])
