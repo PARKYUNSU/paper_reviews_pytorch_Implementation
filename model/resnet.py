@@ -30,7 +30,7 @@ class BasicBlock(nn.Module):
         x += self.residual(identity)
         x = self.relu1(x)
         return x
-    
+
 class BottleNeck(nn.Module):
     expansion_factor=4
     def __init__(self, in_channels, out_channels, stride=1):
@@ -65,7 +65,7 @@ class BottleNeck(nn.Module):
         return x
 
 class Resnet(nn.Module):
-    def __init__(self, block, num_blocks, num_classes=10, output_stride=16):
+    def __init__(self, block, num_blocks, num_classes=21, output_stride=16):
         super(Resnet, self).__init__()
         self.in_channels = 64
         self.output_stride = output_stride
@@ -82,8 +82,7 @@ class Resnet(nn.Module):
         self.conv4 = self._make_layer(block, 256, num_blocks[2], stride=s4, dilation=d4)
         self.conv5 = self._make_layer(block, 512, num_blocks[3], stride=2, dilation=1)
 
-        self.avgpool = nn.AdaptiveAvgPool2d(output_size=(1, 1))
-        self.fc = nn.Linear(512 * block.expansion_factor, num_classes)
+        self.classifier = nn.Conv2d(512 * block.expansion_factor, num_classes, kernel_size=1)
 
         self._init_layer()
 
@@ -113,30 +112,33 @@ class Resnet(nn.Module):
     def forward(self, x):
         x = self.conv1(x)
         low_level_features = self.conv2(x)
-        print("Low-level features shape:", low_level_features.shape)
         x = self.conv3(low_level_features)
         x = self.conv4(x)
         x = self.conv5(x)
-        x = self.avgpool(x)
-        x = torch.flatten(x, 1)
-        x = self.fc(x)
+
+        # Apply 1x1 convolution for classification
+        x = self.classifier(x)
+        
+        # Upsample to input image size
+        x = nn.functional.interpolate(x, scale_factor=8, mode='bilinear', align_corners=True)
+
         return x, low_level_features
     
 class Model:
-    def resnet18(self, output_stride=16):
-        return Resnet(BasicBlock, [2, 2, 2, 2], output_stride=output_stride)
+    def resnet18(self, output_stride=16, num_classes=21):
+        return Resnet(BasicBlock, [2, 2, 2, 2], output_stride=output_stride, num_classes=num_classes)
 
-    def resnet34(self, output_stride=16):
-        return Resnet(BasicBlock, [3, 4, 6, 3], output_stride=output_stride)
+    def resnet34(self, output_stride=16, num_classes=21):
+        return Resnet(BasicBlock, [3, 4, 6, 3], output_stride=output_stride, num_classes=num_classes)
 
-    def resnet50(self, output_stride=16):
-        return Resnet(BottleNeck, [3, 4, 6, 3], output_stride=output_stride)
+    def resnet50(self, output_stride=16, num_classes=21):
+        return Resnet(BottleNeck, [3, 4, 6, 3], output_stride=output_stride, num_classes=num_classes)
 
-    def resnet101(self, output_stride=16):
-        return Resnet(BottleNeck, [3, 4, 23, 3], output_stride=output_stride)
+    def resnet101(self, output_stride=16, num_classes=21):
+        return Resnet(BottleNeck, [3, 4, 23, 3], output_stride=output_stride, num_classes=num_classes)
 
-    def resnet152(self, output_stride=16):
-        return Resnet(BottleNeck, [3, 8, 36, 3], output_stride=output_stride)
+    def resnet152(self, output_stride=16, num_classes=21):
+        return Resnet(BottleNeck, [3, 8, 36, 3], output_stride=output_stride, num_classes=num_classes)
 
-model = Model().resnet101(output_stride=8)
+model = Model().resnet101(output_stride=8, num_classes=21)
 summary(model, input_size=(2, 3, 224, 224), device="cpu")
