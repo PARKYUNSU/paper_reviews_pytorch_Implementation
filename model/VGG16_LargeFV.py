@@ -102,6 +102,6 @@ class VGG16_LargeFV(nn.Module):
 
 if __name__ == "__main__":
     model = VGG16_LargeFV()
-    input = torch.ones([2, 3, 256, 256])  # 입력 크기를 자유롭게 설정
+    input = torch.ones([2, 3, 256, 256])
     output = model(input)
-    print(output.shape)  # 입력 크기와 동일하게 출력
+    print(output.shape)
