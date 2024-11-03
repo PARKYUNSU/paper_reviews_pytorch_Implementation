@@ -119,8 +119,10 @@ def main():
     plot_metrics(history)
 
     # 테스트 데이터셋을 사용한 모델 평가
-    avg_pixel_acc, accuracy, iou, precision, recall, f1 = evaluate_model(model, test_loader, device, num_classes=32)
-
+    # 평가 시 CRF 파라미터를 설정하여 함수 호출
+    crf_params = (10, 3, 3, 5, 140, 5)  # iter_max, pos_w, pos_xy_std, bi_w, bi_xy_std, bi_rgb_std
+    avg_pixel_acc, accuracy, iou, precision, recall, f1 = evaluate_model(
+        model, test_loader, device, num_classes=32, use_crf=True, crf_params=crf_params)
     # CRF 파라미터 설정
     iter_max = 10
     pos_w, pos_xy_std, bi_w, bi_xy_std, bi_rgb_std = 3, 3, 5, 140, 5
