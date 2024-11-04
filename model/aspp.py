@@ -79,8 +79,8 @@ class ASPP(nn.Module):
 # 테스트 코드
 if __name__ == "__main__":
     # 입력 텐서 정의 (예: 3채널 RGB 이미지, 크기 64x64)
-    input_tensor = torch.randn(3, 2048, 32, 32)  # (배치 크기, 채널, 높이, 너비)
-    aspp = ASPP(in_channels=2048, out_channels=256, output_stride=8)
+    input_tensor = torch.randn(3, 2048, 16, 16)  # (배치 크기, 채널, 높이, 너비)
+    aspp = ASPP(in_channels=2048, out_channels=256, output_stride=16)
     
     # 평가 모드로 설정
     aspp.eval()
