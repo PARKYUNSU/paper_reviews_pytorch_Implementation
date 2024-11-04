@@ -110,39 +110,42 @@ class EntryFlow(nn.Module):
     
 # MiddleFlow
 class MiddleFlow(nn.Module):
-    def __init__(self, dilation):
+    def __init__(self, mf_d):
         super(MiddleFlow, self).__init__()
         self.conv_residual = nn.Sequential(
             nn.ReLU(inplace=True),
-            DwSepConv(728, 728, dilation=dilation),
+            DwSepConv(728, 728, dilation=mf_d),
             nn.BatchNorm2d(728),
             nn.ReLU(inplace=True),
-            DwSepConv(728, 728, dilation=dilation),
+            DwSepConv(728, 728, dilation=mf_d),
             nn.BatchNorm2d(728),
             nn.ReLU(inplace=True),
-            DwSepConv(728, 728, dilation=dilation),
-            nn.BatchNorm2d(728)
+            DwSepConv(728, 728, dilation=mf_d),
+            nn.BatchNorm2d(728),
+            nn.ReLU(inplace=True)
         )
 
         self.conv_shortcut = nn.Sequential()
 
     def forward(self, x):
         x = self.conv_shortcut(x) + self.conv_residual(x)
-        print(f"MiddleFlow output shape: {x.shape}")
         return x
     
 # ExitFlow
 class ExitFlow(nn.Module):
-    def __init__(self, ef_dilation):
+    def __init__(self, exf_d):
         super(ExitFlow, self).__init__()
         self.conv1_residual = nn.Sequential(
             nn.ReLU(inplace=True),
-            DwSepConv(728, 1024, dilation=ef_dilation[0]),
+            DwSepConv(728, 1024, dilation=exf_d[0]),
             nn.BatchNorm2d(1024),
             nn.ReLU(inplace=True),
-            DwSepConv(1024, 1024),
+            DwSepConv(1024, 1024, dilation=exf_d[0]),
             nn.BatchNorm2d(1024),
-            DwSepConv(1024, 1024)
+            nn.ReLU(inplace=True),
+            DwSepConv(1024, 1024, dilation=exf_d[0]),
+            nn.BatchNorm2d(1024),
+            nn.ReLU(inplace=True)
         )
 
         self.conv1_shortcut = nn.Sequential(
@@ -151,13 +154,13 @@ class ExitFlow(nn.Module):
         )
 
         self.conv2 = nn.Sequential(
-            DwSepConv(1024, 1536, kernel_size=3, stride=1, dilation=ef_dilation[1]),
+            DwSepConv(1024, 1536, kernel_size=3, stride=1, dilation=exf_d[1]),
             nn.BatchNorm2d(1536),
             nn.ReLU(inplace=True),
-            DwSepConv(1536, 1536, kernel_size=3, stride=1, dilation=ef_dilation[1]),
+            DwSepConv(1536, 1536, kernel_size=3, stride=1, dilation=exf_d[1]),
             nn.BatchNorm2d(1536),
             nn.ReLU(inplace=True),            
-            DwSepConv(1536, 2048, kernel_size=3, stride=1, dilation=ef_dilation[1]),
+            DwSepConv(1536, 2048, kernel_size=3, stride=1, dilation=exf_d[1]),
             nn.BatchNorm2d(2048),
             nn.ReLU(inplace=True)
         )
