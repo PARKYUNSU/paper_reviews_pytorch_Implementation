@@ -100,8 +100,6 @@ class EntryFlow(nn.Module):
 
         x = self.conv3_residual(x) + self.conv3_shortcut(x)
         print(f"Conv3 output shape: {x.shape}")
-        
-        
 
         x = self.conv4_residual(x) + self.conv4_shortcut(x)
         print(f"Conv4 output shape: {x.shape}")
