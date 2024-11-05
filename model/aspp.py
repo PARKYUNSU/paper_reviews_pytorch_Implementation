@@ -30,7 +30,7 @@ class ASPPPooling(nn.Module):
             x = self.pool(x)
             x = self.conv(x)
             print(f"ASPPPooling output shape: {x.shape} (after pooling and conv)")
-            return F.interpolate(x, size=size, mode='bilinear', align_corners=True)
+            return F.interpolate(x, size=size, mode='bilinear', align_corners=False) # True 면 시맨틱 세그멘테이션 경우 좋다
 
 class ASPP(nn.Module):
     def __init__(self, in_channels, out_channels, output_stride):
