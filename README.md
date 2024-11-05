@@ -143,11 +143,13 @@ FCN은 업샘플링에 bilinear interpolation을 사용하나, 이 방법은 성
 
 #### 1. Experiment 1
 
-- Dataset : https://www.kaggle.com/datasets/carlolepelaars/camvid (CamVid (Cambridge-Driving Labeled Video Database)
+- Dataset : CamVid (Cambridge-Driving Labeled Video Database)
+  https://www.kaggle.com/datasets/carlolepelaars/camvid
 - Model : FCN 8s
-- Num Classes = 32
-- Num_epochs = 100
-- Lerarning rate = 0.001
+- Optimizer : Adam
+- Num Classes : 32
+- Num epochs : 100
+- Lerarning rate =:0.001
 
 ### 11. Result
 
@@ -175,11 +177,11 @@ FCN은 업샘플링에 bilinear interpolation을 사용하나, 이 방법은 성
 #### Experiment 2
 - Dataset : VOC 2012
 - Model : FCN 8s
-- - Num Classes : 21
-- num epoch : 100
+- Num Classes : 21
+- Num epochs : 100
 - Criterion : Cross Entropy Loss
 - Optimizer : Adam
-- lr : 0.001
+- Lerarning rate : 0.001
 
 #### Segmentaion Result
 
