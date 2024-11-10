@@ -15,20 +15,20 @@ https://arxiv.org/pdf/1802.02611
 
 DeepLabV3에서는 2가지 유형의 신경 구조를 메인으로 다룹니다.
 
-1. Atrous Spatial Pyramid Pooling module
+### 1. Atrous Spatial Pyramid Pooling module
     
-    여러 비율의 ASPP을 사용하여 다양한 해상도의 Feature를 얻음.
+   여러 비율의 ASPP을 사용하여 다양한 해상도의 Feature를 얻음.
     
-2. Encoder-Decoder Structure
+### 2. Encoder-Decoder Structure
     
-    Encoder는 변형된 Xception 모델을 사용
+   Encoder는 변형된 Xception 모델을 사용
     
-    Decoder를 통해서 세밀한 객체의 경계를 복원
+   Decoder를 통해서 세밀한 객체의 경계를 복원
     
 
 결과적으로, PASCAL VOC 2012와 Cityscapes 데이터에서 후처리 없이 각각 mIou를 89.0% 와 82.1% 테스트 성능을 기록했습니다.
 
-![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/8e93c4f1-6ad9-4a70-8e85-041046be0f87/6d1ce0cb-880e-477b-bb83-a25be0ac9d86/image.png)
+<img src="https://github.com/user-attachments/assets/101061a5-c30a-4459-9a3d-b44e2833d329" width=600>
 
 ## 2. Encoder-Decoder with Atrous Convolution
 
@@ -36,7 +36,7 @@ DeepLabV3에서는 2가지 유형의 신경 구조를 메인으로 다룹니다.
 
 DeepLabV3+ 에서도 기존 DeepLabV1에서 도입된 Dilation Conv를 도입하여 해상도를 유지하면서 더 넓은 수용 영역을 확합니다.
 
-![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/8e93c4f1-6ad9-4a70-8e85-041046be0f87/0e570c22-797d-4603-93df-df5ccf5bff9f/image.png)
+<img src="https://github.com/user-attachments/assets/c198fc69-3b8e-4f43-8a06-a3e66bcce07b" width=600>
 
 ---
 
@@ -102,7 +102,7 @@ $r=2$로 첫 번째 위치와 두 번째 위치가 $r$만큼 차이가 나는 �
 
 ### 2.2 Depthwise Separable Convolution
 
-![스크린샷 2024-11-05 오후 4.02.56.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/8e93c4f1-6ad9-4a70-8e85-041046be0f87/a84d9bab-cf25-4728-be58-3594bcb60e18/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2024-11-05_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_4.02.56.png)
+<img src="https://github.com/user-attachments/assets/419cd77c-01f1-4e6f-ac74-8300740941a7" width=500>
 
 1. **Depthwise Conv** : 각 채널에 대해 독립적으로 **Spatial Correlations**을 학습
 2. **Pointwise Conv** : 1 x 1 Conv로 학습된 **Spatial Correlations**을 새로운 Channel 공간으로 매핑하여 **Cross-Channel Correlations**를 학습
@@ -124,13 +124,13 @@ Xception에서 변경점은 다음과 같습니다.
 - Max Pooling 연산을 Depthwise Separable Conv로 대체
 - MobileNet과 비슷한 구조화 목적으로 Depthwise Separable Conv 뒤에 Batch Normalization 과 ReLU 수행
 
-![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/8e93c4f1-6ad9-4a70-8e85-041046be0f87/e0385f21-9237-4319-af6e-4507689371db/image.png)
+<img src="https://github.com/user-attachments/assets/676ce9d2-6678-4f3f-b090-ae2a9556b34e" width=600>
 
 ### 2.4 Atrous Spatial Pyramid Pooling (ASPP)
 
 DeepLabV3는 **Atrous Spatial Pyramid Pooling(ASPP)** 모듈을 통해서 여러 스케일에서 Atrous Conv를 적용하여 다양한 스케일에서 문맥 정보를 얻습니다.
 
-![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/8e93c4f1-6ad9-4a70-8e85-041046be0f87/81435ed8-dee0-4057-bc0f-673f53ebc6ad/image.png)
+<img src="https://github.com/user-attachments/assets/3ecef92b-bb1d-4183-977b-0a78436aba68" width=700>
 
 ### **Output Stride**
 
@@ -161,7 +161,7 @@ If Output_stride = 16
 
 ## 2.1.5 Decoder
 
-![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/8e93c4f1-6ad9-4a70-8e85-041046be0f87/9dde957c-f698-49f6-ae96-ce9af682586d/image.png)
+<img src="https://github.com/user-attachments/assets/f71a0f31-effb-47a1-8eb5-67dbdc364e8b" width=600>
 
 논문에서는 Decoder 구조를 여러가지 방법으로 실험해서 어떤 구조가 좋은 성능을 내는지 소개합니다
 
@@ -174,16 +174,15 @@ If Output_stride = 16
 
 Low-Level Feature map을 48로 줄일 때 성능이 제일 좋다
 
-![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/8e93c4f1-6ad9-4a70-8e85-041046be0f87/577671b2-9db2-412f-9737-7979ace589d2/image.png)
+<img src="https://github.com/user-attachments/assets/004989dd-d28d-4c2d-95bb-04de0c024c04" width=700>
 
 ### 2. 3X3 Conv 구조를 어떻게 해야 좋은지
 
 Encoder의 Conv2를 Concat한 것을 [3X3, 256] 을 2번 했을 때가 제일 성능이 좋음
 
-![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/8e93c4f1-6ad9-4a70-8e85-041046be0f87/32255fee-1f98-4b1d-9c16-2db8de427d4f/image.png)
-
+<img src="https://github.com/user-attachments/assets/2e751f78-e6ba-4f47-baa6-86364c57291b" width=700>
 ---
 
 ### Decoder Upsampling 과정
 
-![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/8e93c4f1-6ad9-4a70-8e85-041046be0f87/ffcfda0d-140a-43a3-8b51-a1a8917a125d/image.png)
+<img src="https://github.com/user-attachments/assets/9e2ae21d-3a53-4ccf-8de3-b9a066515e98" width=700>
