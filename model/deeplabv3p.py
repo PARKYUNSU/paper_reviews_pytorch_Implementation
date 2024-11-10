@@ -7,28 +7,25 @@ from xception import Xception
 class Decoder(nn.Module):
     def __init__(self, low_level_channels, num_classes):
         super(Decoder, self).__init__()
-        self.conv1 = nn.Conv2d(low_level_channels, 48, 1, bias=False)
-        self.bn1 = nn.BatchNorm2d(48)
-        self.relu = nn.ReLU(inplace=True)
-
-        self.output = nn.Sequential(
-            nn.Conv2d(48 + 128, 256, 3, stride=1, padding=1, bias=False),
+       
+        self.conv1 = nn.Sequential(
+            nn.Conv2d(low_level_channels + 256, 256, 3, padding=1, bias=False),
             nn.BatchNorm2d(256),
-            nn.ReLU(inplace=True),
-            nn.Conv2d(256, 256, 3, stride=1, padding=1, bias=False),
-            nn.BatchNorm2d(256),
-            nn.ReLU(inplace=True),
-            nn.Dropout(0.1),
-            nn.Conv2d(256, num_classes, 1, stride=1),
+            nn.ReLU(inplace=True)
         )
+        self.conv2 = nn.Sequential(
+            nn.Conv2d(256, 256, 3, padding=1, bias=False),
+            nn.BatchNorm2d(256),
+            nn.ReLU()
+        )
+        self.classifier = nn.Conv2d(256, num_classes, 1)
 
-    def forward(self, x, low_level_features):
-        low_level_features = self.conv1(low_level_features)
-        low_level_features = self.relu(self.bn1(low_level_features))
-        H, W = low_level_features.size(2), low_level_features.size(3)
-
-        x = F.interpolate(x, size=(H, W), mode='bilinear', align_corners=True)
-        x = self.output(torch.cat((low_level_features, x), dim=1))
+    def forward(self, x, low_level_feat):
+        x = F.interpolate(x, size=low_level_feat.size()[2:], mode='bilinear', align_corners=True)
+        x = torch.cat([x, low_level_feat], dim=1)
+        x = self.conv1(x)
+        x = self.conv2(x)
+        x = self.classifier(x)
         return x
 
     
