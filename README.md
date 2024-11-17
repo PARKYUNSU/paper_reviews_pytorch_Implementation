@@ -197,10 +197,10 @@ Encoder의 Conv2를 Concat한 것을 [3X3, 256] 을 2번 했을 때가 제일 �
 <img src="https://github.com/user-attachments/assets/1dca6921-6072-49df-aa56-711f0aa3b752" width=800>
 
 
-### DeepLabV3+ ResNet Result
+### DeepLabV3+ ResNet Result (10 Epochs)
 <img src="https://github.com/user-attachments/assets/d853760b-e1aa-4a87-9ca0-e2047707e554" width=700>
 
 
-### DeepLabV3+ Xception Result
+### DeepLabV3+ Xception Result (10 Epochs)
 
 <img src="https://github.com/user-attachments/assets/8d508a73-d8ad-4599-aece-e308615b2a56" width=700>
