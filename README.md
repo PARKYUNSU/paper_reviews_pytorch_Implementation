@@ -13,7 +13,7 @@ https://arxiv.org/pdf/1409.4842
 
 GoogLeNet 모델이 기준년(2014년) 2년 전 Krizhevsky et al에  우승한 아키텍처보다 12배 적은 파라미터를 사용하면서 정확도를 높이는 성과를 거뒀습니다. 
 
-이 논문의 이름은 Network in Network 논문 저자인 Lin et 과 Inception 영화에서의 “We Need to go Deeper”의 밈에서 유래되었습니다. Deep이라는 단어가 두 가지 의미로 사용되는데, 하나는 Inception 모듈 이라는 a new levle of organization을 도입했다는 의미가 있고, 다른 하나는 네ㅡㅌ워크의 깊이가 증가했다라는 의미가 있습니다.
+이 논문의 이름은 Network in Network 논문 저자인 Lin et 과 Inception 영화에서의 “We Need to go Deeper”의 밈에서 유래되었습니다. Deep이라는 단어가 두 가지 의미로 사용되는데, 하나는 Inception 모듈 이라는 a new levle of organization을 도입했다는 의미가 있고, 다른 하나는 네트워크의 깊이가 증가했다라는 의미가 있습니다.
 
 <img src="https://github.com/user-attachments/assets/53edd6f6-dfb8-4641-9769-3b2ae17ed32e" width=400>
 
