@@ -2,7 +2,7 @@
  
 ---
 
-“Encoder-Decoder with Atrous Separable Convolution for Semantic Image Segmentation”
+“Encoder-Decoder with Atrous Separable Convolution for Semantic Image Segmentation” - 2018
 
 -Liang-Chieh Chen, Yukun Zhu, George Papandreou, Florian Schroff, and
 Hartwig Adam
