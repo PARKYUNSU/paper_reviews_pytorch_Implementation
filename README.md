@@ -39,7 +39,7 @@ DeepLabV3+ 에서도 기존 DeepLabV1에서 도입된 Dilation Conv를 도입하
 <img src="https://github.com/user-attachments/assets/c198fc69-3b8e-4f43-8a06-a3e66bcce07b" width=600>
 
 ---
-### 2.1.1 Dilation Ratio 커널 확장 계산법
+### 2.1.1 Dilation Ratio 커널 확장 계산법 (연두색)
 
 $k_e = k + (k-1)(r-1)$
 
@@ -63,7 +63,7 @@ $=3+(3-1)(2-1) = 3+2 = 5$ (5 X 5 커널)
 
 ---
 
-### 2.1.2 Dilation Ratio 가중치 거리 계산법
+### 2.1.2 Dilation Ratio 가중치 거리 계산법 (빨간색)
 
 $y[i]$ $=$ $\displaystyle\sum_{k=1}^K x[i + r ⋅ k]⋅w[k]$
 
