@@ -44,4 +44,20 @@ ___
 
 ## Ghost Module for More Features
 
+기존 잘 학습된 CNN 네트워크는 Feature Map에는 풍부하지만, 중복적인 정보가 존재한다고 얘기하고 있습니다.
+
 <img src="https://github.com/user-attachments/assets/594f54f0-b35a-4fa7-8f0c-124bcaab7c62" width=400>
+
+ResNet-50의 첫 번째 Residual Groupd에서 생성된 Feature Map을 시각화한 그림
+
+
+위의 그림에서 많은 쌍이 서로 유사하며, 서로 Ghost(유령) 처럼 보입니다.
+
+이러한 중복성은 딥러닝 네트워크의 중요한 특징일 수 있으나, 논문에서는 중복성을 피하고 비용면에서 효율적인 학습방법을 제안하고 자합니다.
+
+
+
+같은 색의 상자로 표시된 유사한 특징 맵 쌍의 예를 확인할 수 있습니다. 한 특징 맵은 다른 하나를 값싼 연산(cheap operations, 스패너로 표시됨)을 통해 대략적으로 얻을 수 있습니다.
+
+
+
