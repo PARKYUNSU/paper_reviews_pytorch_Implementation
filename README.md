@@ -114,23 +114,25 @@ $Where$
 Ghost Module은 convolution 연산을 다음 두 단계로 분리:
 
 #### **1) Intrinsic Feature Maps**
-Convolution 필터 $f^'$를 사용하여 소수의 주요 특징 맵 $Y^'$를 생성합니다:
+
+Convolution 필터 $f^{'}$ 를 사용하여 소수의 주요 특징 맵 $Y^{'}$ 를 생성합니다:
 
 $$
-Y^' = X \ast f^'
+Y^{'} = X \ast f^{'}
 $$
 
 $Where$
 
-- $Y^'$ : $m$개의 intrinsic Feature Map
-- $f^'$: 일반 필터
+- $Y^{'}$ : $m$개의 intrinsic Feature Map
+- $f^{'}$: 일반 필터
 - $m$: 주요 특징 맵의 총 수 ($m < n$, $n$은 전체 출력 채널 수)
 
 #### **2) Ghost Feature Maps**
-$Y^'$를 기반으로 여러 Cheap linear 연산(Depthwise Convolution, 선형 변환 등)을 수행해 ghost feature maps $Y_{ghost}$를 생성합니다:
+
+$Y^{'}$를 기반으로 여러 Cheap linear 연산(Depthwise Convolution, 선형 변환 등)을 수행해 ghost feature maps $Y_{ghost}$를 생성합니다:
 
 $$
-y_{ij} = \Phi_{i,j}(y^'_i), \, \forall i = 1, \ldots, m, \, j = 1, \ldots, s
+y_{ij} = \Phi_{i,j}(y^{'}_i), \, \forall i = 1, \ldots, m, \, j = 1, \ldots, s
 $$
 
 여기서:
