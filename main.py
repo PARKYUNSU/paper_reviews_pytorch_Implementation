@@ -1,5 +1,5 @@
 import torch
-from torch import optim
+from fvcore.nn import FlopCountAnalysis, parameter_count_table
 from model.ghost_net import GhostNet
 from utils import get_data_loaders
 from train import train
@@ -11,8 +11,15 @@ def main():
     model = GhostNet(num_classes=10).to(device)
     train_loader, test_loader = get_data_loaders(batch_size=128)
 
-    optimizer = optim.Adam(model.parameters(), lr=0.001, weight_decay=1e-4)
-    scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=200)
+    # FLOPs 계산
+    print("\nCalculating FLOPs and Parameters...")
+    example_input = torch.randn(1, 3, 32, 32).to(device)  # CIFAR-10은 32x32 크기
+    flops = FlopCountAnalysis(model, example_input)
+    print(f"FLOPs: {flops.total() / 1e6:.2f} MFLOPs")
+    print(parameter_count_table(model))
+
+    optimizer = torch.optim.Adam(model.parameters(), lr=0.001, weight_decay=1e-4)
+    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=200)
 
     num_epochs = 200
     best_acc = 0
@@ -23,29 +30,24 @@ def main():
     for epoch in range(num_epochs):
         print(f"\nEpoch {epoch + 1}/{num_epochs}")
         
-        # Train and evaluate
         train_loss, train_acc = train(model, train_loader, optimizer, device)
         test_loss, test_acc = evaluate(model, test_loader, device)
 
-        # Log losses and accuracies
         train_losses.append(train_loss)
         train_accuracies.append(train_acc)
         test_losses.append(test_loss)
         test_accuracies.append(test_acc)
 
-        # Update scheduler
         scheduler.step()
 
         print(f"Train Loss: {train_loss:.4f}, Train Acc: {train_acc:.2f}%")
         print(f"Test Loss: {test_loss:.4f}, Test Acc: {test_acc:.2f}%")
 
-        # Save best model
         if test_acc > best_acc:
             best_acc = test_acc
             torch.save(model.state_dict(), "ghostnet_best.pth")
             print("Best model saved!")
 
-    # Plot accuracy and loss
     plot_metrics(train_losses, test_losses, train_accuracies, test_accuracies)
 
 def plot_metrics(train_losses, test_losses, train_accuracies, test_accuracies):
