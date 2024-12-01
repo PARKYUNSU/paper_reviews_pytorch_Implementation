@@ -56,7 +56,10 @@ ResNet-50의 첫 번째 Residual Groupd에서 생성된 Feature Map을 시각화
 이러한 중복성은 딥러닝 네트워크의 중요한 특징일 수 있으나, 논문에서는 중복성을 피하고 *cheap operations(값싼 연산)* 으로 대체하고자 합니다.
 
 ---
+
 ### Feature Map (ResNet-50)
+
+---
 
 #### Input
 
@@ -70,21 +73,22 @@ ResNet-50의 첫 번째 Residual Groupd에서 생성된 Feature Map을 시각화
 
 <img src="https://github.com/user-attachments/assets/660eb7f9-b274-4189-b9f8-ad286f004761" width=300>
 
+---
 ResNet-50의 2번째 레이어의 Feature Map (256개인 이유)
 
-
-
-
-
+| Layer     | Number of Feature Maps |
+|-----------|-------------------------|
+| Conv1     | 64                      |
+| Conv2_x   | 256                     |
+| Conv3_x   | 512                     |
+| Conv4_x   | 1,024                    |
+| Conv5_x   | 2,048                    |
 
 ---
 
 
 
 
-Conv1: 64개의 Feature Map
-Conv2_x: 256개의 Feature Map
-Conv3_x: 512개의 Feature Map
-Conv4_x: 1024개의 Feature Map
-Conv5_x: 2048개의 Feature Map
+
+
 
