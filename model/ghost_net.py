@@ -1,6 +1,6 @@
 import torch
 import torch.nn as nn
-from ghost_module import Ghost_module
+from .ghost_module import Ghost_module
 
 class GhosBottleNeck(nn.Module):
     def __init__(self, in_channels, hidden_channels, out_channels, kernel_size, stride, use_se=False):
