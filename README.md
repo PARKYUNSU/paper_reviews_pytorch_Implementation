@@ -71,9 +71,10 @@ ResNet-50의 첫 번째 Residual Groupd에서 생성된 Feature Map을 시각화
 
 전체 이미지 : [ResNet-50 Feature Map](img/ResNet-50_feature_map.png)
 
+---
+
 <img src="https://github.com/user-attachments/assets/660eb7f9-b274-4189-b9f8-ad286f004761" width=300>
 
----
 ResNet-50의 2번째 레이어의 Feature Map (256개인 이유)
 
 | Layer     | Number of Feature Maps |
