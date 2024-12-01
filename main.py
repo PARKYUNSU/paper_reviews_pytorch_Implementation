@@ -1,4 +1,7 @@
 import torch
+import torch_xla
+import torch_xla.core.xla_model as xm
+from torch_xla.distributed.parallel_loader import MpDeviceLoader
 from torch import optim
 from model.ghost_net import GhostNet
 from utils import get_coco_data_loaders
@@ -7,11 +10,16 @@ from eval import evaluate
 import matplotlib.pyplot as plt
 
 def main():
-    device = "cuda" if torch.cuda.is_available() else "cpu"
-    model = GhostNet(num_classes=80).to(device)  # COCO에는 80개의 객체 클래스가 있음
+    # TPU 디바이스 설정
+    device = xm.xla_device()
 
-    # COCO 데이터 로더
-    train_loader, val_loader = get_coco_data_loaders(batch_size=64)
+    # 모델 생성 및 TPU로 이동
+    model = GhostNet(num_classes=80).to(device)  # COCO는 80 클래스
+    train_loader, val_loader = get_coco_data_loaders(batch_size=128)
+
+    # TPU용 데이터 로더
+    train_loader = MpDeviceLoader(train_loader, device)
+    val_loader = MpDeviceLoader(val_loader, device)
 
     # 옵티마이저와 스케줄러
     optimizer = optim.Adam(model.parameters(), lr=0.001, weight_decay=1e-4)
@@ -23,15 +31,13 @@ def main():
     train_losses, train_accuracies = [], []
     val_losses, val_accuracies = [], []
 
-    # 로그 출력
     print(f"Dataset: COCO")
-    print(f"Batch Size: {train_loader.batch_size}, Learning Rate: {0.001}, Weight Decay: {1e-4}")
-    print(f"Device: {device}")
+    print(f"Batch Size: {128}, Learning Rate: {0.001}, Weight Decay: {1e-4}")
 
     for epoch in range(num_epochs):
         print(f"\nEpoch {epoch + 1}/{num_epochs}")
-        
-        # Train and evaluate
+
+        # Train
         train_loss, train_acc = train(model, train_loader, optimizer, device)
         val_loss, val_acc = evaluate(model, val_loader, device)
 
@@ -44,22 +50,13 @@ def main():
         # Update scheduler
         scheduler.step()
 
-        # 현재 학습률 출력
-        current_lr = scheduler.get_last_lr()[0]
-        print(f"Current Learning Rate: {current_lr:.6f}")
-
         print(f"Train Loss: {train_loss:.4f}, Train Acc: {train_acc:.2f}%")
         print(f"Val Loss: {val_loss:.4f}, Val Acc: {val_acc:.2f}%")
-
-        # GPU 메모리 사용량 출력
-        if device == "cuda":
-            gpu_memory = torch.cuda.memory_allocated(device) / (1024 ** 3)
-            print(f"GPU Memory Allocated: {gpu_memory:.2f} GB")
 
         # Save best model
         if val_acc > best_acc:
             best_acc = val_acc
-            torch.save(model.state_dict(), f"ghostnet_best_epoch_{epoch + 1}.pth")
+            xm.save(model.state_dict(), f"ghostnet_best_epoch_{epoch + 1}.pth")
             print("Best model saved!")
 
     # Plot accuracy and loss

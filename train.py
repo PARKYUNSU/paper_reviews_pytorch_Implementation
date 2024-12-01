@@ -1,25 +1,28 @@
 import torch
-import torch.nn.functional as F
-from tqdm import tqdm
+import torch_xla.core.xla_model as xm
 
 def train(model, train_loader, optimizer, device):
     model.train()
-    total_loss = 0
-    correct = 0
-    total = 0
+    total_loss, correct, total = 0, 0, 0
 
-    for inputs, targets in tqdm(train_loader, desc="Training"):
+    for inputs, targets in train_loader:
         inputs, targets = inputs.to(device), targets.to(device)
-        optimizer.zero_grad()
+
+        # Forward pass
         outputs = model(inputs)
-        loss = F.cross_entropy(outputs, targets)
+        loss = torch.nn.functional.cross_entropy(outputs, targets)
+
+        # Backward pass and optimizer step
+        optimizer.zero_grad()
         loss.backward()
-        optimizer.step()
+        xm.optimizer_step(optimizer)  # TPU-specific optimizer step
 
-        total_loss += loss.item()
+        # Update metrics
+        total_loss += loss.item() * inputs.size(0)
         _, predicted = outputs.max(1)
-        total += targets.size(0)
         correct += predicted.eq(targets).sum().item()
+        total += targets.size(0)
 
-    acc = 100. * correct / total
-    return total_loss / len(train_loader), acc
+    avg_loss = total_loss / total
+    accuracy = 100.0 * correct / total
+    return avg_loss, accuracy
