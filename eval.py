@@ -6,16 +6,12 @@ def evaluate(model, val_loader, device):
     total_loss, correct, total = 0, 0, 0
 
     with torch.no_grad():
-        # tqdm으로 평가 진행 표시
         for inputs, targets in tqdm(val_loader, desc="Evaluating", leave=False):
             # COCO 주석이 없는 이미지를 건너뜀
             if any(len(target) == 0 for target in targets):
                 continue
-
-            # 이미지 리스트를 Tensor로 변환
             inputs = torch.stack(inputs).to(device)
             
-            # 주석에서 category_id 추출
             labels = torch.tensor([target[0]['category_id'] for target in targets if len(target) > 0]).to(device)
 
             # Forward pass

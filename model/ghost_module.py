@@ -28,8 +28,7 @@ class Ghost_module(nn.Module):
 
 
 if __name__ == "__main__":
-    # 테스트 입력
-    x = torch.randn(1, 16, 32, 32)  # 배치 크기 1, 입력 채널 16, 32x32 이미지
+    x = torch.randn(1, 16, 32, 32)
     ghost_module = Ghost_module(16, 32, kernel_size=1, stride=1, ratio=2)  # Ghost Module 초기화
     y = ghost_module(x)
-    print(f"input: {x.shape}, output: {y.shape}")  # 입력 및 출력 크기 출력
+    print(f"input: {x.shape}, output: {y.shape}")
