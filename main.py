@@ -1,7 +1,4 @@
 import torch
-import torch_xla
-import torch_xla.core.xla_model as xm
-from torch_xla.distributed.parallel_loader import MpDeviceLoader
 from torch import optim
 from model.ghost_net import GhostNet
 from utils import get_coco_data_loaders
@@ -10,18 +7,10 @@ from eval import evaluate
 import matplotlib.pyplot as plt
 
 def main():
-    # TPU 디바이스 설정
-    device = xm.xla_device()
-
-    # 모델 생성 및 TPU로 이동
-    model = GhostNet(num_classes=80).to(device)  # COCO는 80 클래스
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    model = GhostNet(num_classes=80).to(device)  # COCO는 80개의 클래스
     train_loader, val_loader = get_coco_data_loaders(batch_size=128)
 
-    # TPU용 데이터 로더
-    train_loader = MpDeviceLoader(train_loader, device)
-    val_loader = MpDeviceLoader(val_loader, device)
-
-    # 옵티마이저와 스케줄러
     optimizer = optim.Adam(model.parameters(), lr=0.001, weight_decay=1e-4)
     scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=200)
 
@@ -56,7 +45,7 @@ def main():
         # Save best model
         if val_acc > best_acc:
             best_acc = val_acc
-            xm.save(model.state_dict(), f"ghostnet_best_epoch_{epoch + 1}.pth")
+            torch.save(model.state_dict(), f"ghostnet_best_epoch_{epoch + 1}.pth")
             print("Best model saved!")
 
     # Plot accuracy and loss

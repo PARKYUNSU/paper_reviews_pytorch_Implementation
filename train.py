@@ -1,5 +1,4 @@
 import torch
-import torch_xla.core.xla_model as xm
 
 def train(model, train_loader, optimizer, device):
     model.train()
@@ -23,7 +22,7 @@ def train(model, train_loader, optimizer, device):
         # Backward pass와 Optimizer step
         optimizer.zero_grad()
         loss.backward()
-        xm.optimizer_step(optimizer)  # TPU를 사용할 경우 필요
+        optimizer.step()
 
         # Metrics 업데이트
         total_loss += loss.item() * inputs.size(0)
