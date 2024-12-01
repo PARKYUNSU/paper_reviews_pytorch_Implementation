@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 def main():
     device = "cuda" if torch.cuda.is_available() else "cpu"
     model = GhostNet(num_classes=80).to(device)  # COCO는 80개의 클래스
-    train_loader, val_loader = get_coco_data_loaders(batch_size=128)
+    train_loader, val_loader = get_coco_data_loaders(batch_size=128, num_workers=4)
 
     optimizer = optim.Adam(model.parameters(), lr=0.001, weight_decay=1e-4)
     scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=200)
