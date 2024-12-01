@@ -6,16 +6,18 @@ def train(model, train_loader, optimizer, device):
     total_loss, correct, total = 0, 0, 0
 
     for inputs, targets in train_loader:
+        # COCO 주석이 없는 이미지를 건너뜀
+        if any(len(target) == 0 for target in targets):
+            continue
+
         # 이미지 리스트를 Tensor로 변환
         inputs = torch.stack(inputs).to(device)
-        # targets는 리스트 그대로 유지 (COCO annotations)
+        
+        # 주석에서 category_id 추출
+        labels = torch.tensor([target[0]['category_id'] for target in targets if len(target) > 0]).to(device)
 
         # Forward pass
         outputs = model(inputs)
-        # COCO 데이터셋의 주석 구조에 맞게 라벨을 가져옵니다
-        labels = torch.tensor([target[0]['category_id'] for target in targets]).to(device)
-
-        # 손실 계산
         loss = torch.nn.functional.cross_entropy(outputs, labels)
 
         # Backward pass와 Optimizer step
@@ -29,6 +31,6 @@ def train(model, train_loader, optimizer, device):
         correct += predicted.eq(labels).sum().item()
         total += labels.size(0)
 
-    avg_loss = total_loss / total
-    accuracy = 100.0 * correct / total
+    avg_loss = total_loss / total if total > 0 else 0
+    accuracy = 100.0 * correct / total if total > 0 else 0
     return avg_loss, accuracy
