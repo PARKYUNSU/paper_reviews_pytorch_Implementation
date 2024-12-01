@@ -85,10 +85,9 @@ ResNet-50의 2번째 레이어의 Feature Map (256개인 이유)
 
 ---
 
-<img src="https://github.com/user-attachments/assets/f96f326f-3179-46c1-9cf1-fee0043f3fc6" width=500>
-
-
 # Ghost Module
+
+<img src="https://github.com/user-attachments/assets/f96f326f-3179-46c1-9cf1-fee0043f3fc6" width=500>
 
 ### 1. 기본 구조
 
