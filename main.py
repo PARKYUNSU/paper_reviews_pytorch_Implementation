@@ -1,5 +1,5 @@
 import torch
-from model import GhostNet
+from model.ghost_net import GhostNet
 from utils import get_data_loaders
 from train import train
 from eval import evaluate
