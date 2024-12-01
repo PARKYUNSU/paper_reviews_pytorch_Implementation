@@ -50,14 +50,27 @@ ___
 
 ResNet-50의 첫 번째 Residual Groupd에서 생성된 Feature Map을 시각화한 그림
 
-
 위의 그림에서 많은 쌍이 서로 유사하며, 서로 Ghost(유령) 처럼 보입니다.
+같은 색의 상자로 표시된 유사한 특징 맵 쌍의 예를 확인할 수 있습니다.
 
-이러한 중복성은 딥러닝 네트워크의 중요한 특징일 수 있으나, 논문에서는 중복성을 피하고 비용면에서 효율적인 학습방법을 제안하고 자합니다.
+이러한 중복성은 딥러닝 네트워크의 중요한 특징일 수 있으나, 논문에서는 중복성을 피하고 *cheap operations(값싼 연산)* 으로 대체하고자 합니다.
+
+---
+### Feature Map (ResNet-50)
 
 
 
-같은 색의 상자로 표시된 유사한 특징 맵 쌍의 예를 확인할 수 있습니다. 한 특징 맵은 다른 하나를 값싼 연산(cheap operations, 스패너로 표시됨)을 통해 대략적으로 얻을 수 있습니다.
 
 
+
+---
+
+
+
+
+Conv1: 64개의 Feature Map
+Conv2_x: 256개의 Feature Map
+Conv3_x: 512개의 Feature Map
+Conv4_x: 1024개의 Feature Map
+Conv5_x: 2048개의 Feature Map
 
