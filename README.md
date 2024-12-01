@@ -38,10 +38,6 @@ ___
 | **ShuffleNetV1**      | Channel Shuffle Operation                | Channel shuffle 연산으로 채널 그룹 간 정보 흐름 교환을 개선.                    |
 | **ShuffleNetV2**      | Channel Shuffle Operation + Hardware-Aware Design | 실제 하드웨어에서 속도를 고려한 컴팩트 모델 설계.                             |
 
-그러나, 본 논문의 저자는 위의 방법론 대신
-
-기존 CNN의 Feature Map에서 생성하는 정보들을 비교하여 새로운 방법으로 경량화를 제공하고자 합니다.
-
 
 ## Ghost Module for More Features
 
@@ -51,8 +47,7 @@ ___
 
 ResNet-50의 첫 번째 Residual Groupd에서 생성된 Feature Map을 시각화한 그림
 
-위의 그림에서 많은 쌍이 서로 유사하며, 서로 Ghost(유령) 처럼 보입니다.
-같은 색의 상자로 표시된 유사한 특징 맵 쌍의 예를 확인할 수 있습니다.
+위의 그림에서 많은 쌍이 서로 유사하며, 서로 Ghost(유령) 처럼 보입니다. 같은 색의 상자로 표시된 유사한 특징 맵 쌍의 예를 확인할 수 있습니다.
 
 이러한 중복성은 딥러닝 네트워크의 중요한 특징일 수 있으나, 논문에서는 중복성을 피하고 *cheap operations(값싼 연산)* 으로 대체하고자 합니다.
 
@@ -88,6 +83,66 @@ ResNet-50의 2번째 레이어의 Feature Map (256개인 이유)
 
 ---
 
+<img src="https://github.com/user-attachments/assets/f96f326f-3179-46c1-9cf1-fee0043f3fc6" width=500>
+
+
+# Ghost Module
+
+### 1. 기본 구조
+
+입력 데이터 $X$를 convolution 연산으로 처리하여 $Y$라는 출력 특징 맵을 생성합니다:
+
+$$
+Y = X \ast f + b
+$$
+
+여기서:
+
+- $f$: 필터
+- $\ast$: convolution 연산
+- $b$: 편향(bias)
+
+일반적으로 $f$와 $b$는 크고 복잡하여 많은 FLOPs와 메모리를 소모합니다.
+
+---
+
+### 2. Ghost Module의 아이디어
+
+Ghost Module은 convolution 연산을 다음 두 단계로 분리합니다:
+
+#### **1) Intrinsic Feature Maps 생성**
+Convolution 필터 $f_0$를 사용하여 소수의 주요 특징 맵 $Y_0$를 생성합니다:
+
+$$
+Y_0 = X \ast f_0
+$$
+
+여기서:
+
+- $f_0$: 일반 필터
+- $m$: 주요 특징 맵의 총 수 ($m < n$, $n$은 전체 출력 채널 수)
+
+#### **2) Ghost Feature Maps 생성**
+$Y_0$를 기반으로 여러 저렴한 연산(예: Depthwise Convolution, 선형 변환 등)을 수행해 ghost feature maps $Y_{ghost}$를 생성합니다:
+
+$$
+y_{ij} = \Phi_{i,j}(y_{0i}), \, \forall i = 1, \ldots, m, \, j = 1, \ldots, s
+$$
+
+여기서:
+
+- $\Phi$: 선형 연산(cheap operation)
+- $s$: 각 주요 특징 맵에서 생성될 ghost feature의 수
+
+---
+
+### 3. 최종 출력
+
+최종 출력 $Y$는 intrinsic feature maps $Y_0$와 ghost feature maps $Y_{ghost}$의 결합입니다:
+
+$$
+Y = [Y_0, Y_{ghost}]
+$$
 
 
 
