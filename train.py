@@ -1,10 +1,12 @@
 import torch
+from tqdm import tqdm
 
 def train(model, train_loader, optimizer, device):
     model.train()
     total_loss, correct, total = 0, 0, 0
 
-    for inputs, targets in train_loader:
+    # tqdm으로 학습 진행 표시
+    for inputs, targets in tqdm(train_loader, desc="Training", leave=False):
         # COCO 주석이 없는 이미지를 건너뜀
         if any(len(target) == 0 for target in targets):
             continue
