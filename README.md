@@ -132,26 +132,58 @@ $Where$
 $Y^{'}$를 기반으로 여러 Cheap linear 연산(Depthwise Convolution, 선형 변환 등)을 수행해 ghost feature maps $Y_{ghost}$를 생성합니다:
 
 $$
-y_{ij} = \Phi_{i,j}(y^{'}_i), \, \forall i = 1, \ldots, m, \, j = 1, \ldots, s
-$$
+y_{ij} = \Phi_{i,j}(y^{'}_{i})$$ $$\forall i = 1\ldots, m$$  $$j = 1, \ldots, s$$
 
-여기서:
 
+$Where$
+
+- $y^{'}_{i}$: $i$번째 Intrinsic feature map
 - $\Phi$: 선형 연산(cheap operation)
 - $s$: 각 주요 특징 맵에서 생성될 ghost feature의 수
 
+### 3. Final
+
+최종 출력 $Y$는 intrinsic feature maps $Y^{'}$와 ghost feature maps $Y_{ghost}$의 결합입니다:
+
+$$
+Y = [Y^{'}, Y_{ghost}]
+$$
+
 ---
 
-### 3. 최종 출력
+### Speed-Up 비율 계산
 
-최종 출력 $Y$는 intrinsic feature maps $Y_0$와 ghost feature maps $Y_{ghost}$의 결합입니다:
+Ghost Module에서 **linear operations**와 **identity mapping**을 speed-up 비율은 아래와 같이 계산됩니다:
+
+#### Speed-Up 비율 공식:
 
 $$
-Y = [Y_0, Y_{ghost}]
+r_s = \frac{n \cdot h' \cdot w' \cdot c \cdot k \cdot k}{\frac{n}{s} \cdot h' \cdot w' \cdot c \cdot k \cdot k + (s - 1) \cdot \frac{n}{s} \cdot h' \cdot w' \cdot d \cdot d}
 $$
 
+이를 간단히 정리하면:
+
+$$
+r_s \approx \frac{c \cdot k \cdot k}{\frac{1}{s} \cdot c \cdot k \cdot k + \frac{(s - 1)}{s} \cdot d \cdot d}
+$$
+
+$$
+r_s \approx \frac{s \cdot c}{s + c - 1} \approx s
+$$
+
+---
+
+### 간단한 설명
+
+1. **$n$: 출력 채널 수**, **$s$: Ghost factor**, **$c$: 입력 채널 수**
+2. **$k \cdot k$**: convolution 연산의 커널 크기, **$d \cdot d$**: linear operation에서 사용하는 커널 크기
+3. Ghost Module은 intrinsic feature maps와 cheap operations로 구성되므로, 연산의 비효율성을 줄일 수 있음.
+4. Ghost factor $s$가 클수록 계산 효율성이 더 높아짐.
 
 
+ 
+
+<img src="https://github.com/user-attachments/assets/162de10c-83b9-44a2-82d9-19b37d05d4fc" width=500>
 
 
 
