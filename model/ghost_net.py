@@ -3,7 +3,7 @@ import torch.nn as nn
 from ghost_module import Ghost_module
 
 class GhosBottleNeck(nn.Module):
-    def __init__(self, in_channels, hidden_channels, out_channels, kerner_size, stride, use_se=False):
+    def __init__(self, in_channels, hidden_channels, out_channels, kernel_size, stride, use_se=False):
         super(GhosBottleNeck, self).__init__()
         self.stride = stride
         self.use_se = use_se
@@ -13,23 +13,23 @@ class GhosBottleNeck(nn.Module):
 
         # Depthwise Conv
         self.depthwise = nn.Sequential(
-            nn.Conv2d(hidden_channels, hidden_channels, kerner_size, stride, kerner_size//2 , groups=hidden_channels, biase=False),
+            nn.Conv2d(hidden_channels, hidden_channels, kernel_size, stride, kernel_size//2 , groups=hidden_channels, bias=False),
             nn.BatchNorm2d(hidden_channels)
         ) if stride > 1 else nn.Identity()
 
         # SE module
         self.se = nn.Sequential(
             nn.AdaptiveAvgPool2d((1, 1)),
-            nn.Conv2d(hidden_channels, hidden_channels//4, kerner_size=1, bias=True),
+            nn.Conv2d(hidden_channels, hidden_channels//4, kernel_size=1, bias=True),
             nn.ReLU(inplace=True),
-            nn.Conv2d(hidden_channels//4, hidden_channels, kerner_size=1, bias=True),
+            nn.Conv2d(hidden_channels//4, hidden_channels, kernel_size=1, bias=True),
             nn.Hardsigmoid(inplace=True)
         ) if use_se else nn.Identity()
 
         # Ghost module without ReLU
         self.ghost = Ghost_module(hidden_channels, out_channels, relu=False)
         self.shortcut = nn.Sequential(
-            nn.Convd2d(in_channels, out_channels, kerner_size=1, stride=stride, biase=False),
+            nn.Conv2d(in_channels, out_channels, kernel_size=1, stride=stride, bias=False),
             nn.BatchNorm2d(out_channels)
         ) if stride > 1 or in_channels != out_channels else nn.Identity()
 
@@ -38,7 +38,7 @@ class GhosBottleNeck(nn.Module):
         x = self.ghostR(x)
         x = self.depthwise(x)
         x = self.se(x) if self.use_se else x
-        x = self.ghost
+        x = self.ghost(x)
         return x + shorchut
     
 class GhostNet(nn.Module):
@@ -46,16 +46,22 @@ class GhostNet(nn.Module):
         super(GhostNet, self).__init__()
         self.configs = [
             # [kernel_size, exp_size, out_channels, use_se, stride]
-            [3, 16, 16, False, 1],
-            [3, 48, 24, False, 2],
-            [3, 72, 24, False, 1],
-            [5, 72, 40, True, 2],
-            [5, 120, 40, True, 1],
-            [5, 240, 80, False, 2],
-            [3, 200, 80, False, 1],
-            [3, 480, 112, True, 1],
-            [3, 672, 160, True, 2],
-            [3, 960, 160, True, 1],
+            [3,  16,  16, 0, 1],
+            [3,  48,  24, 0, 2],
+            [3,  72,  24, 0, 1],
+            [5,  72,  40, 1, 2],
+            [5, 120,  40, 1, 1],
+            [3, 240,  80, 0, 2],
+            [3, 200,  80, 0, 1],
+            [3, 184,  80, 0, 1],
+            [3, 184,  80, 0, 1],
+            [3, 480, 112, 1, 1],
+            [3, 672, 112, 1, 1],
+            [5, 672, 160, 1, 2],
+            [5, 960, 160, 0, 1],
+            [5, 960, 160, 1, 1],
+            [5, 960, 160, 0, 1],
+            [5, 960, 160, 1, 1]
         ]
 
         self.conv_stem = nn.Sequential(
@@ -78,7 +84,7 @@ class GhostNet(nn.Module):
     def _make_layers(self):
         layers = []
         in_channels = 16
-        for k, exp, c, se, s in self.cfgs:
+        for k, exp, c, se, s in self.configs:
             layers.append(GhosBottleNeck(in_channels, exp, c, k, s, use_se=se))
             in_channels = c
         return nn.Sequential(*layers)
@@ -95,6 +101,6 @@ class GhostNet(nn.Module):
 # 테스트
 if __name__ == "__main__":
     model = GhostNet(num_classes=1000)
-    x = torch.randn(1, 3, 224, 224)
+    x = torch.randn(3, 3, 224, 224)
     y = model(x)
     print(f"Output shape: {y.shape}")
