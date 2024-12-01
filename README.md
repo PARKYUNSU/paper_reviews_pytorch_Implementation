@@ -37,7 +37,9 @@ ___
 | **ShuffleNetV1**      | Channel Shuffle Operation                | Channel shuffle 연산으로 채널 그룹 간 정보 흐름 교환을 개선.                    |
 | **ShuffleNetV2**      | Channel Shuffle Operation + Hardware-Aware Design | 실제 하드웨어에서 속도를 고려한 컴팩트 모델 설계.                             |
 
-그러나, 본 논문의 저자는 위의 방법론 대신에, 기존 CNN의 Feature Map에서 생성하는 정보들을 비교하여 새로운 방법으로 경량화를 제공하고자 합니다.
+그러나, 본 논문의 저자는 위의 방법론 대신
+
+기존 CNN의 Feature Map에서 생성하는 정보들을 비교하여 새로운 방법으로 경량화를 제공하고자 합니다.
 
 
 ## Ghost Module for More Features
