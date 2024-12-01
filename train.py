@@ -15,6 +15,9 @@ def train(model, train_loader, optimizer, device):
         # 주석에서 category_id 추출
         labels = torch.tensor([target[0]['category_id'] for target in targets if len(target) > 0]).to(device)
 
+        # 라벨 값이 1부터 시작하므로 1씩 감소
+        labels -= 1
+
         # Forward pass
         outputs = model(inputs)
         loss = torch.nn.functional.cross_entropy(outputs, labels)
