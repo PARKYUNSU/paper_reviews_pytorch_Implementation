@@ -45,7 +45,7 @@ ___
 
 <img src="https://github.com/user-attachments/assets/594f54f0-b35a-4fa7-8f0c-124bcaab7c62" width=400>
 
-ResNet-50의 첫 번째 Residual Groupd에서 생성된 Feature Map을 시각화한 그림
+| ResNet-50의 첫 번째 Residual Groupd에서 생성된 Feature Map 시각화
 
 위의 그림에서 많은 쌍이 서로 유사하며, 서로 Ghost(유령) 처럼 보입니다. 같은 색의 상자로 표시된 유사한 특징 맵 쌍의 예를 확인할 수 있습니다.
 
@@ -65,11 +65,13 @@ ResNet-50의 첫 번째 Residual Groupd에서 생성된 Feature Map을 시각화
 
 <img src="https://github.com/user-attachments/assets/c727a7a5-fad2-442c-a10e-870a794ce07d" width=400>
 
-전체 이미지 : [ResNet-50 Feature Map](img/ResNet-50_feature_map.png)
+| 전체 이미지 : [ResNet-50 Feature Map](img/ResNet-50_feature_map.png)
 
 ---
 
 <img src="https://github.com/user-attachments/assets/660eb7f9-b274-4189-b9f8-ad286f004761" width=300>
+
+| Architecture of ResNet-50
 
 ResNet-50의 2번째 레이어의 Feature Map (256개인 이유)
 
