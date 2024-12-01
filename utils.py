@@ -1,32 +1,37 @@
-from torchvision import datasets, transforms
+from torchvision import transforms
+from torchvision.datasets import CocoDetection
 from torch.utils.data import DataLoader
 
-def get_data_loaders(batch_size=128):
-    # CIFAR-10 정규화 값
-    cifar10_mean = [0.4914, 0.4822, 0.4465]
-    cifar10_std = [0.2023, 0.1994, 0.2010]
+def get_coco_data_loaders(batch_size=32, root_path="/kaggle/input/2017-2017"):
+    # COCO 데이터 경로
+    train_img_path = f"{root_path}/train2017/train2017/"
+    val_img_path = f"{root_path}/val2017/val2017/"
+    train_anno_path = f"{root_path}/annotations_trainval2017/annotations/instances_train2017.json"
+    val_anno_path = f"{root_path}/annotations_trainval2017/annotations/instances_val2017.json"
 
-    # 데이터 증강 (학습용)
+    # COCO 데이터셋용 변환 (학습)
     transform_train = transforms.Compose([
-        transforms.RandomCrop(32, padding=4),  # 랜덤 크롭
-        transforms.RandomHorizontalFlip(),     # 좌우 반전
+        transforms.Resize((256, 256)),         # 이미지 크기 조정
+        transforms.RandomCrop((224, 224)),    # 랜덤 크롭
+        transforms.RandomHorizontalFlip(),    # 좌우 반전
         transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2),  # 색상 변형
         transforms.ToTensor(),
-        transforms.Normalize(mean=cifar10_mean, std=cifar10_std)  # CIFAR-10 정규화
+        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])  # ImageNet 정규화
     ])
 
-    # 데이터 변환 (테스트용)
-    transform_test = transforms.Compose([
+    # COCO 데이터셋용 변환 (검증)
+    transform_val = transforms.Compose([
+        transforms.Resize((224, 224)),  # 이미지 크기 조정
         transforms.ToTensor(),
-        transforms.Normalize(mean=cifar10_mean, std=cifar10_std)  # CIFAR-10 정규화
+        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])  # ImageNet 정규화
     ])
 
-    # CIFAR-10 데이터셋 로드
-    train_dataset = datasets.CIFAR10(root="./data", train=True, transform=transform_train, download=True)
-    test_dataset = datasets.CIFAR10(root="./data", train=False, transform=transform_test, download=True)
+    # COCO 데이터셋 로드
+    train_dataset = CocoDetection(root=train_img_path, annFile=train_anno_path, transform=transform_train)
+    val_dataset = CocoDetection(root=val_img_path, annFile=val_anno_path, transform=transform_val)
 
     # DataLoader 생성
-    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=2)
-    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=2)
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=2, collate_fn=collate_fn)
+    val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False, num_workers=2, collate_fn=collate_fn)
 
-    return train_loader, test_loader
+    return train_loader, val_loader
