@@ -2,7 +2,6 @@ import torch
 import torch.nn.functional as F
 from tqdm import tqdm
 
-
 def train(model, train_loader, optimizer, device):
     model.train()
     total_loss = 0

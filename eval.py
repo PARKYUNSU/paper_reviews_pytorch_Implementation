@@ -2,7 +2,6 @@ import torch
 import torch.nn.functional as F
 from tqdm import tqdm
 
-
 def evaluate(model, test_loader, device):
     model.eval()
     total_loss = 0
