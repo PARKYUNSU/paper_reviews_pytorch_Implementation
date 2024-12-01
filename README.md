@@ -93,41 +93,44 @@ ResNet-50의 2번째 레이어의 Feature Map (256개인 이유)
 
 입력 데이터 $X$를 convolution 연산으로 처리하여 $Y$라는 출력 특징 맵을 생성합니다:
 
+| (a) The convolution layer.
+
 $$
 Y = X \ast f + b
 $$
 
-여기서:
+$Where$
 
 - $f$: 필터
 - $\ast$: convolution 연산
 - $b$: 편향(bias)
 
-일반적으로 $f$와 $b$는 크고 복잡하여 많은 FLOPs와 메모리를 소모합니다.
+이때, FLOPs는 $n⋅h^′⋅w^′⋅c⋅k⋅k$으로 그 수가 커질수 밖에 없다.
 
 ---
 
-### 2. Ghost Module의 아이디어
+### 2. Ghost Module
 
-Ghost Module은 convolution 연산을 다음 두 단계로 분리합니다:
+Ghost Module은 convolution 연산을 다음 두 단계로 분리:
 
-#### **1) Intrinsic Feature Maps 생성**
-Convolution 필터 $f_0$를 사용하여 소수의 주요 특징 맵 $Y_0$를 생성합니다:
+#### **1) Intrinsic Feature Maps**
+Convolution 필터 $f^'$를 사용하여 소수의 주요 특징 맵 $Y^'$를 생성합니다:
 
 $$
-Y_0 = X \ast f_0
+Y^' = X \ast f^'
 $$
 
-여기서:
+$Where$
 
-- $f_0$: 일반 필터
+- $Y^'$ : $m$개의 intrinsic Feature Map
+- $f^'$: 일반 필터
 - $m$: 주요 특징 맵의 총 수 ($m < n$, $n$은 전체 출력 채널 수)
 
-#### **2) Ghost Feature Maps 생성**
-$Y_0$를 기반으로 여러 저렴한 연산(예: Depthwise Convolution, 선형 변환 등)을 수행해 ghost feature maps $Y_{ghost}$를 생성합니다:
+#### **2) Ghost Feature Maps**
+$Y^'$를 기반으로 여러 Cheap linear 연산(Depthwise Convolution, 선형 변환 등)을 수행해 ghost feature maps $Y_{ghost}$를 생성합니다:
 
 $$
-y_{ij} = \Phi_{i,j}(y_{0i}), \, \forall i = 1, \ldots, m, \, j = 1, \ldots, s
+y_{ij} = \Phi_{i,j}(y^'_i), \, \forall i = 1, \ldots, m, \, j = 1, \ldots, s
 $$
 
 여기서:
