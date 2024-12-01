@@ -7,7 +7,7 @@
 https://arxiv.org/pdf/1911.11907
 ___
 
-## Introduction
+## 1. Introduction
 
 딥러닝에서 CNN은 여러 ComputerVision Task에 좋은 성능을 보여줬습니다.
 
@@ -18,7 +18,7 @@ ___
 이러한 계산량은 모바일 Device에서는 비효율적입니다. 따라서 효율적이고 경량화된 네트워크 설계가 주목받고 있습니다.
 
 ---
-### 1. 가중치 제거 방법
+### 1) 가중치 제거 방법
 
 | **Technique**         | **정의**                                                    | **종류**                                 | **장점**                                             | **단점**                                         |
 |------------------------|------------------------------------------------------------|------------------------------------------|-----------------------------------------------------|------------------------------------------------|
@@ -27,7 +27,8 @@ ___
 | **Knowledge Distillation** | 큰 모델에서 작은 모델로 지식을 전달하여 학습하는 기술.        | 출력 기반 증류, 특징 기반 증류             | - 작은 모델도 높은 성능 달성이 가능.                | - Teacher 모델 학습에 많은 자원이 필요함.       |
 
 ---
-### 2. Architecture
+
+### 2) Architecture
 
 | **Model**             | **Key Technique**                         | **Description**                                                                 |
 |-----------------------|-------------------------------------------|---------------------------------------------------------------------------------|
@@ -39,7 +40,7 @@ ___
 | **ShuffleNetV2**      | Channel Shuffle Operation + Hardware-Aware Design | 실제 하드웨어에서 속도를 고려한 컴팩트 모델 설계.                             |
 
 
-## Ghost Module for More Features
+## 2. Ghost Module for More Features
 
 기존 잘 학습된 CNN 네트워크는 Feature Map에는 풍부하지만, 중복적인 정보가 존재한다고 얘기하고 있습니다.
 
@@ -51,7 +52,6 @@ ___
 
 이러한 중복성은 딥러닝 네트워크의 중요한 특징일 수 있으나, 논문에서는 중복성을 피하고 *cheap operations(값싼 연산)* 으로 대체하고자 합니다.
 
----
 
 ### Feature Map (ResNet-50)
 
@@ -85,11 +85,11 @@ ResNet-50의 2번째 레이어의 Feature Map (256개인 이유)
 
 ---
 
-# Ghost Module
+## 3. Ghost Module
 
 <img src="https://github.com/user-attachments/assets/f96f326f-3179-46c1-9cf1-fee0043f3fc6" width=500>
 
-### 1. 기본 구조
+### 1) 기본 구조
 
 입력 데이터 $X$를 convolution 연산으로 처리하여 $Y$라는 출력 특징 맵을 생성합니다:
 
@@ -109,7 +109,7 @@ $Where$
 
 ---
 
-### 2. Ghost Module
+### 2) Ghost Module
 
 Ghost Module은 convolution 연산을 다음 두 단계로 분리:
 
@@ -141,7 +141,7 @@ $Where$
 - $\Phi$: 선형 연산(cheap operation)
 - $s$: 각 주요 특징 맵에서 생성될 ghost feature의 수
 
-### 3. Final
+### 3) Final
 
 최종 출력 $Y$는 intrinsic feature maps $Y^{'}$와 ghost feature maps $Y_{ghost}$의 결합입니다:
 
@@ -151,7 +151,7 @@ $$
 
 ---
 
-### Speed-Up 비율 계산
+### 4) Speed-Up 비율 계산
 
 Ghost Module에서 **linear operations**와 **identity mapping**을 speed-up 비율은 아래와 같이 계산됩니다:
 
@@ -171,19 +171,62 @@ $$
 r_s \approx \frac{s \cdot c}{s + c - 1} \approx s
 $$
 
----
-
-### 간단한 설명
+### 설명
 
 1. **$n$: 출력 채널 수**, **$s$: Ghost factor**, **$c$: 입력 채널 수**
 2. **$k \cdot k$**: convolution 연산의 커널 크기, **$d \cdot d$**: linear operation에서 사용하는 커널 크기
 3. Ghost Module은 intrinsic feature maps와 cheap operations로 구성되므로, 연산의 비효율성을 줄일 수 있음.
 4. Ghost factor $s$가 클수록 계산 효율성이 더 높아짐.
 
+---
 
+## 4. Ghost Bottleneck
+Ghost Bottleneck은 다음과 같이 구성
+
+### 4.1 Ghost Module 1
  
+  #### 4.1.1 Depthwise Convolution
 
-<img src="https://github.com/user-attachments/assets/162de10c-83b9-44a2-82d9-19b37d05d4fc" width=500>
+   - 공간 정보를 처리하며, stride에 따라 특징 맵의 크기를 줄이거나 유지합니다.
+
+   - stride=2일 경우, 특징 맵의 크기를 절반으로 다운샘플링합니다.
+
+   - stride=1일 경우, 특징 맵의 크기를 유지합니다.
+
+| **속성**              | **Stride=1**                          | **Stride=2**                                 |
+|-----------------------|---------------------------------------|---------------------------------------------|
+| **특징 맵 크기 변화**   | 동일 (크기 유지)                      | 크기 절반으로 다운샘플링                     |
+| **Depthwise Convolution** | 공간 정보 유지 (`stride=1`)             | 공간 정보 다운샘플링 (`stride=2`)             |
+| **Shortcut 연결**      | 직접 연결 (Identity Connection)        | 1×1 Convolution으로 크기 맞춤               |
+| **적용 목적**          | 세밀한 공간 정보 유지                  | 연산량 감소 및 추상적 특징 학습              |
+| **사용 위치**          | 네트워크 중간 레이어                   | 네트워크의 다운샘플링 전환 계층              |
 
 
+  #### 4.1.2 Squeeze-and-Excitation(SE) Module
 
+  - 입력 특징 맵의 채널별 중요도를 조정
+
+    | [SE-Net 내용](https://github.com/PARKYUNSU/SE-Net)
+
+
+### 4.2 Ghost Module 2
+
+  #### 4.2.1 Shortcut Connection:
+
+   - 입력과 출력이 동일한 크기일 때, 입력 특징 맵을 직접 연결(stride=1)
+
+   - 입력 크기와 출력 크기가 다르면(if stride=2), 1×1 convolution으로 크기를 맞춘 후 연결
+
+<img src="https://github.com/user-attachments/assets/162de10c-83b9-44a2-82d9-19b37d05d4fc" width=400>
+
+| Ghost Bottle Neck (left: stride=1, Right: stride=2)
+
+## 5. Architecture
+
+<img src="https://github.com/user-attachments/assets/503066ef-eeb8-4db1-9407-d739dc81bd14" width=600>
+
+---
+## 6. Result
+
+
+---
