@@ -14,7 +14,7 @@ def main():
     optimizer = optim.Adam(model.parameters(), lr=0.001, weight_decay=1e-4)
     scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=200)
 
-    num_epochs = 200
+    num_epochs = 50
     best_acc = 0
 
     train_losses, train_accuracies = [], []
