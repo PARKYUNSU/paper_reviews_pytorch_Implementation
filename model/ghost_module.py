@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 
 class Ghost_module(nn.Module):
-    def __init__(self, in_channels, out_channels, kerner_size=1, stride=1, ratio=2, dw_size=3):
+    def __init__(self, in_channels, out_channels, kerner_size=1, stride=1, ratio=2, dw_size=3, relu=True):
         super(Ghost_module, self).__init__()
         self.conv_channels = out_channels // ratio
         self.cheap_channels = out_channels - self.conv_channels
@@ -11,14 +11,14 @@ class Ghost_module(nn.Module):
         self.conv = nn.Sequential(
             nn.Conv2d(in_channels, self.conv_channels, kerner_size, stride, kerner_size//2, biae=False),
             nn.BatchNorm2d(self.conv_channels),
-            nn.ReLU(inplace=True)
+            nn.ReLU(inplace=True) if relu else nn.Identity()
         )
 
         # Ghost feature maps
         self.cheap_operation = nn.Sequential(
             nn.Conv2d(self.conv_channels, self.cheap_channels, dw_size, stride=1, padding=dw_size//2, groups=self.conv_channels, bias=False),
             nn.BatchNorm2d(self.conv_channels),
-            nn.ReLU(inplace=True)
+            nn.ReLU(inplace=True) if relu else nn.Identity()
         )
 
         def forward(self, x):
