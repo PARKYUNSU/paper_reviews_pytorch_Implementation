@@ -1,5 +1,7 @@
 # GhostNet
 
+"More Features from Cheap Operations"
+
 -Kai Han, Yunhe Wang, Qi Tian, Jianyuan Guo, Chunjing Xu, Chang Xu
 
 https://arxiv.org/pdf/1911.11907
