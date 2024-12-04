@@ -34,6 +34,7 @@ class SELayer(nn.Module):
 class GhostModule(nn.Module):
     def __init__(self, in_channels, out_channels, kernel_size=1, stride=1, ratio=2, dw_size=3, relu=True):
         super(GhostModule, self).__init__()
+        self.oup = out_channels  # 출력 채널 수 저장
         init_channels = math.ceil(out_channels / ratio)
         new_channels = out_channels - init_channels
 
