@@ -11,45 +11,58 @@ def _make_divisible(v, divisor, min_value=None):
         new_v += divisor
     return new_v
 
-class GhosBottleNeck(nn.Module):
-    def __init__(self, in_channels, hidden_channels, out_channels, kernel_size, stride, use_se=False):
-        super(GhosBottleNeck, self).__init__()
+class GhostBottleneck(nn.Module):
+    def __init__(self, in_channels, exp_channels, out_channels, kernel_size, stride, use_se):
+        super(GhostBottleneck, self).__init__()
         self.stride = stride
         self.use_se = use_se
 
-        # Ghost module with ReLU
-        self.ghostR = Ghost_module(in_channels, hidden_channels, relu=True)
+        # Pointwise conv (expansion)
+        self.ghost1 = nn.Conv2d(in_channels, exp_channels, kernel_size=1, stride=1, bias=False)
+        self.bn1 = nn.BatchNorm2d(exp_channels)
+        self.act1 = nn.ReLU(inplace=True)
 
-        # Depthwise Conv
-        self.depthwise = nn.Sequential(
-            nn.Conv2d(hidden_channels, hidden_channels, kernel_size, stride, kernel_size//2 , groups=hidden_channels, bias=False),
-            nn.BatchNorm2d(hidden_channels),
-            nn.ReLU(inplace=True)
+        # Depthwise conv (optional downsampling)
+        self.dwconv = nn.Conv2d(
+            exp_channels, exp_channels, kernel_size=kernel_size, stride=stride,
+            padding=kernel_size // 2, groups=exp_channels, bias=False
         ) if stride > 1 else nn.Identity()
+        self.bn2 = nn.BatchNorm2d(exp_channels)
 
-        # SE module
+        # SE layer (optional)
         self.se = nn.Sequential(
             nn.AdaptiveAvgPool2d(1),
-            nn.Conv2d(hidden_channels, hidden_channels//4, kernel_size=1, bias=True),
+            nn.Conv2d(exp_channels, exp_channels // 4, kernel_size=1),
             nn.ReLU(inplace=True),
-            nn.Conv2d(hidden_channels//4, hidden_channels, kernel_size=1, bias=True),
-            nn.Hardsigmoid(inplace=True)
+            nn.Conv2d(exp_channels // 4, exp_channels, kernel_size=1),
+            nn.Sigmoid()
         ) if use_se else nn.Identity()
 
-        # Ghost module without ReLU
-        self.ghost = Ghost_module(hidden_channels, out_channels, relu=False)
-        self.shortcut = nn.Sequential(
-            nn.Conv2d(in_channels, out_channels, kernel_size=1, stride=stride, bias=False),
-            nn.BatchNorm2d(out_channels)
-        ) if stride > 1 or in_channels != out_channels else nn.Identity()
+        # Pointwise linear (reduction)
+        self.ghost2 = nn.Conv2d(exp_channels, out_channels, kernel_size=1, stride=1, bias=False)
+        self.bn3 = nn.BatchNorm2d(out_channels)
 
     def forward(self, x):
-        shorchut = self.shortcut(x)
-        x = self.ghostR(x)
-        x = self.depthwise(x)
-        x = self.se(x) if self.use_se else x
-        x = self.ghost(x)
-        return x + shorchut
+        residual = x if self.stride == 1 else None
+
+        x = self.ghost1(x)
+        x = self.bn1(x)
+        x = self.act1(x)
+
+        x = self.dwconv(x)
+        x = self.bn2(x)
+
+        if self.use_se:
+            x = self.se(x)
+
+        x = self.ghost2(x)
+        x = self.bn3(x)
+
+        if residual is not None:
+            x += residual
+
+        return x
+
     
 class GhostNet(nn.Module):
     def __init__(self, cfgs, num_classes=1000, width_mult=1.):
