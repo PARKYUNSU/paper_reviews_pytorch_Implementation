@@ -2,6 +2,15 @@ import torch
 import torch.nn as nn
 from .ghost_module import Ghost_module
 
+
+def _make_divisible(v, divisor, min_value=None):
+    if min_value is None:
+        min_value = divisor
+    new_v = max(min_value, int(v + divisor / 2) // divisor * divisor)
+    if new_v < 0.9 * v:
+        new_v += divisor
+    return new_v
+
 class GhosBottleNeck(nn.Module):
     def __init__(self, in_channels, hidden_channels, out_channels, kernel_size, stride, use_se=False):
         super(GhosBottleNeck, self).__init__()
@@ -14,12 +23,13 @@ class GhosBottleNeck(nn.Module):
         # Depthwise Conv
         self.depthwise = nn.Sequential(
             nn.Conv2d(hidden_channels, hidden_channels, kernel_size, stride, kernel_size//2 , groups=hidden_channels, bias=False),
-            nn.BatchNorm2d(hidden_channels)
+            nn.BatchNorm2d(hidden_channels),
+            nn.ReLU(inplace=True)
         ) if stride > 1 else nn.Identity()
 
         # SE module
         self.se = nn.Sequential(
-            nn.AdaptiveAvgPool2d((1, 1)),
+            nn.AdaptiveAvgPool2d(1),
             nn.Conv2d(hidden_channels, hidden_channels//4, kernel_size=1, bias=True),
             nn.ReLU(inplace=True),
             nn.Conv2d(hidden_channels//4, hidden_channels, kernel_size=1, bias=True),
@@ -42,51 +52,49 @@ class GhosBottleNeck(nn.Module):
         return x + shorchut
     
 class GhostNet(nn.Module):
-    def __init__(self, num_classes=10):
+    def __init__(self, cfgs, num_classes=1000, width_mult=1.):
         super(GhostNet, self).__init__()
-        self.configs = [
-            # [kernel_size, exp_size, out_channels, use_se, stride]
-            [3,  16,  16, 0, 1],
-            [3,  48,  24, 0, 2],
-            [3,  72,  24, 0, 1],
-            [5,  72,  40, 1, 2],
-            [5, 120,  40, 1, 1],
-            [3, 240,  80, 0, 2],
-            [3, 200,  80, 0, 1],
-            [3, 184,  80, 0, 1],
-            [3, 184,  80, 0, 1],
-            [3, 480, 112, 1, 1],
-            [3, 672, 112, 1, 1],
-            [5, 672, 160, 1, 2],
-            [5, 960, 160, 0, 1],
-            [5, 960, 160, 1, 1],
-            [5, 960, 160, 0, 1],
-            [5, 960, 960, 1, 1]
-        ]
+        self.cfgs = cfgs
 
+        # First Layer
+        output_channel = _make_divisible(16 * width_mult, 4)
         self.conv_stem = nn.Sequential(
-            nn.Conv2d(3, 16, kernel_size=3, stride=2, padding=1, bias=False),
-            nn.BatchNorm2d(16),
+            nn.Conv2d(3, output_channel, kernel_size=3, stride=2, padding=1, bias=False),
+            nn.BatchNorm2d(output_channel),
             nn.ReLU(inplace=True)
         )
+        input_channel = output_channel
 
-        self.blocks = self._make_layers()
+        # GhostBottleneck Blocks
+        self.blocks = self._make_layers(input_channel, width_mult)
 
+        # Head Layer
+        output_channel = _make_divisible(960 * width_mult, 4)
         self.conv_head = nn.Sequential(
-            nn.Conv2d(960, 1280, kernel_size=1, stride=1, padding=0, bias=False),
-            nn.BatchNorm2d(1280),
+            nn.Conv2d(input_channel, output_channel, kernel_size=1, stride=1, padding=0, bias=False),
+            nn.BatchNorm2d(output_channel),
             nn.ReLU(inplace=True)
         )
 
+        # Classification Layer
         self.global_pool = nn.AdaptiveAvgPool2d(1)
-        self.fc = nn.Linear(1280, num_classes)
+        self.classifier = nn.Sequential(
+            nn.Linear(output_channel, 1280, bias=False),
+            nn.BatchNorm1d(1280),
+            nn.ReLU(inplace=True),
+            nn.Dropout(0.2),
+            nn.Linear(1280, num_classes)
+        )
 
-    def _make_layers(self):
+        self._initialize_weights()
+
+    def _make_layers(self, input_channel, width_mult):
         layers = []
-        in_channels = 16
-        for k, exp, c, se, s in self.configs:
-            layers.append(GhosBottleNeck(in_channels, exp, c, k, s, use_se=se))
-            in_channels = c
+        for k, exp_size, c, use_se, s in self.cfgs:
+            output_channel = _make_divisible(c * width_mult, 4)
+            hidden_channel = _make_divisible(exp_size * width_mult, 4)
+            layers.append(GhosBottleNeck(input_channel, hidden_channel, output_channel, k, s, use_se))
+            input_channel = output_channel
         return nn.Sequential(*layers)
 
     def forward(self, x):
@@ -95,12 +103,44 @@ class GhostNet(nn.Module):
         x = self.conv_head(x)
         x = self.global_pool(x)
         x = torch.flatten(x, 1)
-        x = self.fc(x)
+        x = self.classifier(x)
         return x
+
+    def _initialize_weights(self):
+        for m in self.modules():
+            if isinstance(m, nn.Conv2d):
+                nn.init.kaiming_normal_(m.weight, mode='fan_out', nonlinearity='relu')
+            elif isinstance(m, nn.BatchNorm2d):
+                m.weight.data.fill_(1)
+                m.bias.data.zero_()
+
+
+def ghostnet(num_classes=1000, width_mult=1.):
+    cfgs = [
+        # k, t, c, SE, s
+        [3, 16, 16, 0, 1],
+        [3, 48, 24, 0, 2],
+        [3, 72, 24, 0, 1],
+        [5, 72, 40, 1, 2],
+        [5, 120, 40, 1, 1],
+        [3, 240, 80, 0, 2],
+        [3, 200, 80, 0, 1],
+        [3, 184, 80, 0, 1],
+        [3, 184, 80, 0, 1],
+        [3, 480, 112, 1, 1],
+        [3, 672, 112, 1, 1],
+        [5, 672, 160, 1, 2],
+        [5, 960, 160, 0, 1],
+        [5, 960, 160, 1, 1],
+        [5, 960, 160, 0, 1],
+        [5, 960, 160, 1, 1]
+    ]
+    return GhostNet(cfgs, num_classes=num_classes, width_mult=width_mult)
+
 
 # 테스트
 if __name__ == "__main__":
-    model = GhostNet(num_classes=1000)
+    model = ghostnet(num_classes=10)
     x = torch.randn(3, 3, 224, 224)
     y = model(x)
     print(f"Output shape: {y.shape}")
