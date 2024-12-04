@@ -18,16 +18,18 @@ class GhostBottleneck(nn.Module):
         self.use_se = use_se
 
         # Pointwise conv (expansion)
-        self.ghost1 = nn.Conv2d(in_channels, exp_channels, kernel_size=1, stride=1, bias=False)
-        self.bn1 = nn.BatchNorm2d(exp_channels)
-        self.act1 = nn.ReLU(inplace=True)
+        self.ghost1 = nn.Sequential(
+            nn.Conv2d(in_channels, exp_channels, kernel_size=1, stride=1, bias=False),
+            nn.BatchNorm2d(exp_channels),
+            nn.ReLU(inplace=True)
+        )
 
         # Depthwise conv (optional downsampling)
         self.dwconv = nn.Conv2d(
             exp_channels, exp_channels, kernel_size=kernel_size, stride=stride,
             padding=kernel_size // 2, groups=exp_channels, bias=False
         ) if stride > 1 else nn.Identity()
-        self.bn2 = nn.BatchNorm2d(exp_channels)
+        self.bn_dw = nn.BatchNorm2d(exp_channels)
 
         # SE layer (optional)
         self.se = nn.Sequential(
@@ -39,29 +41,32 @@ class GhostBottleneck(nn.Module):
         ) if use_se else nn.Identity()
 
         # Pointwise linear (reduction)
-        self.ghost2 = nn.Conv2d(exp_channels, out_channels, kernel_size=1, stride=1, bias=False)
-        self.bn3 = nn.BatchNorm2d(out_channels)
+        self.ghost2 = nn.Sequential(
+            nn.Conv2d(exp_channels, out_channels, kernel_size=1, stride=1, bias=False),
+            nn.BatchNorm2d(out_channels)
+        )
+
+        # Residual connection adjustment (if needed)
+        self.shortcut = nn.Sequential(
+            nn.Conv2d(in_channels, out_channels, kernel_size=1, stride=stride, bias=False),
+            nn.BatchNorm2d(out_channels)
+        ) if stride > 1 or in_channels != out_channels else nn.Identity()
 
     def forward(self, x):
-        residual = x if self.stride == 1 else None
+        residual = self.shortcut(x)
 
+        # Ghost module operations
         x = self.ghost1(x)
-        x = self.bn1(x)
-        x = self.act1(x)
-
         x = self.dwconv(x)
-        x = self.bn2(x)
+        x = self.bn_dw(x)
 
         if self.use_se:
-            x = self.se(x)
+            x = x * self.se(x)
 
         x = self.ghost2(x)
-        x = self.bn3(x)
 
-        if residual is not None:
-            x += residual
-
-        return x
+        # Add residual connection
+        return x + residual
 
     
 class GhostNet(nn.Module):
