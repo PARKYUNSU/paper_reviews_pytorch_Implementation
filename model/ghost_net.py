@@ -70,7 +70,7 @@ class GhostBottleneck(nn.Module):
 
     
 class GhostNet(nn.Module):
-    def __init__(self, cfgs, num_classes=1000, width_mult=1.):
+    def __init__(self, cfgs, num_classes=80, width_mult=1.):
         super(GhostNet, self).__init__()
         self.cfgs = cfgs
 
@@ -85,6 +85,7 @@ class GhostNet(nn.Module):
 
         # GhostBottleneck Blocks
         self.blocks = self._make_layers(input_channel, width_mult)
+        input_channel = self.blocks[-1][-1].ghost2[0].out_channels  # 마지막 블록 출력 채널 추적
 
         # Head Layer
         output_channel = _make_divisible(960 * width_mult, 4)
