@@ -1,9 +1,3 @@
-"""
-Creates a GhostNet Model as defined in:
-GhostNet: More Features from Cheap Operations By Kai Han, Yunhe Wang, Qi Tian, Jianyuan Guo, Chunjing Xu, Chang Xu.
-https://arxiv.org/abs/1911.11907
-Modified from https://github.com/d-li14/mobilenetv3.pytorch
-"""
 import torch
 import torch.nn as nn
 import math
@@ -13,12 +7,6 @@ __all__ = ['ghostnet']
 
 
 def _make_divisible(v, divisor, min_value=None):
-    """
-    This function is taken from the original tf repo.
-    It ensures that all layers have a channel number that is divisible by 8
-    It can be seen here:
-    https://github.com/tensorflow/models/blob/master/research/slim/nets/mobilenet/mobilenet.py
-    """
     if min_value is None:
         min_value = divisor
     new_v = max(min_value, int(v + divisor / 2) // divisor * divisor)
