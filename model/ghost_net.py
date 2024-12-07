@@ -49,6 +49,8 @@ class SELayer(nn.Module):
 class GhostModule(nn.Module):
     def __init__(self, in_channels, out_channels, kernel_size=1, ratio=2, dw_kernel_size=3, stride=1, relu=True):
         super().__init__()
+        self.oup = oup
+
         init_channels = math.ceil(out_channels / ratio)
         cheap_channels = init_channels * (ratio - 1)
 
