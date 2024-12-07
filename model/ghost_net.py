@@ -29,7 +29,6 @@ class DwSepConv(nn.Module):
         x = self.pointwise(x)
         return x
 
-
 class SELayer(nn.Module):
     def __init__(self, channels, reduction=4):
         super().__init__()
@@ -47,7 +46,6 @@ class SELayer(nn.Module):
         y = self.fc(y).view(b, c, 1, 1)
         return x * y
 
-
 class GhostModule(nn.Module):
     def __init__(self, in_channels, out_channels, kernel_size=1, ratio=2, dw_kernel_size=3, stride=1, relu=True):
         super().__init__()
@@ -63,7 +61,6 @@ class GhostModule(nn.Module):
         primary_output = self.primary_conv(x)
         cheap_output = self.cheap_operation(primary_output)
         return torch.cat([primary_output, cheap_output], dim=1)[:, :self.oup, :, :]
-
 
 class GhostBottleneck(nn.Module):
     def __init__(self, in_channels, hidden_channels, out_channels, kernel_size, stride, use_se):
@@ -88,7 +85,6 @@ class GhostBottleneck(nn.Module):
             return self.conv(x) + x
         else:
             return self.conv(x) + self.shortcut(x)
-
 
 class GhostNet(nn.Module):
     def __init__(self, cfgs, num_classes=80, width_mult=1.0):
@@ -151,7 +147,6 @@ class GhostNet(nn.Module):
             elif isinstance(m, nn.Linear):
                 nn.init.normal_(m.weight, 0, 0.01)
                 nn.init.constant_(m.bias, 0)
-
 
 def ghostnet(num_classes=80):
     cfgs = [
