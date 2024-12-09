@@ -20,9 +20,9 @@ Contrastive Loss는 이미지 pairs 사이의 차이를 학습시키기 위한 L
 
    $Where:$
    
-    $D:$ 이미지 features 사이의 거리
+   $D:$ 이미지 features 사이의 거리
 
-    $margin:$ 다른 클래스 간의 최소 거리 기준
+   $margin:$ 다른 클래스 간의 최소 거리 기준
 
    특징:
    - 같은 Class의 샘플: 거리 D를 최소화
@@ -30,18 +30,18 @@ Contrastive Loss는 이미지 pairs 사이의 차이를 학습시키기 위한 L
    - 다른 Class의 샘플: 거리를 margin 이상으로 벌림
 
 1. Triplet Loss
-2. 
+   
 Triplet Loss는 anchor, positive, negative로 이루어진 triplet을 사용하여 anchor-positive 샘플의 거리를 최소화하고, anchor-negative 샘플의 거리를 최대화합니다.
 
    $L=max(d(a,n)−d(a,p)+margin,0)$
 
    $Where:$
    
-    $d(a,p):$ anchor-positive 거리
+   $d(a,p):$ anchor-positive 거리
 
-    $d(a,n):$ anchor-negative 거리
+   $d(a,n):$ anchor-negative 거리
 
-    $margin:$ 거리 기준
+   $margin:$ 거리 기준
 
 Positive 샘플은 anchor와 같은 클래스
 Negative 샘플은 anchor와 다른 클래스
