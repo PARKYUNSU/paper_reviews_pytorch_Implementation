@@ -1,15 +1,15 @@
 import torch
 import torchvision.transforms as transforms
 from PIL import Image
-from simsiam.builder2 import SimSiamWithoutProjection
+from simsiam.builder import SimSiam
 from torchvision.models import resnet50
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(f"Using device: {device}")
 
-# Pre-trained SimSiamWithoutProjection 모델 로드
+# Pre-trained SimSiam 모델 로드
 pretrained_path = "path/to/pretrain_ckpt.pth.tar"
-encoder = SimSiamWithoutProjection(resnet50, dim=2048)
+encoder = SimSiam(resnet50, dim=1000)
 state_dict = torch.load(pretrained_path, map_location="cpu")["state_dict"]
 encoder.load_state_dict({k.replace("module.", ""): v for k, v in state_dict.items()})
 encoder = encoder.to(device)
