@@ -18,9 +18,10 @@ Contrastive Loss는 이미지 pairs 사이의 차이를 학습시키기 위한 L
    $𝐿=𝑌⋅𝐷^2+(1−𝑌)⋅max(𝑚𝑎𝑟𝑔𝑖𝑛−𝐷,0)^2$
 
    $Where:$
-   $D:$ 이미지 features 사이의 거리
+   
+    $D:$ 이미지 features 사이의 거리
 
-   $margin:$ 다른 클래스 간의 최소 거리 기준
+    $margin:$ 다른 클래스 간의 최소 거리 기준
 
    특징:
    - 같은 Class의 샘플: 거리 D를 최소화
@@ -34,11 +35,11 @@ Triplet Loss는 anchor, positive, negative로 이루어진 triplet을 사용하�
 
    $Where:$
    
-   $d(a,p):$ anchor-positive 거리
+    $d(a,p):$ anchor-positive 거리
 
-   $d(a,n):$ anchor-negative 거리
+    $d(a,n):$ anchor-negative 거리
 
-   $margin:$ 거리 기준
+    $margin:$ 거리 기준
 
 Positive 샘플은 anchor와 같은 클래스
 Negative 샘플은 anchor와 다른 클래스
