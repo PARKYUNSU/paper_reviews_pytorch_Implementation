@@ -13,6 +13,7 @@ img2
 
 Loss Functions
 1. Contrastive Loss
+
 Contrastive Loss는 이미지 pairs 사이의 차이를 학습시키기 위한 Loss입니다.
 
    $𝐿=𝑌⋅𝐷^2+(1−𝑌)⋅max(𝑚𝑎𝑟𝑔𝑖𝑛−𝐷,0)^2$
@@ -29,6 +30,7 @@ Contrastive Loss는 이미지 pairs 사이의 차이를 학습시키기 위한 L
    - 다른 Class의 샘플: 거리를 margin 이상으로 벌림
 
 1. Triplet Loss
+2. 
 Triplet Loss는 anchor, positive, negative로 이루어진 triplet을 사용하여 anchor-positive 샘플의 거리를 최소화하고, anchor-negative 샘플의 거리를 최대화합니다.
 
    $L=max(d(a,n)−d(a,p)+margin,0)$
