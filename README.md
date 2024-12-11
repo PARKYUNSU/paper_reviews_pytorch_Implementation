@@ -65,15 +65,14 @@ Point wise Conv(채널 축)는 $M · N · D_F · D_F$ 계산된다.
 
 결과적으로 기존 Conv 계산 방식에 비해 Depth Wise Conv + Point Wise Conv의 계산 방식은 다음과 같이 계산량이 감소 하는데,
 
-$$
+$
 \frac {D_K · D_K · M · D_F · D_F + M · N · D_F · D_F}
 {D_K · D_K · M · N · D_F · D_F}
-$$
+$
 
-$$
+$
 =\frac1 N + \frac 1 {D^2_k}
-
-$$
+$
 
 이러한 감소량을 보인다.
 
