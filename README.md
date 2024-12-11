@@ -39,9 +39,9 @@ Depthwise Separable Convolutions 기법은 합성곱을 깊이 별 합성곱과 
 
 fig.1
 
-fig.1을 기준으로 `in_feature` 의 shape는[$M , D_F, D_F$]
+fig.1을 기준으로 `in_feature` 의 shape는 $[M, D_F, D_F]$
 
-`Conv Layer`의 커널 사이즈 [$D_K, D_K$], $N$ 개 로 정의 했을 때, 그 수식은
+`Conv Layer`의 커널 사이즈 $[D_K, D_K]$, $N$ 개 로 정의 했을 때, 그 수식은
 
 $D_K · D_K · M · N · D_F · D_F$
 
