@@ -222,3 +222,61 @@ forward 시 값을 그대로 사용, backward에서는 $\frac{∂stopgrad(z)}{�
    - 두 augmentation이 독립적으로 학습에 기여하므로 한쪽 네트워크가 과도하게 학습되지 않도록 방지
    - 모델이 양쪽 입력에 대해 균형 잡힌 표현을 학습할 수 있도록 도움
 
+
+## 4. Empirical Study
+### 4.1 Stop-Gradient의 역할
+   -  Stop-gradient가 없으면 Collapsing 문제가 발생
+   -  Stop-graident는 Collapsing을 방지하며, $z$값의 분산이 유지
+   -  단위벡터 $\frac\{z}{||p_1\||_2}$ 의 채널별 표준편차(std)를 계산하여 Collapsing 여부 평가
+   1) Collapsing 발생 시
+      $z$가 상수로 수렴하며, 채널별 표준편차가 0에 가까워집니다.
+   2) Gaussian 분포에 따른 경우
+      $z$가 Unit Hypersphere 위에 고르게 분포되며, 표준편차는 특정 값에 근접합니다.
+
+$std ≈ \frac{1}{\sqrt{d}}$  ($d$는 $z$ 벡터의 차원)
+
+
+### 4.2 Predictor
+역할:
+예측기 
+h는 Projection MLP 
+z의 출력을 다른 augmentation의 
+z와 정렬되도록 학습합니다.
+표현을 최신 상태로 유지하며, augmentation 분포의 기대값을 근사하는 데 도움을 줍니다.
+실험 결과:
+예측기 제거: 
+h를 제거하면 모델이 collapsing(출력이 상수로 수렴)하여 학습에 실패합니다.
+고정된 예측기: 무작위 초기화 상태로 고정된 
+h는 학습하지 못하며, 손실이 높은 상태로 유지됩니다.
+학습 가능한 예측기: 동적으로 업데이트되는 
+h는 SimSiam의 안정적 학습에 필수적입니다.
+
+
+### 4.3 Batch Size
+
+효과:
+SimSiam은 다양한 배치 크기(64~4096)에서 안정적으로 작동합니다.
+배치 크기가 작아도 성능 저하가 크지 않습니다.
+SimCLR 및 SwAV와의 차이점:
+SimCLR와 SwAV는 큰 배치 크기(4096 이상)가 필요하지만, SimSiam은 일반적인 크기(512)에서도 잘 작동합니다.
+
+### 4.4 Batch Normalization
+
+효과:
+BN은 각 레이어의 출력 분포를 안정화하여 최적화를 돕습니다.
+SimSiam에서 BN은 collapsing 방지에는 직접적인 영향을 미치지 않습니다.
+구성:
+Projection MLP:
+BN은 모든 FC 레이어에 적용되며, 출력 FC에는 ReLU가 없습니다.
+Prediction MLP:
+BN은 은닉 FC 레이어에 적용되지만, 출력 FC에는 적용되지 않습니다.
+
+### 4.6 Symmetrization
+
+$L = \frac{1}{2} D(p_1, stopgrad(z_2)) + \frac{1}{2} D(p_2, stopgrad(z_1))$
+
+두 augmentation 간 손실을 대칭적으로 계산하여 학습 안정성을 높입니다.
+효과:
+대칭화는 정확도를 높이는 데 기여하지만, collapsing 방지에는 필수적이지 않습니다.
+비교 실험:
+대칭화 제거(비대칭 손실)를 적용해도 모델이 collapsing 없이 학습할 수 있지만, 정확도는 약간 감소합니다.
