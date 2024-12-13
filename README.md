@@ -126,7 +126,6 @@ Self-Supervised Learning은 주로 Siamese Networks 구조를 사용합니다. S
 
 그러나 Siamese Networks는 Collapsing(모든 Output이 일정한 값으로 수렴하는 현상)이 발생하는 문제가 있습니다. 이 현상을 해결하기 위해 기존에 다음의 연구들이 진행되었습니다.
 
-<img src="https://github.com/user-attachments/assets/6010d30b-60fc-438c-a147-beff7c4ec539" width=400>
 
 
 ## 2. Related Work
@@ -135,6 +134,9 @@ Self-Supervised Learning은 주로 Siamese Networks 구조를 사용합니다. S
 | **Contrastive Learning** | SimCLR: Positive Pair는 끌어당기고 Negative Pair는 밀어내도록 학습                  | Negative Pairs로 Constant Output이 Solution Space에 포함되지 않도록 방지          |
 | **Clustering**       | SwAV: Siamese Networks에 Online Clustering을 도입                             | Online Clustering으로 Collapsing 방지                                            |
 | **BYOL**             | Positive Pairs만 사용                                                      | Momentum Encoder를 사용하여 Collapsing 방지                                      |
+
+<img src="https://github.com/user-attachments/assets/6010d30b-60fc-438c-a147-beff7c4ec539" width=400>
+| Comparison on Siamese architectures
 
 ### How SimSiam Emerges
 
