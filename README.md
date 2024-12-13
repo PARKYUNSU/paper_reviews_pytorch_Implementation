@@ -126,7 +126,6 @@ Self-Supervised Learning은 주로 Siamese Networks 구조를 사용합니다. S
 
 그러나 Siamese Networks는 Collapsing(모든 Output이 일정한 값으로 수렴하는 현상)이 발생하는 문제가 있습니다. 이 현상을 해결하기 위해 기존에 다음의 연구들이 진행되었습니다.
 
-<img src="https://github.com/user-attachments/assets/6010d30b-60fc-438c-a147-beff7c4ec539" width=400>
 
 
 ## 2. Related Work
@@ -135,6 +134,10 @@ Self-Supervised Learning은 주로 Siamese Networks 구조를 사용합니다. S
 | **Contrastive Learning** | SimCLR: Positive Pair는 끌어당기고 Negative Pair는 밀어내도록 학습                  | Negative Pairs로 Constant Output이 Solution Space에 포함되지 않도록 방지          |
 | **Clustering**       | SwAV: Siamese Networks에 Online Clustering을 도입                             | Online Clustering으로 Collapsing 방지                                            |
 | **BYOL**             | Positive Pairs만 사용                                                      | Momentum Encoder를 사용하여 Collapsing 방지                                      |
+
+<img src="https://github.com/user-attachments/assets/6010d30b-60fc-438c-a147-beff7c4ec539" width=400>
+
+| Comparison on Siamese architectures
 
 ### How SimSiam Emerges
 
@@ -151,6 +154,8 @@ SimSiam은 기존 방법론에서 Key Component 제거하여 더 간결한 구�
 ## 3. Method
 
 <img src="https://github.com/user-attachments/assets/8541e2ab-40ca-42e3-8e98-3d5ec6a6683a" width=400>
+
+| SimSiam Architecture
 
 ### 3.1 SimSiam Architecture
 
@@ -193,5 +198,27 @@ $stopgrad(z) = z$ ($z$를 상수로 취급하여 역전파시 Gradient 계산하
 
 forward 시 값을 그대로 사용, backward에서는 $\frac{∂stopgrad(z)}{∂z} = 0$
 
-#### 3.2.4 Symmetrized Loss 동작 원리
+#### 3.2.4 SimSiam 동작 원리
+
+1. 하나의 Input image $x$에 대해 random augmentation으로 augmentation $x_1$, $x_2$ 생성
+
+2. augmentation $x_1$, $x_2$는 Encoder $f$를 통과 (이떄, 두 Encoder는 weight을 공유)
+
+3. Encoder를 통과한 두 Vectore 중 한쪽에만 Predictor $h$를 통과해 새로운 vector $z$를 만든다.
+
+   $p_1 = h(f(x_1))$
+
+   $z_2 = f(x_2)$
+
+4. Symmetrized Loss
+   - augmenatation $x1$에서 나온 $p_1$과 $z_2$간 손실 계산
+   - augmenatation $x2$에서 나온 $p_2$과 $z_1$간 손실 계산
+     (두 손실을 합산하고 평균을 내서 최종 손실로 사용)
+5. Stop-gradient
+   - 첫 번째 항에서는 $z_2$를 상수로 취급하여 gradient $z_2$로 전달되지 않음
+   - 두 번째 항에서는 $z_1$에 stop-gradient가 적용
+   - 두 augmentation이 학습 과정에서 균형을 이루도록 함
+6. Loss Symmetry
+   - 두 augmentation이 독립적으로 학습에 기여하므로 한쪽 네트워크가 과도하게 학습되지 않도록 방지
+   - 모델이 양쪽 입력에 대해 균형 잡힌 표현을 학습할 수 있도록 도움
 
