@@ -6,7 +6,7 @@
 
 ---
 
-## Introduction
+## 1. Introduction
 
 ### Siamese Networks
 
@@ -120,6 +120,33 @@ Loss Functions
 
 </details>
 
+
+
+Self-Supervised Learning은 주로 Siamese Networks 구조를 사용합니다. Siamese Networks은 weight를 서로 공유하는 Twin Networks 구조를 가지고 있는데, 이들은 각 entitiy를 비교하는 데에 유용하게 사용할 수 있습니다.
+
+그러나 Siamese Networks는 Collapsing(모든 Output이 일정한 값으로 수렴하는 현상)이 발생하는 문제가 있습니다. 이 현상을 해결하기 위해 기존에 다음의 연구들이 진행되었습니다.
+
+<img src="https://github.com/user-attachments/assets/6010d30b-60fc-438c-a147-beff7c4ec539" width=400>
+
+
+## 2. Related Work
+| **Method**          | **Approach**                                                                 | **Key Strategy**                                                                 |
+|----------------------|-----------------------------------------------------------------------------|----------------------------------------------------------------------------------|
+| **Contrastive Learning** | SimCLR: Positive Pair는 끌어당기고 Negative Pair는 밀어내도록 학습                  | Negative Pairs로 Constant Output이 Solution Space에 포함되지 않도록 방지          |
+| **Clustering**       | SwAV: Siamese Networks에 Online Clustering을 도입                             | Online Clustering으로 Collapsing 방지                                            |
+| **BYOL**             | Positive Pairs만 사용                                                      | Momentum Encoder를 사용하여 Collapsing 방지                                      |
+
+### How SimSiam Emerges
+
+SimSiam은 기존 방법론에서 Key Strategy를 제거하여 더 간결한 구조를 갖게 되었습니다
+
+### SimSiam: Simplified by Removing Key Components
+| **Method**       | **Key Component Removed**         | **Resulting Model**                  |
+|-------------------|-----------------------------------|---------------------------------------|
+| **SimCLR**       | ❌ Negative Pairs                 | ✅ SimCLR without Negative Pairs      |
+| **SwAV**         | ❌ Online Clustering             | ✅ SwAV without Online Clustering     |
+| **BYOL**         | ❌ Momentum Encoder              | ✅ BYOL without Momentum Encoder      |
+| **SimSiam**      | ➕ Adds Stop-Gradient              | ✅ SimSiam with Stop-Gradient         |
 
 
 
