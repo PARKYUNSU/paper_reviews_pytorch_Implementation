@@ -135,7 +135,7 @@ Self-Supervised Learning은 주로 Siamese Networks 구조를 사용합니다. S
 | **Clustering**       | SwAV: Siamese Networks에 Online Clustering을 도입                             | Online Clustering으로 Collapsing 방지                                            |
 | **BYOL**             | Positive Pairs만 사용                                                      | Momentum Encoder를 사용하여 Collapsing 방지                                      |
 
-<img src="https://github.com/user-attachments/assets/6010d30b-60fc-438c-a147-beff7c4ec539" width=400>
+<img src="https://github.com/user-attachments/assets/fa34ddd5-4d2b-443a-9073-240b45fa3ae9" width=400>
 
 | Comparison on Siamese architectures
 
