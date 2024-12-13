@@ -198,7 +198,7 @@ $stopgrad(z) = z$ ($z$를 상수로 취급하여 역전파시 Gradient 계산하
 
 forward 시 값을 그대로 사용, backward에서는 $\frac{∂stopgrad(z)}{∂z} = 0$
 
-#### 3.2.4 Symmetrized Loss 동작 원리
+#### 3.2.4 SimSiam 동작 원리
 
 1. 하나의 Input image $x$에 대해 random augmentation으로 augmentation $x_1$, $x_2$ 생성
 
@@ -210,5 +210,13 @@ $z_2 = f(x_2)$
 
 4. Symmetrized Loss
    - augmenatation $x1$에서 나온 $p_1$과 $z_2$간 손실 계산
-   - augmenatation
-   
+   - augmenatation $x2$에서 나온 $p_2$과 $z_1$간 손실 계산
+     (두 손실을 합산하고 평균을 내서 최종 손실로 사용)
+5. Stop-gradient
+   - 첫 번째 항에서는 $z_2$를 상수로 취급하여 gradient $z_2$로 전달되지 않음
+   - 두 번째 항에서는 $z_1$에 stop-gradient가 적용
+   - 두 augmentation이 학습 과정에서 균형을 이루도록 함
+6. Loss Symmetry
+   - 두 augmentation이 독립적으로 학습에 기여하므로 한쪽 네트워크가 과도하게 학습되지 않도록 방지
+   - 모델이 양쪽 입력에 대해 균형 잡힌 표현을 학습할 수 있도록 도움
+
