@@ -200,3 +200,15 @@ forward 시 값을 그대로 사용, backward에서는 $\frac{∂stopgrad(z)}{�
 
 #### 3.2.4 Symmetrized Loss 동작 원리
 
+1. 하나의 Input image $x$에 대해 random augmentation으로 augmentation $x_1$, $x_2$ 생성
+
+2. augmentation $x_1$, $x_2$는 Encoder $f$를 통과 (이떄, 두 Encoder는 weight을 공유)
+
+3. Encoder를 통과한 두 Vectore 중 한쪽에만 Predictor $h$를 통과해 새로운 vector $z$를 만든다.
+$p_1 = h(f(x_1))$
+$z_2 = f(x_2)$
+
+4. Symmetrized Loss
+   - augmenatation $x1$에서 나온 $p_1$과 $z_2$간 손실 계산
+   - augmenatation
+   
