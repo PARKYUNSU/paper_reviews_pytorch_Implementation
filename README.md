@@ -136,6 +136,7 @@ Self-Supervised Learning은 주로 Siamese Networks 구조를 사용합니다. S
 | **BYOL**             | Positive Pairs만 사용                                                      | Momentum Encoder를 사용하여 Collapsing 방지                                      |
 
 <img src="https://github.com/user-attachments/assets/6010d30b-60fc-438c-a147-beff7c4ec539" width=400>
+
 | Comparison on Siamese architectures
 
 ### How SimSiam Emerges
@@ -153,6 +154,8 @@ SimSiam은 기존 방법론에서 Key Component 제거하여 더 간결한 구�
 ## 3. Method
 
 <img src="https://github.com/user-attachments/assets/8541e2ab-40ca-42e3-8e98-3d5ec6a6683a" width=400>
+
+| SimSiam Architecture
 
 ### 3.1 SimSiam Architecture
 
