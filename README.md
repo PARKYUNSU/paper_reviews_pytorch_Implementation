@@ -130,7 +130,7 @@ Self-Supervised Learning은 주로 Siamese Networks 구조를 사용합니다. S
 
 
 ## 2. Related Work
-| **Method**          | **Approach**                                                                 | **Key Strategy**                                                                 |
+| **Method**          | **Approach**                                                                 | **Key Component**                                                                 |
 |----------------------|-----------------------------------------------------------------------------|----------------------------------------------------------------------------------|
 | **Contrastive Learning** | SimCLR: Positive Pair는 끌어당기고 Negative Pair는 밀어내도록 학습                  | Negative Pairs로 Constant Output이 Solution Space에 포함되지 않도록 방지          |
 | **Clustering**       | SwAV: Siamese Networks에 Online Clustering을 도입                             | Online Clustering으로 Collapsing 방지                                            |
@@ -138,15 +138,60 @@ Self-Supervised Learning은 주로 Siamese Networks 구조를 사용합니다. S
 
 ### How SimSiam Emerges
 
-SimSiam은 기존 방법론에서 Key Strategy를 제거하여 더 간결한 구조를 갖게 되었습니다
+SimSiam은 기존 방법론에서 Key Component 제거하여 더 간결한 구조를 갖게 되었습니다
 
 ### SimSiam: Simplified by Removing Key Components
-| **Method**       | **Key Component Removed**         | **Resulting Model**                  |
+| **Method**       | **Key Component Removed**         | **Result Model**                  |
 |-------------------|-----------------------------------|---------------------------------------|
-| **SimCLR**       | ❌ Negative Pairs                 | ✅ SimCLR without Negative Pairs      |
-| **SwAV**         | ❌ Online Clustering             | ✅ SwAV without Online Clustering     |
-| **BYOL**         | ❌ Momentum Encoder              | ✅ BYOL without Momentum Encoder      |
-| **SimSiam**      | ➕ Adds Stop-Gradient              | ✅ SimSiam with Stop-Gradient         |
+| **SimCLR**       | ❌ Negative Pairs                 | SimCLR without Negative Pairs      |
+| **SwAV**         | ❌ Online Clustering             | SwAV without Online Clustering     |
+| **BYOL**         | ❌ Momentum Encoder              | BYOL without Momentum Encoder      |
+| **SimSiam**      | ➕ Adds Stop-Gradient              | SimSiam with Stop-Gradient         |
 
+## 3. Method
 
+<img src="https://github.com/user-attachments/assets/8541e2ab-40ca-42e3-8e98-3d5ec6a6683a" width=400>
+
+### 3.1 SimSiam Architecture
+
+1. 두 augmentation $x_1, x_2$ → 동일한 인코더 $f$ 통과
+2. $f:$ 백본 + Projection MLP
+3. $h:$ predictor → 한쪽에만 적용
+4. Stop-gradient → 다른 한쪽에 적용
+
+### 3.2 Loss
+#### 3.2.1 Negative Cosine Similarity
+
+$D(p_1, z_2) = - \frac{p_1}{\||p_1\||_2} \cdot \frac{z_2}{\||z_2\||_2}$
+
+$Where:$
+
+- $p_1$: Predictor MLP의 출력 벡터
+- $z_2$: Projection MLP의 출력 벡터 (stop-gradient 적용)
+- $\||p_1\||_2$: $p_1$ 벡터의 $\ell_2$-노름(norm)
+- $\||z_2\||_2$: $z_2$ 벡터의 $\ell_2$-노름(norm)
+
+#### 3.2.2 Symmetrized Loss
+
+Symmetrized Loss는 두개의 Augmentation의 손실을 대칭적으로 계산하여 학습 안정성을 부여
+
+$L = \frac{1}{2} D(p_1, stopgrad(z_2)) + \frac{1}{2} D(p_2, stopgrad(z_1))$
+
+$Where:$
+
+- $D(p_1,z_2)$: 두 벡터 $p_1$, $z_2$ 간의 Negative Cosine Similarity
+- $p_1, p_2$: Predictor MLP의 출력 벡터
+- $z_1, z_2$: Projection MLP의 출력 벡터
+- $stopgrad(z)$: Stop-gradient 연산이 적용된 z, 상수로 취급 되어 Gradient 전파되지 않는 텐서
+
+#### 3.2.3 Stop-Gradient
+Stop-gradient 연산은 collapsing(출력이 일정한 값으로 수렴하는 현상)을 방지하는 데 핵심적인 역할
+
+Gradient Flow 차단
+
+$stopgrad(z) = z$ ($z$를 상수로 취급하여 역전파시 Gradient 계산하지 않도록)
+
+forward 시 값을 그대로 사용, backward에서는 $\frac{∂stopgrad(z)}{∂z} = 0$
+
+#### 3.2.4 Symmetrized Loss 동작 원리
 
