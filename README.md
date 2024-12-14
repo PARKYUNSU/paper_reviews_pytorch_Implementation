@@ -159,7 +159,7 @@ SimSiam은 기존 방법론에서 Key Component 제거하여 더 간결한 구�
 
 ### 3.1 SimSiam Architecture
 
-1. Input Image $x → 랜덤 augmentation으로 $x_1, x_2$ 생성
+1. Input Image $x$ → 랜덤 augmentation으로 $x_1, x_2$ 생성
 2. 두 augmentation $x_1, x_2$ → 동일한 인코더 $f$ 통과
 3. $f:$ 백본 + Projection MLP
 4. $h:$ predictor → 한쪽에만 적용
