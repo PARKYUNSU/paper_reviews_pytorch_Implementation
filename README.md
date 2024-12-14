@@ -229,10 +229,13 @@ forward 시 값을 그대로 사용, backward에서는 $\frac{∂stopgrad(z)}{�
    -  Stop-graident는 Collapsing을 방지하며, $z$값의 분산이 유지
    -  단위벡터 $\frac\{z}{||p_1\||_2}$ 의 채널별 표준편차(std)를 계산하여 Collapsing 여부 평가
 
-   1) Collapsing 발생 시
-       $z$가 상수로 수렴하며, 채널별 표준편차가 0에 가까워집니다.
-   2) Gaussian 분포에 따른 경우
-       $z$가 Unit Hypersphere 위에 고르게 분포되며, 표준편차는 특정 값에 근접합니다.
+1) Collapsing 발생 시
+   
+   $z$가 상수로 수렴하며, 채널별 표준편차가 0에 가까워집니다.
+
+3) Gaussian 분포에 따른 경우
+   
+   $z$가 Unit Hypersphere 위에 고르게 분포되며, 표준편차는 특정 값에 근접합니다.
 
    $std ≈ \frac{1}{\sqrt{d}}$  ($d$는 $z$ 벡터의 차원)
 
