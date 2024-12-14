@@ -9,11 +9,9 @@ def evaluate(model, val_loader, device):
         for inputs, targets in tqdm(val_loader, desc="Evaluating", leave=False):
             inputs, targets = inputs.to(device), targets.to(device)
 
-            # Forward pass
             outputs = model(inputs)
             loss = torch.nn.functional.cross_entropy(outputs, targets)
 
-            # Metrics 업데이트
             total_loss += loss.item() * inputs.size(0)
             _, predicted = outputs.max(1)
             correct += predicted.eq(targets).sum().item()
