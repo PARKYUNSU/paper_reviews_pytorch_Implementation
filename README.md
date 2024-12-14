@@ -271,7 +271,7 @@ BN은 모든 FC 레이어에 적용되며, 출력 FC에는 ReLU가 없습니다.
 Prediction MLP:
 BN은 은닉 FC 레이어에 적용되지만, 출력 FC에는 적용되지 않습니다.
 
-### 4.6 Symmetrization
+### 4.5 Symmetrization
 
 $L = \frac{1}{2} D(p_1, stopgrad(z_2)) + \frac{1}{2} D(p_2, stopgrad(z_1))$
 
