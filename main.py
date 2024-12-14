@@ -1,6 +1,6 @@
 import torch
 from torch import optim
-from model.mobilev3 import MobilenetV3
+from model.mobilev3 import mobilenet_v3_large
 from utils import get_cifar10_data_loaders
 from train import train
 from eval import evaluate
@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 
 def main():
     device = "cuda" if torch.cuda.is_available() else "cpu"
-    model = MobilenetV3(num_classes=10).to(device)
+    model = mobilenet_v3_large(num_classes=10).to(device)
     train_loader, val_loader = get_cifar10_data_loaders(batch_size=128)
 
     optimizer = optim.Adam(model.parameters(), lr=0.001, weight_decay=1e-4)
