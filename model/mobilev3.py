@@ -2,7 +2,7 @@ import torch
 from torch import nn
 from torchinfo import summary
 
-from in_block import InvertedResBlock
+from .in_block import InvertedResBlock
 
 class MobilenetV3(nn.Module):
     def __init__(self, bottleneck, last_channels, num_classes):
