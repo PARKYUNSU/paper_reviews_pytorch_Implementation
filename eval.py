@@ -7,22 +7,17 @@ def evaluate(model, val_loader, device):
 
     with torch.no_grad():
         for inputs, targets in tqdm(val_loader, desc="Evaluating", leave=False):
-            # COCO 주석이 없는 이미지를 건너뜀
-            if any(len(target) == 0 for target in targets):
-                continue
-            inputs = torch.stack(inputs).to(device)
-            
-            labels = torch.tensor([target[0]['category_id'] for target in targets if len(target) > 0]).to(device)
+            inputs, targets = inputs.to(device), targets.to(device)
 
             # Forward pass
             outputs = model(inputs)
-            loss = torch.nn.functional.cross_entropy(outputs, labels)
+            loss = torch.nn.functional.cross_entropy(outputs, targets)
 
             # Metrics 업데이트
             total_loss += loss.item() * inputs.size(0)
             _, predicted = outputs.max(1)
-            correct += predicted.eq(labels).sum().item()
-            total += labels.size(0)
+            correct += predicted.eq(targets).sum().item()
+            total += targets.size(0)
 
     avg_loss = total_loss / total if total > 0 else 0
     accuracy = 100.0 * correct / total if total > 0 else 0

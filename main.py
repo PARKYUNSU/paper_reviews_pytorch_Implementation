@@ -1,15 +1,15 @@
 import torch
 from torch import optim
 from model.ghost_net import ghostnet
-from utils import get_coco_data_loaders
+from utils import get_cifar10_data_loaders
 from train import train
 from eval import evaluate
 import matplotlib.pyplot as plt
 
 def main():
     device = "cuda" if torch.cuda.is_available() else "cpu"
-    model = ghostnet(num_classes=80).to(device)  # COCO 80개 class
-    train_loader, val_loader = get_coco_data_loaders(batch_size=128)
+    model = ghostnet(num_classes=10).to(device)
+    train_loader, val_loader = get_cifar10_data_loaders(batch_size=128)
 
     optimizer = optim.Adam(model.parameters(), lr=0.001, weight_decay=1e-4)
     scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=200)
@@ -20,7 +20,7 @@ def main():
     train_losses, train_accuracies = [], []
     val_losses, val_accuracies = [], []
 
-    print(f"Dataset: COCO")
+    print(f"Dataset: CIFAR-10")
     print(f"Batch Size: {128}, Learning Rate: {0.001}, Weight Decay: {1e-4}")
 
     for epoch in range(num_epochs):
