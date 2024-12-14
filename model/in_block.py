@@ -1,6 +1,6 @@
 import torch
 from torch import nn
-from se_block import SE_block
+from .se_block import SE_block
 
 class InvertedResBlock(nn.Module):
     def __init__(self, in_channels, inner_channels, out_channels, kernel_size, stride, SE, AF):
