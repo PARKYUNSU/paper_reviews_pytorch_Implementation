@@ -165,6 +165,8 @@ SimSiam은 기존 방법론에서 Key Component 제거하여 더 간결한 구�
 4. $h:$ predictor → 한쪽에만 적용
 5. Stop-gradient → 다른 한쪽에 적용
 
+---
+
 ### 3.2 Loss
 #### 3.2.1 Negative Cosine Similarity
 
@@ -223,6 +225,7 @@ forward 시 값을 그대로 사용, backward에서는 $\frac{∂stopgrad(z)}{�
    - 두 augmentation이 독립적으로 학습에 기여하므로 한쪽 네트워크가 과도하게 학습되지 않도록 방지
    - 모델이 양쪽 입력에 대해 균형 잡힌 표현을 학습할 수 있도록 도움
 
+---
 
 ## 4. Empirical Study
 ### 4.1 Stop-Gradient의 역할
