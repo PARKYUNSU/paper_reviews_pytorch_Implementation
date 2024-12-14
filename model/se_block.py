@@ -1,5 +1,5 @@
 import torch
-from torch.nn import nn
+from torch import nn
 
 class SE_block(nn.Module):
     def __init__(self, in_channels, reduction_ratio=4): # MobilenetV3 r = 4
