@@ -49,7 +49,7 @@ class MobilenetV3(nn.Module):
         x = self.fc2(x)
         return x
     
-def mobilenet_v3_large():
+def mobilenet_v3_large(num_classes=1000):
     cfgs = [
         [3,  16,  16, False, False, 1],
         [3,  64,  24, False, False, 2],
@@ -68,9 +68,9 @@ def mobilenet_v3_large():
         [5, 960, 160,  True,  True, 1],
     ]
 
-    return MobilenetV3(cfgs, last_channels = 1280, num_classes = 1000)
+    return MobilenetV3(cfgs, last_channels=1280, num_classes=num_classes)
 
-def mobilenet_v3_small():
+def mobilenet_v3_small(num_classes=1000):
     cfgs = [
         [3,  16, 16,  True, False, 2],
         [3,  72, 24, False, False, 2],
@@ -85,8 +85,9 @@ def mobilenet_v3_small():
         [5, 576, 96,  True,  True, 1],
         ]
    
-    return MobilenetV3(cfgs, last_channels = 1024, num_classes = 1000)
+    return MobilenetV3(cfgs, last_channels = 1024, num_classes=num_classes)
+
 model = mobilenet_v3_large()
 #model = mobilenet_v3_small()
 
-summary(model, input_size = (2, 3, 224, 224), device = "cpu")
+# summary(model, input_size = (2, 3, 224, 224), device = "cpu")
