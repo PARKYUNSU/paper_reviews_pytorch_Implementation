@@ -45,7 +45,7 @@ def main():
         # Save best model
         if val_acc > best_acc:
             best_acc = val_acc
-            torch.save(model.state_dict(), f"ghostnet_best_epoch_{epoch + 1}.pth")
+            torch.save(model.state_dict(), f"mobilenetv3_best_epoch_{epoch + 1}.pth")
             print("Best model saved!")
 
     # Plot accuracy and loss
