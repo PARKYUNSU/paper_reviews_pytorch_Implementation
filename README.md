@@ -256,11 +256,11 @@ $Where:$
 
 #### **Step 2. Encoder를 통해 Feature 추출**
 
-- 각각의 augmentation 이미지를 Encoder \( f \)에 입력하여 Feature Vector \( z \)를 생성합니다.
-  - $z_a^{1} = f(x_a^{(1)})$
-  - $z_a^{2} = f(x_a^{(2)})$
-  - $z_b^{1} = f(x_b^{(1)})$
-  - $z_b^{2} = f(x_b^{(2)})$
+- 각각의 augmentation 이미지를 Encoder $f$에 입력하여 Feature Vector $z$를 생성합니다.
+  - $z_a^{1} = f(x_a^{1})$
+  - $z_a^{2} = f(x_a^{2})$
+  - $z_b^{1} = f(x_b^{1})$
+  - $z_b^{2} = f(x_b^{2})$
 
 #### **Step 3. Projection MLP를 통과**
 
@@ -271,8 +271,8 @@ $Where:$
 #### **Step 4. Predictor를 통해 정렬**
 
 - Projection MLP의 출력을 Predictor $h$에 입력하여 다른 뷰와 정렬하도록 학습합니다.
-  - $p_a^{1} = h(z_a'^{1}) \), \( p_a^{2} = h(z_a'^{2})$
-  - $p_b^{1} = h(z_b'^{1}) \), \( p_b^{2} = h(z_b'^{2})$
+  - $p_a^{1} = h(z_a'^{1}), p_a^{2} = h(z_a'^{2})$
+  - $p_b^{1} = h(z_b'^{1}), p_b^{2} = h(z_b'^{2})$
 
 #### **Step 5. Symmetrized Loss 계산**
 
