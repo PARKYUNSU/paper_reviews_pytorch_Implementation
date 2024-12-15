@@ -165,21 +165,21 @@ SimSiam은 자가 지도 학습에서 Collapsing 현상(출력이 일정한 값�
 
 1. Collapsing 방지
   
-    - 모든 출력이 일정한 값으로 수렴하면 모델이 더 이상 의미 있는 표현을 학습하지 못합니다.
+   - 모든 출력이 일정한 값으로 수렴하면 모델이 더 이상 의미 있는 표현을 학습하지 못합니다.
 
-    - Stop-gradient는 하나의 네트워크 출력($z1$ 또는 $z2$)을 상수처럼 취급하여 역전파를 차단
+   - Stop-gradient는 하나의 네트워크 출력($z1$ 또는 $z2$)을 상수처럼 취급하여 역전파를 차단
 
 2. Gradient Flow 차단
 
-    - $stopgrad(z) = z$ ($z$를 상수로 취급하여 역전파시 Gradient 계산하지 않도록)
+   - $stopgrad(z) = z$ ($z$를 상수로 취급하여 역전파시 Gradient 계산하지 않도록)
 
-    - forward 시 값을 그대로 사용, backward에서는 $\frac{∂stopgrad(z)}{∂z} = 0$
+   - forward 시 값을 그대로 사용, backward에서는 $\frac{∂stopgrad(z)}{∂z} = 0$
 
 3. Gaussian 분포 유지
 
-    - Stop-gradient는 $z$ 값이 Unit Hypersphere 위에 고르게 분포하도록 유도합니다.
+   - Stop-gradient는 $z$ 값이 Unit Hypersphere 위에 고르게 분포하도록 유도합니다.
    
-    - 단위벡터 $\frac\{z}{||p_1\||_2}$ 의 채널별 표준편차(std)를 계산하여 Collapsing 여부 평가
+   - 단위벡터 $\frac\{z}{||p_1\||_2}$ 의 채널별 표준편차(std)를 계산하여 Collapsing 여부 평가
 
 
 ### 3.2 SimSiam Architecture
