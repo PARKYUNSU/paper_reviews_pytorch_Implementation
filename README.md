@@ -181,6 +181,7 @@ SimSiam은 자가 지도 학습에서 Collapsing 현상(출력이 일정한 값�
    
    - 단위벡터 $\frac\{z}{||p_1\||_2}$ 의 채널별 표준편차(std)를 계산하여 Collapsing 여부 평가
 
+---
 
 ### 3.2 SimSiam Architecture
 
@@ -216,6 +217,8 @@ $Where:$
 - $p_1, p_2$: Predictor MLP의 출력 벡터
 - $z_1, z_2$: Projection MLP의 출력 벡터
 - $stopgrad(z)$: Stop-gradient 연산이 적용된 z, 상수로 취급 되어 Gradient 전파되지 않는 텐서
+
+---
 
 ### 3.4 SimSiam 동작 원리
 
