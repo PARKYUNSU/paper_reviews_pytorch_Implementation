@@ -1,6 +1,8 @@
 import torch
 import torch.nn as nn
 import math
+from torchinfo import summary
+
 
 class BasicConv(nn.Module):
     def __init__(self, in_channels, out_channels, kernel_size, stride=1, padding=0, groups=1, relu=True):
@@ -173,3 +175,7 @@ def ghostnet(num_classes=80):
         [5, 960, 160, 1, 1],
     ]
     return GhostNet(cfgs, num_classes=num_classes)
+
+model = ghostnet()
+
+summary(model, input_size = (2, 3, 224, 224), device = "cpu")
