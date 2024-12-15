@@ -90,4 +90,4 @@ def mobilenet_v3_small(num_classes=1000):
 model = mobilenet_v3_large()
 #model = mobilenet_v3_small()
 
-# summary(model, input_size = (2, 3, 224, 224), device = "cpu")
+summary(model, input_size = (2, 3, 224, 224), device = "cpu")
