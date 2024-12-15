@@ -167,7 +167,7 @@ SimSiam은 자가 지도 학습에서 Collapsing 현상(출력이 일정한 값�
   
    - 모든 출력이 일정한 값으로 수렴하면 모델이 더 이상 의미 있는 표현을 학습하지 못합니다.
 
-   - Stop-gradient는 하나의 네트워크 출력($z1$ 또는 $z2$)을 상수처럼 취급하여 역전파를 차단
+   - Stop-gradient는 하나의 네트워크 출력($z_1$ 또는 $z_2$)을 상수처럼 취급하여 역전파를 차단
 
 2. Gradient Flow 차단
 
@@ -252,7 +252,6 @@ $Where:$
 
 - 이미지 A와 B 각각에 대해 서로 다른 랜덤 변형(augmentation)을 적용하여 두 개의 뷰를 생성합니다.
 
-  예를 들어:
   - $x_a^{1}$: 이미지 A에 augmentation 1 적용
   - $x_a^{2}$: 이미지 A에 augmentation 2 적용
   - $x_b^{1}$: 이미지 B에 augmentation 1 적용
