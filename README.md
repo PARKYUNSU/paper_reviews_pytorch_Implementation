@@ -286,6 +286,7 @@ $Where:$
     $L_A = \frac{1}{2} D(p_a^{1}, \text{stopgrad}(z_a'^{2})) + \frac{1}{2} D(p_a^{2}, \text{stopgrad}(z_a'^{1}))$
     
   - 이미지 B
+    
     $L_B = \frac{1}{2} D(p_b^{1}, \text{stopgrad}(z_b'^{2})) + \frac{1}{2} D(p_b^{2}, \text{stopgrad}(z_b'^{1}))$
 
 #### **Step 6. 가중치 업데이트**
@@ -307,17 +308,21 @@ $Where:$
 
 이미지 A, B, C 각각에 대해 개별적으로 Loss를 계산:
 - 이미지 A
+  
   $L_A = \frac{1}{2} D(p_a^{1}, \text{stopgrad}(z_a'^{2})) + \frac{1}{2} D(p_a^{2}, \text{stopgrad}(z_a'^{1}))$
   
 - 이미지 B
+  
   $L_B = \frac{1}{2} D(p_b^{1}, \text{stopgrad}(z_b'^{2})) + \frac{1}{2} D(p_b^{2}, \text{stopgrad}(z_b'^{1}))$
 
 - 이미지 C
+  
   $L_C = \frac{1}{2} D(p_c^{1}, \text{stopgrad}(z_c'^{2})) + \frac{1}{2} D(p_c^{2}, \text{stopgrad}(z_c'^{1}))$
 
 #### **Step 6. 총 손실 계산**
 
-- 최종 손실:
+- 최종 손실
+  
   $L_{\text{total}} = L_A + L_B + L_C$
 
 #### **Step 7. 모델 업데이트**
