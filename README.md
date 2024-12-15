@@ -4,6 +4,8 @@
 
 -Xinlei Chen, Kaiming He (Facebook AI Research)
 
+https://arxiv.org/pdf/2011.10566
+
 ---
 
 ## 1. Introduction
