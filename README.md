@@ -235,46 +235,69 @@ Ghost Bottleneck은 다음과 같이 구성
 | **Model**           | **총 파라미터 수** | **학습 가능한 파라미터 수** | **총 연산량 (Mult-Adds)** |
 |---------------------|--------------------|----------------------------|---------------------------|
 | **GhostNet**        | 4,526,152          | 4,526,152                  | 372.65M                  |
-| **MobileNetV3**     | 5,481,486          | 5,481,486                  | 433.24M                  |
+| **MobileNetV3(Large)**     | 5,481,486          | 5,481,486                  | 433.24M                  |
 
 
 ---
 
 
-### 2. Dataset(CIFAR-10)
+### 2. Experiments
 
-| **설정 항목**       | **값**             |
-|----------------------|--------------------|
-| **Dataset**        | CIFAR-10           |
-| **Img Size** | 32x32              |
-| **Batch Size**      | 128                |
-| **LR**      | 0.001              |
-| **Weight Decay**     | 0.0001             |
-| **Epoch**        | 30                 |
-| **Optimizer**  | Adam               |
-| **Scheduler**        | 없음               |
-| **Loss**        | Cross-Entropy Loss |
+### Dataset & Setting
 
+- **Dataset**: CIFAR-10
+- **Image Size**: 32x32
+- **Batch Size**: 128
+- **Learning Rate (LR)**: 0.001
+- **Weight Decay**: 0.0001
+- **Epochs**: 30
+- **Optimizer**: Adam
+- **Loss Function**: Cross-Entropy Loss
+
+### GPU
+
+- **Platform**: Kaggle
+- **GPU**: NVIDIA Tesla P100
 ---
 
 ### 3. **Train and Validation**
 
-| **지표**           | **GhostNet**                         | **MobileNetV3**                      |
+| **지표**           | **GhostNet**                         | **MobileNetV3(Large)**                      |
 |---------------------|--------------------------------------|--------------------------------------|
 | **Train Loss**      | 1.4653 (1에포크) → 0.0899 (30에포크) | 1.3266 (1에포크) → 0.0765 (30에포크) |
 | **Train Accuracy**  | 46.49% → 96.86%                     | 51.02% → 97.35%                     |
 | **Val Loss**        | 1.2992 (1에포크) → 0.6133 (30에포크) | 1.0472 (1에포크) → 0.6058 (30에포크) |
 | **Val Accuracy**    | 53.94% → 84.52%                     | 62.51% → 84.69%                     |
 
+
+
+#### GhostNet
+<img src="https://github.com/user-attachments/assets/d3992e67-d7bb-45d8-9847-26c1da340943" width=300>
+
+<img src="https://github.com/user-attachments/assets/35c7d8eb-e876-492b-acb3-4a4874af27e6" width=300>
+
+| GhostNet Accuracy & Loss Result
+
+
+#### MobileNetV3(Large)
+<img src="https://github.com/user-attachments/assets/53929c9e-b9c5-48a7-848e-5697ed211305" width=300>
+
+<img src="https://github.com/user-attachments/assets/1de2878a-7dec-4408-a5f2-ae930b3b8bdb" width=300>
+
+| MobileNetV3(Large) Accuracy & Loss Result
+
+
 ---
 
 ### 4. **계산 효율성**
 
-| **지표**             | **GhostNet**       | **MobileNetV3**   |
-|-----------------------|--------------------|--------------------|
-| **파라미터 수 (M)**   | 4.53M             | 5.48M             |
-| **연산량 (Mult-Adds)**| 372.65M           | 433.24M           |
-| **메모리 사용량 (MB)**| 144.97 MB         | 164.04 MB         |
+| **지표**             | **GhostNet**       | **MobileNetV3(Large)**   |
+|-----------------------|--------------------|--------------------------|
+| **파라미터 수 (M)**   | 4.53M              | 5.48M                   |
+| **연산량 (Mult-Adds)**| 372.65M            | 433.24M                 |
+| **FLOPs**            | 0.19 GFLOPs        | 0.22 GFLOPs             |
+| **메모리 사용량 (MB)**| 144.97 MB          | 164.04 MB               |
+
 
 - GhostNet은 MobileNetV3보다 **파라미터 수**가 적고, **연산량**과 **메모리 사용량**이 더 적음.  
 - MobileNetV3는 약간 더 높은 계산 비용을 요구하지만, 그만큼 더 나은 **정확도**를 제공.
