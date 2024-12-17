@@ -40,9 +40,9 @@ SE Block을 도입하면서, 네트워크가 전체적인 정보를 사용하여
 
 <img src="https://velog.velcdn.com/images/qkrdbstn24/post/6ae36879-9a07-4f87-88d8-4a19cb1f5f05/image.png" alt="image" width="800"/>
 
-*$F_{tr}$* 은 단순한 Convolution 연산입니다.
+$F_{tr}$ 은 단순한 Convolution 연산입니다.
 
-$$F_{tr}$ : $X$ $→$ $U$, $X$ $∈$ $R^{H^′×W^′×C^′}$, $U$ $∈$ $R^{H×W×C}$
+$F_{tr}$ : $X$ $→$ $U$, $X$ $∈$ $R^{H^′×W^′×C^′}$, $U$ $∈$ $R^{H×W×C}$
 
 $X$ = $[x^1,x^2,...,x^{C^′}]:$ Input
 
