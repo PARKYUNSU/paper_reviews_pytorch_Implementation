@@ -56,4 +56,32 @@ def create_vocab(lines):
 def encode_data(lines, src_to_index, tar_to_index):
     encoder_input, decoder_input, decoder_target = [], [], []
     for src_line, tar_line in zip(lines.src, lines.tar):
-        
+        encoder_input.append([src_to_index[char] for char in src_line])
+        decoder_input.append([tar_to_index[char] for char in tar_line])
+        decoder_target.append([tar_to_index[char] for char in tar_line[1:]])
+    return encoder_input, decoder_input, decoder_target
+
+def pad_sequences_data(encoder_input, decoder_input, decoder_target, max_src_len, max_tar_len):
+    encoder_input = pad_sequences(encoder_input, maxlen=max_src_len, padding='post')
+    decoder_input = pad_sequences(decoder_input, maxlen=max_tar_len, padding='post')
+    decoder_target = pad_sequences(decoder_target, maxlen=max_tar_len, padding='post')
+    return encoder_input, decoder_input, decoder_target
+
+def seq2seq(src_vocab_size, tar_vocab_size, latent_dim=256):
+    # encoder
+    encoder_inputs = Input(shape=(None, src_vocab_size))
+    encoder_lstm = LSTM(units=latent_dim, return_state=True)
+    _, state_h, state_c = encoder_lstm(encoder_inputs)
+    encoder_states = [state_h, state_c]
+
+    # decoder
+    decoder_inputs = Input(shape=(None, tar_vocab_size))
+    decoder_lstm = LSTM(units=latent_dim, return_sequences=True, return_state=True)
+    decoder_outputs, _, _ = decoder_lstm(decoder_inputs, initial_state=encoder_states)
+    decoder_dense = Dense(tar_vocab_size, activation='softmax')
+    decoder_outputs = decoder_dense(decoder_outputs)
+
+    # model
+    model = Model([encoder_inputs, decoder_inputs] , decoder_outputs)
+    model.compile(optimizer='rmsprop', loss='categorical_crossentropy')
+    return model
