@@ -138,7 +138,7 @@ def main():
     decoder_target = to_categorical(decoder_target)
 
     model = seq2seq(len(SRC_VOCAB)+1, len(TAR_VOCAB)+1)
-    model.fit([encoder_input, decoder_input], decoder_target, batch_size=16, epochs=40, validation_split=0.2)
+    model.fit([encoder_input, decoder_input], decoder_target, batch_size=4, epochs=40, validation_split=0.2)
 
     encoder_model, decoder_model = build_inference_models(model.input[0], model.layers[2].output, model.layers[3], model.layers[4])
 
