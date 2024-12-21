@@ -26,7 +26,7 @@ def download_zip(url, output_path):
         print(f"Failed to download. HTTP Response Code: {response.status_code}")
 
 url = "http://www.manythings.org/anki/fra-eng.zip"
-output_path = "fra-eng/fra-eng.zip"
+output_path = "fra-eng.zip"
 download_zip(url, output_path)
 
 path = os.getcwd()
@@ -35,7 +35,7 @@ zipfilename = os.path.join(path, output_path)
 with zipfile.ZipFile(zipfilename, 'r') as zip_ref:
     zip_ref.extractall(path)
 
-lines = pd.read_csv('fra-eng/fra.txt', names=['src', 'tar', 'lic'], sep='\t')
+lines = pd.read_csv('fra.txt', names=['src', 'tar', 'lic'], sep='\t')
 del lines['lic']
 
 
