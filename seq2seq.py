@@ -39,7 +39,7 @@ lines = pd.read_csv('fra.txt', names=['src', 'tar', 'lic'], sep='\t')
 del lines['lic']
 
 
-def preprocess_data(file_path, num_samples=60000):
+def preprocess_data(file_path, num_samples=10000):
     lines = pd.read_csv(file_path, names=['src', 'tar', 'lic'], sep='\t')
     lines = lines.loc[:, 'src':'tar'].iloc[:num_samples]
     lines.tar = lines.tar.apply(lambda x: '\t ' + x + ' \n')
@@ -138,7 +138,7 @@ def main():
     decoder_target = to_categorical(decoder_target)
 
     model = seq2seq(len(SRC_VOCAB)+1, len(TAR_VOCAB)+1)
-    model.fit([encoder_input, decoder_input], decoder_target, batch_size=64, epochs=40, validation_split=0.2)
+    model.fit([encoder_input, decoder_input], decoder_target, batch_size=32, epochs=40, validation_split=0.2)
 
     encoder_model, decoder_model = build_inference_models(model.input[0], model.layers[2].output, model.layers[3], model.layers[4])
 
