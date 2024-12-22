@@ -56,10 +56,10 @@ class IMDBDataset(Dataset):
 
 
 def collate_fn(batch):
-    texts, labels = zip(*batch)
-    texts = pad_sequence(texts, batch_first=True, padding_value=0)  # Pad with <pad> token
-    labels = torch.stack(labels)
-    return texts, labels
+    inputs, targets = zip(*batch)
+    inputs = pad_sequence(inputs, batch_first=True, padding_value=0).unsqueeze(-1)  # Add input_dim dimension
+    targets = pad_sequence(targets, batch_first=True, padding_value=0)
+    return inputs, targets
 
 
 def download_imdb(data_dir):
