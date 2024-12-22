@@ -20,7 +20,6 @@ class LSTM(nn.Module):
         h0 = torch.zeros(self.layer_dim, x.size(0), self.hidden_dim, device=device)
         c0 = torch.zeros(self.layer_dim, x.size(0), self.hidden_dim, device=device)
 
-
         outs = []
         cn =  c0[0,:,:]
         hn = h0[0,:,:]
