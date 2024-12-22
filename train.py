@@ -6,6 +6,7 @@ from model.lstm import LSTM
 from data.generate_data import get_dataloaders
 from utils import save_checkpoint
 
+
 def plot_loss(train_losses, val_losses, filename="loss_plot.png"):
     plt.figure(figsize=(10, 6))
     plt.plot(train_losses, label="Train Loss")
@@ -18,6 +19,7 @@ def plot_loss(train_losses, val_losses, filename="loss_plot.png"):
     plt.savefig(filename)
     plt.close()
 
+
 def train():
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     
@@ -25,16 +27,16 @@ def train():
     train_loader, val_loader, vocab_size = get_dataloaders(data_dir="data", batch_size=32)
     
     # Hyperparameters
-    input_dim = vocab_size
+    embedding_dim = 100
     hidden_dim = 128
     layer_dim = 2
-    output_dim = vocab_size
+    output_dim = 2  # Positive or Negative classification
     learning_rate = 0.001
     num_epochs = 10
 
     # Model, Loss, Optimizer
-    model = LSTM(input_dim, hidden_dim, layer_dim, output_dim).to(device)
-    criterion = nn.CrossEntropyLoss(ignore_index=0)  # Ignore padding index
+    model = LSTM(vocab_size, embedding_dim, hidden_dim, layer_dim, output_dim).to(device)
+    criterion = nn.CrossEntropyLoss()  # Ignore padding index if needed
     optimizer = optim.Adam(model.parameters(), lr=learning_rate)
 
     # Track losses
@@ -52,10 +54,6 @@ def train():
             optimizer.zero_grad()
             outputs = model(inputs)
 
-            # Reshape outputs for CrossEntropyLoss
-            outputs = outputs.view(-1, outputs.size(-1))
-            targets = targets.view(-1)
-
             loss = criterion(outputs, targets)
             loss.backward()
             optimizer.step()
@@ -71,9 +69,6 @@ def train():
                 inputs, targets = inputs.to(device), targets.to(device)
 
                 outputs = model(inputs)
-                outputs = outputs.view(-1, outputs.size(-1))
-                targets = targets.view(-1)
-
                 loss = criterion(outputs, targets)
                 val_loss += loss.item()
         
@@ -84,6 +79,7 @@ def train():
     
     # Plot Loss
     plot_loss(train_losses, val_losses)
+
 
 if __name__ == "__main__":
     train()
