@@ -26,8 +26,9 @@ class IMDBDataset(Dataset):
                     continue
                 with open(filepath, "r", encoding="utf-8") as file:
                     tokens = self.tokenizer(file.read())
-                    self.data.append(tokens)
-                    self.labels.append(1 if label == "pos" else 0)
+                    if len(tokens) > 0:  # 빈 시퀀스 제외
+                        self.data.append(tokens)
+                        self.labels.append(1 if label == "pos" else 0)
 
         # Build vocab
         self.build_vocab()
@@ -56,9 +57,15 @@ class IMDBDataset(Dataset):
 
 
 def collate_fn(batch):
+    # Filter out empty sequences
+    batch = [(input, target) for input, target in batch if len(input) > 0]
+
+    if len(batch) == 0:
+        return torch.tensor([]), torch.tensor([])
+
     inputs, targets = zip(*batch)
-    inputs = pad_sequence(inputs, batch_first=True, padding_value=0).unsqueeze(-1)  # Add input_dim dimension
-    targets = pad_sequence(targets, batch_first=True, padding_value=0)
+    inputs = pad_sequence(inputs, batch_first=True, padding_value=0)  # Pad input sequences
+    targets = torch.tensor(targets, dtype=torch.long)  # Convert targets to tensor
     return inputs, targets
 
 
@@ -89,6 +96,10 @@ def get_dataloaders(data_dir="data", batch_size=32):
     # Create DataLoader for train and test datasets
     train_loader = DataLoader(train_dataset, batch_size=batch_size, collate_fn=collate_fn, shuffle=True)
     test_loader = DataLoader(test_dataset, batch_size=batch_size, collate_fn=collate_fn)
+    
+    # Print dataset sizes
+    print(f"Train dataset size: {len(train_dataset)}")
+    print(f"Test dataset size: {len(test_dataset)}")
     
     # Return DataLoaders and vocab size
     return train_loader, test_loader, len(train_dataset.vocab)
