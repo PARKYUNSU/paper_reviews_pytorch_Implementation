@@ -1,4 +1,4 @@
-## SSD MobileNetV2 Model into Iphone 14Pro
+## SSD MobileNetV2 Model -> Iphone 14Pro
 
 ![ssd](https://github.com/user-attachments/assets/9eb3159e-7842-402e-8cec-15f129b2e4a3)
 
