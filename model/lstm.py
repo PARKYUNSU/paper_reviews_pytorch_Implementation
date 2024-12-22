@@ -31,5 +31,3 @@ class LSTM(nn.Module):
         out = outs[-1].squeeze()
         out = self.fc(out)
         return out
-    
-        
