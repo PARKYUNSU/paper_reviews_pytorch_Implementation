@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from model.lstm import LSTM
-from data.ptb_data import get_dataloaders
+from data.generate_data import get_dataloaders
 from utils import save_checkpoint
 import matplotlib.pyplot as plt
 

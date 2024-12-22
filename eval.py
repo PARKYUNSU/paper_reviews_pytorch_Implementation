@@ -1,6 +1,6 @@
 import torch
 from model.lstm import LSTM
-from data.ptb_data import get_dataloaders
+from data.generate_data import get_dataloaders
 from utils import load_checkpoint
 from torch.nn.functional import cross_entropy
 import numpy as np
