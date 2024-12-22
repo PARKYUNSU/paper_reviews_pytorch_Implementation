@@ -2,7 +2,7 @@ import torch
 import torch.nn  as nn
 import torch.nn.functional as F
 
-from lstm_cell import LSTMCell
+from .lstm_cell import LSTMCell
 
 
 class LSTM(nn.Module):
