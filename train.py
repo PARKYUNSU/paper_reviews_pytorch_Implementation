@@ -24,7 +24,7 @@ def train():
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     
     # Load Data
-    train_loader, val_loader, vocab_size = get_dataloaders(data_dir="data", batch_size=32)
+    train_loader, val_loader, vocab_size = get_dataloaders(data_dir="data", batch_size=64)
     
     # Hyperparameters
     embedding_dim = 100

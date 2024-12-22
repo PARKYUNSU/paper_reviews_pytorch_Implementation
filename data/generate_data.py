@@ -79,7 +79,7 @@ def download_imdb(data_dir):
         print("IMDB dataset already downloaded.")
 
 
-def get_dataloaders(data_dir="data", batch_size=32):
+def get_dataloaders(data_dir="data", batch_size=64):
     # Download IMDB dataset if not already present
     download_imdb(data_dir)
 
