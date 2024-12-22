@@ -1,17 +1,40 @@
-import numpy as np
 import torch
+from torchtext.datasets import PennTreebank
+from torchtext.data.utils import get_tokenizer
+from torchtext.vocab import build_vocab_from_iterator
+from torch.utils.data import DataLoader, Dataset
+from torch.nn.utils.rnn import pad_sequence
 
-def generate_sine_data(seq_length=50, num_samples=1000):
-    x = np.linspace(0, num_samples * 2 * np.pi / seq_length, num_samples)
-    sine_wave = np.sin(x)
-    
-    X, y = [], []
-    for i in range(num_samples - seq_length):
-        X.append(sine_wave[i:i + seq_length])
-        y.append(sine_wave[i + seq_length])
-    
-    return torch.tensor(X, dtype=torch.float32), torch.tensor(y, dtype=torch.float32)
+def build_vocab():
+    tokenizer = get_tokenizer("basic_english")
+    def yield_tokens(data_iter):
+        for line in data_iter:
+            yield tokenizer(line)
+    train_iter = PennTreebank(split="train")
+    return build_vocab_from_iterator(yield_tokens(train_iter), specials=["<unk>", "<pad>"])
 
-if __name__ == "__main__":
-    X, y = generate_sine_data()
-    print("Generated Data Shapes:", X.shape, y.shape)
+class PTBDataset(Dataset):
+    def __init__(self, split, vocab):
+        self.data = list(PennTreebank(split=split))
+        self.tokenizer = get_tokenizer("basic_english")
+        self.vocab = vocab
+
+    def __len__(self):
+        return len(self.data)
+
+    def __getitem__(self, idx):
+        tokens = self.tokenizer(self.data[idx])
+        indices = [self.vocab[token] for token in tokens]
+        return torch.tensor(indices[:-1]), torch.tensor(indices[1:])  # 입력, 타겟
+
+def collate_fn(batch):
+    inputs, targets = zip(*batch)
+    inputs = pad_sequence(inputs, batch_first=True, padding_value=0)
+    targets = pad_sequence(targets, batch_first=True, padding_value=0)
+    return inputs, targets
+
+def get_dataloaders(split="train", batch_size=32):
+    vocab = build_vocab()
+    dataset = PTBDataset(split=split, vocab=vocab)
+    dataloader = DataLoader(dataset, batch_size=batch_size, collate_fn=collate_fn)
+    return dataloader, len(vocab)
