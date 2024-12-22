@@ -1,6 +1,7 @@
 import os
 import requests
-import tarfile
+
+import zipfile
 import torch
 from torch.utils.data import Dataset, DataLoader
 from torch.nn.utils.rnn import pad_sequence
@@ -8,28 +9,30 @@ from collections import Counter
 from itertools import chain
 
 # Step 1: Download WikiText2 dataset
+
+
 def download_wikitext2(data_dir):
     os.makedirs(data_dir, exist_ok=True)
     url = "https://s3.amazonaws.com/research.metamind.io/wikitext/wikitext-2-v1.zip"
     file_path = os.path.join(data_dir, "wikitext-2-v1.zip")
 
-    # Download file
+    # 파일 다운로드
     if not os.path.exists(file_path):
         print("Downloading WikiText2 dataset...")
         response = requests.get(url, stream=True)
         with open(file_path, "wb") as f:
             for chunk in response.iter_content(chunk_size=1024):
                 f.write(chunk)
-    
-    # Extract file (adjusted for tar format)
-    if file_path.endswith(".zip"):
-        extract_dir = os.path.join(data_dir, "wikitext-2")
-        with tarfile.open(file_path, "r:gz") as tar:
-            tar.extractall(path=extract_dir)
+
+    # 파일 추출
+    extract_dir = os.path.join(data_dir, "wikitext-2")
+    if not os.path.exists(extract_dir):
+        with zipfile.ZipFile(file_path, "r") as zip_ref:
+            zip_ref.extractall(data_dir)
         print(f"Dataset extracted to {extract_dir}")
     else:
-        raise ValueError("Downloaded file is not a .zip or tar format")
-    
+        print(f"Dataset already extracted at {extract_dir}")
+
 # Step 2: Tokenization and Vocabulary Building
 def build_vocab(data_path, min_freq=2):
     with open(data_path, "r") as f:
