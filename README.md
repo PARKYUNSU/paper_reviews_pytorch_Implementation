@@ -10,6 +10,8 @@ Link : https://drive.google.com/file/d/1j2TDMbTNzmsutQ0idPDGSN9ld1R0v_sN/view?us
 
 ## 1. MobilnetV2 Backbone
 
+MobileNetV2 : https://github.com/PARKYUNSU/MobileNetV2
+
 기존 MobilenetV2 Model Architecture (input: 300x300)
 
 | 층 (Layer)                       | 출력 채널 수 (Output Channels) | Feature Map 크기 (Feature Map Size) |
