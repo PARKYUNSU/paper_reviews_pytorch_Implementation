@@ -1,78 +1,59 @@
 import os
-import requests
-
-import zipfile
+import urllib.request
+import tarfile
+import re
 import torch
-from torch.utils.data import Dataset, DataLoader
+from torch.utils.data import DataLoader, Dataset
 from torch.nn.utils.rnn import pad_sequence
-from collections import Counter
-from itertools import chain
 
-# Step 1: Download WikiText2 dataset
+class IMDBDataset(Dataset):
+    def __init__(self, data_dir, split):
+        self.data = []
+        self.labels = []
+        self.tokenizer = lambda x: re.findall(r"\b\w+\b", x.lower())  # 간단한 토크나이저
 
-
-def download_wikitext2(data_dir):
-    os.makedirs(data_dir, exist_ok=True)
-    url = "https://s3.amazonaws.com/research.metamind.io/wikitext/wikitext-2-v1.zip"
-    file_path = os.path.join(data_dir, "wikitext-2-v1.zip")
-
-    # 파일 다운로드
-    if not os.path.exists(file_path):
-        print("Downloading WikiText2 dataset...")
-        response = requests.get(url, stream=True)
-        with open(file_path, "wb") as f:
-            for chunk in response.iter_content(chunk_size=1024):
-                f.write(chunk)
-
-    # 파일 추출
-    extract_dir = os.path.join(data_dir, "wikitext-2")
-    if not os.path.exists(extract_dir):
-        with zipfile.ZipFile(file_path, "r") as zip_ref:
-            zip_ref.extractall(data_dir)
-        print(f"Dataset extracted to {extract_dir}")
-    else:
-        print(f"Dataset already extracted at {extract_dir}")
-
-# Step 2: Tokenization and Vocabulary Building
-def build_vocab(data_path, min_freq=2):
-    with open(data_path, "r") as f:
-        text = f.readlines()
-    tokens = [word for line in text for word in line.strip().split()]
-    counter = Counter(tokens)
-    vocab = {word: idx + 2 for idx, (word, freq) in enumerate(counter.items()) if freq >= min_freq}
-    vocab["<unk>"] = 0
-    vocab["<pad>"] = 1
-    return vocab
-
-# Step 3: Custom Dataset for WikiText2
-class WikiText2Dataset(Dataset):
-    def __init__(self, data_path, vocab, seq_len=50):
-        self.vocab = vocab
-        self.seq_len = seq_len
-        with open(data_path, "r") as f:
-            text = f.readlines()
-        tokens = [self.vocab.get(word, self.vocab["<unk>"]) for line in text for word in line.strip().split()]
-        self.data = [torch.tensor(tokens[i:i + seq_len + 1]) for i in range(0, len(tokens) - seq_len, seq_len)]
+        # Load data
+        data_path = os.path.join(data_dir, split)
+        for label in ["pos", "neg"]:
+            dir_path = os.path.join(data_path, label)
+            for filename in os.listdir(dir_path):
+                with open(os.path.join(dir_path, filename), "r", encoding="utf-8") as file:
+                    self.data.append(self.tokenizer(file.read()))
+                    self.labels.append(1 if label == "pos" else 0)
 
     def __len__(self):
         return len(self.data)
 
     def __getitem__(self, idx):
-        seq = self.data[idx]
-        return seq[:-1], seq[1:]  # Input and target
+        tokens = self.data[idx]
+        label = self.labels[idx]
+        return torch.tensor(tokens, dtype=torch.long), torch.tensor(label, dtype=torch.long)
 
-# Step 4: Collate function for DataLoader
 def collate_fn(batch):
-    inputs, targets = zip(*batch)
-    inputs = pad_sequence(inputs, batch_first=True, padding_value=1)  # Padding index
-    targets = pad_sequence(targets, batch_first=True, padding_value=1)
-    return inputs, targets
+    texts, labels = zip(*batch)
+    texts = pad_sequence(texts, batch_first=True, padding_value=0)
+    labels = torch.stack(labels)
+    return texts, labels
 
-# Step 5: Get DataLoader
-def get_dataloaders(data_dir="data", batch_size=32, seq_len=50):
-    download_wikitext2(data_dir)
-    train_path = os.path.join(data_dir, "wikitext-2", "wiki.train.tokens")
-    vocab = build_vocab(train_path)
-    dataset = WikiText2Dataset(train_path, vocab, seq_len)
-    dataloader = DataLoader(dataset, batch_size=batch_size, collate_fn=collate_fn, shuffle=True)
-    return dataloader, len(vocab)
+def download_imdb(data_dir):
+    url = "https://ai.stanford.edu/~amaas/data/sentiment/aclImdb_v1.tar.gz"
+    file_path = os.path.join(data_dir, "aclImdb_v1.tar.gz")
+    extract_path = os.path.join(data_dir, "aclImdb")
+
+    if not os.path.exists(extract_path):
+        print("Downloading IMDB dataset...")
+        urllib.request.urlretrieve(url, file_path)
+        with tarfile.open(file_path, "r:gz") as tar:
+            tar.extractall(path=data_dir)
+        print("Dataset extracted.")
+    else:
+        print("IMDB dataset already downloaded.")
+
+def get_dataloaders(data_dir="data", batch_size=32):
+    download_imdb(data_dir)
+    train_dataset = IMDBDataset(os.path.join(data_dir, "aclImdb"), split="train")
+    test_dataset = IMDBDataset(os.path.join(data_dir, "aclImdb"), split="test")
+
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, collate_fn=collate_fn, shuffle=True)
+    test_loader = DataLoader(test_dataset, batch_size=batch_size, collate_fn=collate_fn)
+    return train_loader, test_loader, len(train_dataset.data)
