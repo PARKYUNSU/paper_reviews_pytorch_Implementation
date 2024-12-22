@@ -1,15 +1,15 @@
 import torch
 import torch.nn as nn
+import matplotlib.pyplot as plt
 from model.lstm import LSTM
 from data.generate_data import get_dataloaders
 from utils import load_checkpoint
-
 
 def evaluate():
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     
     # Load test data
-    test_loader, vocab_size = get_dataloaders(data_dir="data", split="test", batch_size=32, seq_len=50)
+    test_loader, vocab_size = get_dataloaders(data_dir="data", batch_size=32)
 
     # Load model
     input_dim = vocab_size
@@ -24,7 +24,7 @@ def evaluate():
     # Evaluation
     model.eval()
     total_loss = 0.0
-    criterion = nn.CrossEntropyLoss(ignore_index=0)  # Ignore padding index
+    criterion = nn.CrossEntropyLoss(ignore_index=0)  # Ignore <pad> token during loss calculation
 
     total_samples = 0
     correct_predictions = 0
@@ -58,7 +58,6 @@ def evaluate():
         f.write(f"Evaluation Accuracy: {accuracy:.2f}%\n")
 
     return avg_loss, accuracy
-
 
 if __name__ == "__main__":
     avg_loss, accuracy = evaluate()
