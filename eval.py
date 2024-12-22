@@ -15,7 +15,7 @@ def evaluate():
     hidden_dim = 128
     layer_dim = 2
     output_dim = 1  # 이진 분류이므로 output_dim = 1
-    model = LSTM(input_dim, hidden_dim, layer_dim, output_dim).to(device)
+    model = LSTM(input_dim, hidden_dim, layer_dim, output_dim).to(device)  # output_dim 추가
     
     # 모델 체크포인트 로드
     _, _ = load_checkpoint(model, None)  # 모델 가중치만 로드
