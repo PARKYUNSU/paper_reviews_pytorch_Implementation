@@ -6,6 +6,7 @@ from model.lstm import LSTM
 from data.generate_data import get_dataloaders
 from utils import save_checkpoint
 
+
 def plot_loss(train_losses, val_losses, filename="loss_plot.png"):
     plt.figure(figsize=(10, 6))
     plt.plot(train_losses, label="Train Loss")
@@ -18,24 +19,24 @@ def plot_loss(train_losses, val_losses, filename="loss_plot.png"):
     plt.savefig(filename)
     plt.close()
 
+
 def train():
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     
     # Load Data
-    train_loader, vocab_size = get_dataloaders(data_dir="data", split="train", batch_size=32)
-    val_loader, _ = get_dataloaders(data_dir="data", split="valid", batch_size=32)
+    train_loader, val_loader, vocab_size = get_dataloaders(data_dir="data", batch_size=32, seq_len=50)
     
     # Hyperparameters
     input_dim = vocab_size
     hidden_dim = 128
     layer_dim = 2
-    output_dim = 2  # Positive or Negative for IMDB sentiment analysis
+    output_dim = vocab_size
     learning_rate = 0.001
     num_epochs = 10
 
     # Model, Loss, Optimizer
     model = LSTM(input_dim, hidden_dim, layer_dim, output_dim).to(device)
-    criterion = nn.CrossEntropyLoss()  # Binary Classification Loss
+    criterion = nn.CrossEntropyLoss(ignore_index=0)  # Ignore padding index
     optimizer = optim.Adam(model.parameters(), lr=learning_rate)
 
     # Track losses
@@ -85,6 +86,7 @@ def train():
     
     # Plot Loss
     plot_loss(train_losses, val_losses)
+
 
 if __name__ == "__main__":
     train()
