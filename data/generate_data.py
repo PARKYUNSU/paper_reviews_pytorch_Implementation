@@ -57,15 +57,13 @@ class IMDBDataset(Dataset):
 
 
 def collate_fn(batch):
-    # Filter out empty sequences
-    batch = [(input, target) for input, target in batch if len(input) > 0]
-
-    if len(batch) == 0:
-        return torch.tensor([]), torch.tensor([])
-
     inputs, targets = zip(*batch)
-    inputs = pad_sequence(inputs, batch_first=True, padding_value=0)  # Pad input sequences
-    targets = torch.tensor(targets, dtype=torch.long)  # Convert targets to tensor
+
+    # 입력 데이터를 padding하고 3D 텐서로 만듦
+    inputs = pad_sequence(inputs, batch_first=True, padding_value=0)
+    inputs = inputs.unsqueeze(-1)  # input_dim 추가
+
+    targets = torch.tensor(targets)  # 1D 텐서로 만듦 (batch_size,)
     return inputs, targets
 
 
