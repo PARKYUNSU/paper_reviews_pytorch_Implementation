@@ -4,11 +4,12 @@ from model.lstm import LSTM
 from data.generate_data import get_dataloaders
 from utils import load_checkpoint
 
+# eval.py에서 수정
 def evaluate():
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     
     # 테스트 데이터 로드
-    test_loader, vocab_size = get_dataloaders(data_dir="data", batch_size=32)
+    _, test_loader, vocab_size = get_dataloaders(data_dir="data", batch_size=32)
 
     # 모델 초기화
     input_dim = vocab_size
