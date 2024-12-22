@@ -11,7 +11,7 @@ class LSTMCell(nn.Module):
         self.bias = bias
         self.x2h = nn.Linear(input_size, 4*hidden_size, bias=bias)
         self.h2h = nn.Linear(hidden_size, 4*hidden_size, bias=bias)
-        self.reset_parameters()
+        self.reset_parpameters()
 
     def reset_parpameters(self):
         std = 1.0 / math.sqrt(self.hidden_size)
