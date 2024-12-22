@@ -4,7 +4,6 @@ from model.lstm import LSTM
 from data.generate_data import get_dataloaders
 from utils import load_checkpoint
 
-# eval.py에서 수정
 def evaluate():
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     
