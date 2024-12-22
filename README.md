@@ -1,6 +1,7 @@
 ## SSD MobileNetV2 Model -> Iphone 14Pro
 
-![ssd](https://github.com/user-attachments/assets/4c0b088a-9bf2-412a-9535-bab8e3ee62a5)
+![ssdv2](https://github.com/user-attachments/assets/bf29e733-54ec-4933-adf4-257618d5a179)
+
 ---
 
 
