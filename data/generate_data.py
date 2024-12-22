@@ -1,40 +1,67 @@
+import os
+import requests
+import zipfile
 import torch
-from torchtext.datasets import WikiText2
-from torchtext.data.utils import get_tokenizer
-from torchtext.vocab import build_vocab_from_iterator
-from torch.utils.data import DataLoader, Dataset
+from torch.utils.data import Dataset, DataLoader
 from torch.nn.utils.rnn import pad_sequence
+from collections import Counter
+from itertools import chain
 
-def build_vocab():
-    tokenizer = get_tokenizer("basic_english")
-    def yield_tokens(data_iter):
-        for line in data_iter:
-            yield tokenizer(line)
-    train_iter = WikiText2(split="train")
-    return build_vocab_from_iterator(yield_tokens(train_iter), specials=["<unk>", "<pad>"])
+# Step 1: Download WikiText2 dataset
+def download_wikitext2(data_dir="data"):
+    url = "https://s3.amazonaws.com/research.metamind.io/wikitext/wikitext-2-v1.zip"
+    if not os.path.exists(data_dir):
+        os.makedirs(data_dir)
+    file_path = os.path.join(data_dir, "wikitext-2-v1.zip")
+    if not os.path.exists(file_path):
+        print("Downloading WikiText2 dataset...")
+        response = requests.get(url)
+        with open(file_path, "wb") as f:
+            f.write(response.content)
+        with zipfile.ZipFile(file_path, "r") as zip_ref:
+            zip_ref.extractall(data_dir)
+    print("WikiText2 dataset downloaded and extracted.")
 
-class WikiTextDataset(Dataset):
-    def __init__(self, split, vocab):
-        self.data = list(WikiText2(split=split))
-        self.tokenizer = get_tokenizer("basic_english")
+# Step 2: Tokenization and Vocabulary Building
+def build_vocab(data_path, min_freq=2):
+    with open(data_path, "r") as f:
+        text = f.readlines()
+    tokens = [word for line in text for word in line.strip().split()]
+    counter = Counter(tokens)
+    vocab = {word: idx + 2 for idx, (word, freq) in enumerate(counter.items()) if freq >= min_freq}
+    vocab["<unk>"] = 0
+    vocab["<pad>"] = 1
+    return vocab
+
+# Step 3: Custom Dataset for WikiText2
+class WikiText2Dataset(Dataset):
+    def __init__(self, data_path, vocab, seq_len=50):
         self.vocab = vocab
+        self.seq_len = seq_len
+        with open(data_path, "r") as f:
+            text = f.readlines()
+        tokens = [self.vocab.get(word, self.vocab["<unk>"]) for line in text for word in line.strip().split()]
+        self.data = [torch.tensor(tokens[i:i + seq_len + 1]) for i in range(0, len(tokens) - seq_len, seq_len)]
 
     def __len__(self):
         return len(self.data)
 
     def __getitem__(self, idx):
-        tokens = self.tokenizer(self.data[idx])
-        indices = [self.vocab[token] for token in tokens]
-        return torch.tensor(indices[:-1]), torch.tensor(indices[1:])  # 입력, 타겟
+        seq = self.data[idx]
+        return seq[:-1], seq[1:]  # Input and target
 
+# Step 4: Collate function for DataLoader
 def collate_fn(batch):
     inputs, targets = zip(*batch)
-    inputs = pad_sequence(inputs, batch_first=True, padding_value=0)
-    targets = pad_sequence(targets, batch_first=True, padding_value=0)
+    inputs = pad_sequence(inputs, batch_first=True, padding_value=1)  # Padding index
+    targets = pad_sequence(targets, batch_first=True, padding_value=1)
     return inputs, targets
 
-def get_dataloaders(split="train", batch_size=32):
-    vocab = build_vocab()
-    dataset = WikiTextDataset(split=split, vocab=vocab)
-    dataloader = DataLoader(dataset, batch_size=batch_size, collate_fn=collate_fn)
+# Step 5: Get DataLoader
+def get_dataloaders(data_dir="data", batch_size=32, seq_len=50):
+    download_wikitext2(data_dir)
+    train_path = os.path.join(data_dir, "wikitext-2", "wiki.train.tokens")
+    vocab = build_vocab(train_path)
+    dataset = WikiText2Dataset(train_path, vocab, seq_len)
+    dataloader = DataLoader(dataset, batch_size=batch_size, collate_fn=collate_fn, shuffle=True)
     return dataloader, len(vocab)

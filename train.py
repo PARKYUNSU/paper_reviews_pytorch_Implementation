@@ -8,8 +8,8 @@ from utils import save_checkpoint
 def train():
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     
-    # DataLoader and Vocab size
-    train_loader, vocab_size = get_dataloaders(split="train", batch_size=32)
+    # Load Data
+    train_loader, vocab_size = get_dataloaders(data_dir="data", batch_size=32, seq_len=50)
     
     # Hyperparameters
     input_dim = vocab_size
@@ -21,7 +21,7 @@ def train():
 
     # Model, Loss, Optimizer
     model = LSTM(input_dim, hidden_dim, layer_dim, output_dim).to(device)
-    criterion = nn.CrossEntropyLoss(ignore_index=0)  # Padding index ignored
+    criterion = nn.CrossEntropyLoss(ignore_index=1)  # Ignore padding index
     optimizer = optim.Adam(model.parameters(), lr=learning_rate)
     
     # Training Loop
