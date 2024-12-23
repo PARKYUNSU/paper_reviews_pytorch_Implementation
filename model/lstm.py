@@ -23,6 +23,3 @@ class LSTMModel(nn.Module):
         out = self.fc(hn)
         return out
 
-
-# Train
-model = LSTMModel(input_dim=28, hidden_dim=128, layer_dim=2, output_dim=10).to(device)
