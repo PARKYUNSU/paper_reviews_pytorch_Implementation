@@ -9,19 +9,18 @@ def main():
     # 데이터 로드
     train_loader, valid_loader, test_loader, input_dim = get_dataloaders(batch_size=64)
 
-    # 학습
+    # 모델 학습
     model = train(
-        train_loader=train_loader,
-        valid_loader=valid_loader,
+        train_loader,
+        valid_loader,
         input_dim=input_dim,
         hidden_dim=128,
         num_layers=2,
         num_classes=10,
-        device=device
+        device=device,
+        num_epochs=20,
+        learning_rate=0.001,
     )
-
-    # 모델 저장
-    torch.save(model.state_dict(), "lstm_model.pth")
 
     # 모델 평가
     evaluate(model, test_loader, device)

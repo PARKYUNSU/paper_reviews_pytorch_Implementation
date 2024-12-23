@@ -1,16 +1,30 @@
 import torch
+import torch.nn.functional as F
 
-def evaluate(model, test_loader, device):
+def evaluate(model, val_iter, seq_dim, input_dim, device):
+    corrects, total, total_loss = 0, 0, 0
     model.eval()
-    correct, total = 0, 0
 
     with torch.no_grad():
-        for inputs, targets in test_loader:
-            inputs, targets = inputs.to(device), targets.to(device)
-            outputs = model(inputs)
-            _, predicted = torch.max(outputs, 1)
-            total += targets.size(0)
-            correct += (predicted == targets).sum().item()
+        for images, labels in val_iter:
+            # 입력 크기 변환 및 장치 이동
+            images = images.view(-1, seq_dim, input_dim).to(device)
+            labels = labels.to(device)
 
-    accuracy = 100 * correct / total
-    print(f"Test Accuracy: {accuracy:.2f}%")
+            # 모델 출력
+            logits = model(images)
+            loss = F.cross_entropy(logits, labels, reduction='sum')
+
+            # 예측값 계산
+            _, predicted = torch.max(logits, 1)
+
+            # 정확도 및 손실 합산
+            total += labels.size(0)
+            corrects += (predicted == labels).sum().item()
+            total_loss += loss.item()
+
+    # 평균 손실 및 정확도 계산
+    avg_loss = total_loss / len(val_iter.dataset)
+    avg_accuracy = 100 * corrects / total
+
+    return avg_loss, avg_accuracy
