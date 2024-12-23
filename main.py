@@ -1,7 +1,7 @@
 import torch
 from train import train
 from eval import evaluate
-from data.dataset import get_dataloaders
+from data.generate_data import get_dataloaders
 
 def main():
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")

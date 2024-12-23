@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 from model.lstm import LSTM
-from utils.plotting import plot_loss
+from utils import plot_loss
 
 def train(train_loader, valid_loader, input_dim, hidden_dim, num_layers, num_classes, device, num_epochs=20, learning_rate=0.001):
     model = LSTM(num_classes, input_dim, hidden_dim, num_layers).to(device)
