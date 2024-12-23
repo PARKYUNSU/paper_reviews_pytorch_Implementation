@@ -1,16 +1,13 @@
-import torch
+import matplotlib.pyplot as plt
 
-def save_checkpoint(model, optimizer, epoch, loss, filename="checkpoint.pth.tar"):
-    torch.save({
-        'model_state_dict': model.state_dict(),
-        'optimizer_state_dict': optimizer.state_dict(),
-        'epoch': epoch,
-        'loss': loss
-    }, filename)
-
-def load_checkpoint(model, optimizer, filename="checkpoint.pth.tar"):
-    checkpoint = torch.load(filename)
-    model.load_state_dict(checkpoint['model_state_dict'])
-    if optimizer:
-        optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
-    return checkpoint['epoch'], checkpoint['loss']
+def plot_loss(train_losses, val_losses, filename="loss_plot.png"):
+    plt.figure(figsize=(10, 6))
+    plt.plot(train_losses, label="Train Loss")
+    plt.plot(val_losses, label="Validation Loss")
+    plt.xlabel("Epochs")
+    plt.ylabel("Loss")
+    plt.title("Train and Validation Loss")
+    plt.legend()
+    plt.grid()
+    plt.savefig(filename)
+    plt.close()

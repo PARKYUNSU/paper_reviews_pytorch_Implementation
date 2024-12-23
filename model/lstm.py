@@ -2,9 +2,9 @@ import torch
 import torch.nn as nn
 from .lstm_cell import LSTMCell
 
-class LSTMModel(nn.Module):
+class LSTM(nn.Module):
     def __init__(self, input_dim, hidden_dim, layer_dim, output_dim, bias=True):
-        super(LSTMModel, self).__init__()
+        super(LSTM, self).__init__()
         self.hidden_dim = hidden_dim
         self.layer_dim = layer_dim
         self.lstm_cells = nn.ModuleList(
