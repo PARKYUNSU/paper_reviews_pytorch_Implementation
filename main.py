@@ -40,7 +40,7 @@ criterion = torch.nn.MSELoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 
 # 학습
-num_epochs = 200
+num_epochs = 500
 train_losses = train_model(train_loader, model, criterion, optimizer, num_epochs)
 
 # 학습 곡선 시각화 및 저장
