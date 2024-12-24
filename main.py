@@ -1,8 +1,8 @@
 import torch
 from torch.utils.data import DataLoader
 from model.lstm import LSTM
-from data.prepare_stock_data import prepare_stock_data, SineWaveDataset
-from data.download_stock_data import download_stock_data, save_stock_data
+from data.generate_data import prepare_stock_data, SineWaveDataset
+from data.generate_data import download_stock_data, save_stock_data
 from train import train_model
 from eval import evaluate_model, plot_training_curves
 
