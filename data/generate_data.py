@@ -1,16 +1,23 @@
+import numpy as np
 import torch
-from torch.utils.data import DataLoader
-from torchvision import datasets, transforms
 
-def get_dataloaders(batch_size=64):
-    transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5,), (0.5,))])
+def generate_data(seq_length, num_samples):
+    x = np.linspace(0, 100, num_samples)
+    data = np.sin(x)
+    sequences = []
+    for i in range(len(data) - seq_length):
+        seq = data[i:i + seq_length]
+        label = data[i + seq_length]
+        sequences.append((seq, label))
+    return sequences
 
-    train_dataset = datasets.MNIST(root="./data", train=True, transform=transform, download=True)
-    test_dataset = datasets.MNIST(root="./data", train=False, transform=transform, download=True)
+class SineWaveDataset(torch.utils.data.Dataset):
+    def __init__(self, data):
+        self.data = data
 
-    train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True)
-    valid_loader = DataLoader(dataset=test_dataset, batch_size=batch_size, shuffle=False)
-    test_loader = DataLoader(dataset=test_dataset, batch_size=batch_size, shuffle=False)
+    def __len__(self):
+        return len(self.data)
 
-    input_dim = 28  # MNIST의 입력 크기 (28x28)
-    return train_loader, valid_loader, test_loader, input_dim
+    def __getitem__(self, idx):
+        seq, label = self.data[idx]
+        return torch.tensor(seq, dtype=torch.float32), torch.tensor(label, dtype=torch.float32)

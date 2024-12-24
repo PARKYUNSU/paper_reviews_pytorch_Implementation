@@ -22,4 +22,3 @@ class LSTM(nn.Module):
 
         out = self.fc(hn)
         return out
-
