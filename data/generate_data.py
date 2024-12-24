@@ -1,7 +1,18 @@
 import yfinance as yf
 import pandas as pd
 import numpy as np
+import torch
 
+class SineWaveDataset(torch.utils.data.Dataset):
+    def __init__(self, data):
+        self.data = data
+
+    def __len__(self):
+        return len(self.data)
+
+    def __getitem__(self, idx):
+        seq, label = self.data[idx]
+        return torch.tensor(seq, dtype=torch.float32), torch.tensor(label, dtype=torch.float32)
 
 def download_stock_data(ticker, start_date, end_date):
     """특정 주식 데이터를 Yahoo Finance에서 다운로드"""
