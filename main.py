@@ -1,5 +1,6 @@
 import torch
 from torch.utils.data import DataLoader
+from torch.optim.lr_scheduler import StepLR  # 학습률 스케줄러 추가
 from model.lstm import LSTM
 from data.generate_data import prepare_stock_data, SineWaveDataset
 from data.generate_data import download_stock_data, save_stock_data
@@ -39,9 +40,21 @@ model = LSTM(input_dim, hidden_dim, layer_dim, output_dim)
 criterion = torch.nn.MSELoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 
+# 학습률 스케줄러 추가
+scheduler = StepLR(optimizer, step_size=50, gamma=0.5)  # 50 에포크마다 학습률 감소
+
 # 학습
 num_epochs = 500
-train_losses = train_model(train_loader, model, criterion, optimizer, num_epochs)
+train_losses = []
+
+for epoch in range(num_epochs):
+    # 에포크 단위로 학습
+    epoch_loss = train_model(train_loader, model, criterion, optimizer, num_epochs=1)
+    scheduler.step()  # 학습률 감소 적용
+    train_losses.append(epoch_loss)
+
+    # 에포크 진행 상태 출력
+    print(f"Epoch {epoch + 1}/{num_epochs}, Loss: {epoch_loss:.4f}")
 
 # 학습 곡선 시각화 및 저장
 plot_training_curves(train_losses, save_path="training_loss_curve.png")
