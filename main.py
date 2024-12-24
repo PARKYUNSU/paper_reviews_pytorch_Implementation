@@ -34,8 +34,8 @@ optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 num_epochs = 20
 train_losses = train_model(train_loader, model, criterion, optimizer, num_epochs)
 
-# 학습 곡선 시각화
-plot_training_curves(train_losses)
+# 학습 곡선 시각화 및 저장
+plot_training_curves(train_losses, save_path="/kaggle/working/training_loss_curve.png")
 
-# 평가
-evaluate_model(test_loader, model)
+# 평가 그래프 저장
+evaluate_model(test_loader, model, save_path="/kaggle/working/prediction_graph.png")
