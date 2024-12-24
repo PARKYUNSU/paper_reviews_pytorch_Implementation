@@ -3,27 +3,21 @@ import torch.nn as nn
 import torch.optim as optim
 from model.lstm import LSTM
 
-
-def train_model(train_loader, model, criterion, optimizer, num_epochs):
+def train_model(train_loader, model, criterion, optimizer, num_epochs=1):
     model.train()
-    train_losses = []
+    epoch_loss = 0.0  # 단일 스칼라 값으로 초기화
 
-    for epoch in range(num_epochs):
-        epoch_loss = 0.0
-        for sequences, labels in train_loader:
-            sequences = sequences.unsqueeze(-1)  # [batch_size, seq_length, 1]
-            labels = labels.unsqueeze(-1)  # [batch_size, 1]
+    for sequences, labels in train_loader:
+        sequences = sequences.unsqueeze(-1)
+        labels = labels.unsqueeze(-1)
 
-            optimizer.zero_grad()
-            outputs = model(sequences)
-            loss = criterion(outputs, labels)
-            loss.backward()
-            optimizer.step()
+        optimizer.zero_grad()
+        outputs = model(sequences)
+        loss = criterion(outputs, labels)
+        loss.backward()
+        optimizer.step()
 
-            epoch_loss += loss.item()
+        epoch_loss += loss.item()  # 배치 손실을 누적
 
-        epoch_loss /= len(train_loader)
-        train_losses.append(epoch_loss)
-        print(f"Epoch {epoch + 1}/{num_epochs}, Loss: {epoch_loss:.4f}")
-
-    return train_losses
+    epoch_loss /= len(train_loader)  # 평균 손실 계산
+    return epoch_loss  # 단일 스칼라 값 반환

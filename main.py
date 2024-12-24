@@ -43,17 +43,19 @@ optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 # 학습률 스케줄러 추가
 scheduler = StepLR(optimizer, step_size=50, gamma=0.5)  # 50 에포크마다 학습률 감소
 
+
 # 학습
 num_epochs = 500
 train_losses = []
 
 for epoch in range(num_epochs):
-    # train_model 함수는 단일 에포크의 평균 손실을 반환합니다.
+    # train_model 함수는 단일 스칼라 값을 반환해야 함
     epoch_loss = train_model(train_loader, model, criterion, optimizer, num_epochs=1)
-    train_losses.append(epoch_loss)
+    train_losses.append(epoch_loss)  # 리스트에 추가
 
-    # 출력
+    # 스칼라 값 출력
     print(f"Epoch {epoch + 1}/{num_epochs}, Loss: {epoch_loss:.4f}")
+
 
 # 학습 곡선 시각화 및 저장
 plot_training_curves(train_losses, save_path="training_loss_curve.png")
