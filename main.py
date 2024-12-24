@@ -48,12 +48,11 @@ num_epochs = 500
 train_losses = []
 
 for epoch in range(num_epochs):
-    # 에포크 단위로 학습
+    # train_model 함수는 단일 에포크의 평균 손실을 반환합니다.
     epoch_loss = train_model(train_loader, model, criterion, optimizer, num_epochs=1)
-    scheduler.step()  # 학습률 감소 적용
     train_losses.append(epoch_loss)
 
-    # 에포크 진행 상태 출력
+    # 출력
     print(f"Epoch {epoch + 1}/{num_epochs}, Loss: {epoch_loss:.4f}")
 
 # 학습 곡선 시각화 및 저장
