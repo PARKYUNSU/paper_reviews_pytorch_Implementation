@@ -1,4 +1,4 @@
-# SimSiam
+# SimSiam (Simple Siamese)
 
 "Exploring Simple Siamese Representation Learning" - 2020
 
