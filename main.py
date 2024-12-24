@@ -15,13 +15,13 @@ file_path = "apple_stock_data.csv"
 stock_data = download_stock_data(ticker, start_date, end_date)
 save_stock_data(stock_data, file_path)
 
-# 주식 데이터를 시계열로 변환
+# 데이터 전처리 및 정규화
 seq_length = 50
-data = prepare_stock_data(file_path, seq_length)
-train_data = data[:800]
-test_data = data[800:]
+data, scaler = prepare_stock_data(file_path, seq_length)
 
 # 데이터셋 및 DataLoader 준비
+train_data = data[:800]
+test_data = data[800:]
 train_dataset = SineWaveDataset(train_data)
 test_dataset = SineWaveDataset(test_data)
 
