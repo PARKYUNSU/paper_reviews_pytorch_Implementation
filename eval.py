@@ -1,7 +1,7 @@
 import torch
 import matplotlib.pyplot as plt
 
-def evaluate_model(test_loader, model):
+def evaluate_model(test_loader, model, save_path=None):
     model.eval()
     predictions = []
     actuals = []
@@ -22,9 +22,14 @@ def evaluate_model(test_loader, model):
     plt.title("Actual vs Predicted (Test Data)")
     plt.xlabel("Time Step")
     plt.ylabel("Value")
-    plt.show()
 
-def plot_training_curves(train_losses):
+    if save_path:  # 파일 저장
+        plt.savefig(save_path)
+        print(f"Prediction graph saved to {save_path}")
+    else:
+        plt.show()
+
+def plot_training_curves(train_losses, save_path=None):
     # Loss 변화 시각화
     plt.figure(figsize=(10, 6))
     plt.plot(train_losses, label="Training Loss", marker="o")
@@ -32,4 +37,9 @@ def plot_training_curves(train_losses):
     plt.xlabel("Epoch")
     plt.ylabel("Loss")
     plt.legend()
-    plt.show()
+
+    if save_path:  # 파일 저장
+        plt.savefig(save_path)
+        print(f"Training loss curve saved to {save_path}")
+    else:
+        plt.show()
