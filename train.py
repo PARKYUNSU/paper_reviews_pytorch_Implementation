@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from model import LSTM
-from dataset import SineWaveDataset, generate_data
+from .data import SineWaveDataset, generate_data
 
 def train_model(train_loader, model, criterion, optimizer, num_epochs):
     model.train()
