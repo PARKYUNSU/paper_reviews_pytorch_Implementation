@@ -1,7 +1,7 @@
 import torch
 from torch.utils.data import DataLoader
 from model import LSTM
-from .data import generate_data, SineWaveDataset
+from data.generate_data import generate_data, SineWaveDataset
 from train import train_model
 from eval import evaluate_model, plot_training_curves
 

@@ -1,8 +1,8 @@
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from model import LSTM
-from .data import SineWaveDataset, generate_data
+from .model import LSTM
+from data.generate_data import generate_data, SineWaveDataset
 
 def train_model(train_loader, model, criterion, optimizer, num_epochs):
     model.train()
