@@ -23,7 +23,7 @@ def evaluate_model(test_loader, model, save_path=None):
     plt.xlabel("Time Step")
     plt.ylabel("Value")
 
-    if save_path:  # 파일 저장
+    if save_path:
         plt.savefig(save_path)
         print(f"Prediction graph saved to {save_path}")
     else:
@@ -38,7 +38,7 @@ def plot_training_curves(train_losses, save_path=None):
     plt.ylabel("Loss")
     plt.legend()
 
-    if save_path:  # 파일 저장
+    if save_path:
         plt.savefig(save_path)
         print(f"Training loss curve saved to {save_path}")
     else:

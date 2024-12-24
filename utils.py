@@ -1,13 +1,10 @@
-import matplotlib.pyplot as plt
+import torch
 
-def plot_loss(train_losses, val_losses, filename="loss_plot.png"):
-    plt.figure(figsize=(10, 6))
-    plt.plot(train_losses, label="Train Loss")
-    plt.plot(val_losses, label="Validation Loss")
-    plt.xlabel("Epochs")
-    plt.ylabel("Loss")
-    plt.title("Train and Validation Loss")
-    plt.legend()
-    plt.grid()
-    plt.savefig(filename)
-    plt.close()
+def save_model(model, path):
+    torch.save(model.state_dict(), path)
+    print(f"Model saved to {path}")
+
+def load_model(model, path):
+    model.load_state_dict(torch.load(path))
+    print(f"Model loaded from {path}")
+    return model

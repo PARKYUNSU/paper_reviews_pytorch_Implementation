@@ -11,8 +11,8 @@ def train_model(train_loader, model, criterion, optimizer, num_epochs):
     for epoch in range(num_epochs):
         epoch_loss = 0.0
         for sequences, labels in train_loader:
-            sequences = sequences.unsqueeze(-1)
-            labels = labels.unsqueeze(-1)
+            sequences = sequences.unsqueeze(-1)  # [batch_size, seq_length, 1]
+            labels = labels.unsqueeze(-1)  # [batch_size, 1]
 
             optimizer.zero_grad()
             outputs = model(sequences)
