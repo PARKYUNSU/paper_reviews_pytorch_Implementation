@@ -23,6 +23,9 @@ def evaluate_model(test_loader, model, device, save_path=None):
         for sequences, labels in test_loader:
             sequences, labels = sequences.to(device), labels.to(device)
 
+            # 데이터 타입 변환
+            sequences = sequences.float()
+            
             # 입력 데이터에 추가 차원을 삽입 (batch_size, seq_length, 1)
             sequences = sequences.unsqueeze(-1)
 
