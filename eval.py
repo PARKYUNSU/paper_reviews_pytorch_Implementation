@@ -2,15 +2,29 @@ import torch
 import matplotlib.pyplot as plt
 import numpy as np
 
-def evaluate_model(test_loader, model, save_path=None):
-    model.eval()
+def evaluate_model(test_loader, model, device, save_path=None):
+    """
+    모델 평가 함수: 테스트 데이터를 사용해 모델의 예측값과 실제값을 비교하고 시각화.
+
+    Args:
+        test_loader (DataLoader): 테스트 데이터 로더.
+        model (nn.Module): 평가할 학습된 모델.
+        device (torch.device): 모델과 데이터를 실행할 디바이스 (CPU/GPU).
+        save_path (str, optional): 그래프를 저장할 경로. 기본값은 None.
+
+    Returns:
+        None
+    """
+    model.eval()  # 평가 모드로 전환
     predictions = []
     actuals = []
 
-    with torch.no_grad():
+    with torch.no_grad():  # 그래디언트 계산 비활성화
         for sequences, labels in test_loader:
-            sequences = sequences.unsqueeze(-1)  # [batch_size, seq_length, 1]
-            labels = labels.unsqueeze(-1)  # [batch_size, 1]
+            sequences = sequences.to(device)  # 데이터를 디바이스로 이동
+            labels = labels.to(device)  # 데이터를 디바이스로 이동
+
+            # 모델 예측
             outputs = model(sequences)
             predictions.extend(outputs.squeeze().tolist())
             actuals.extend(labels.squeeze().tolist())
@@ -24,23 +38,8 @@ def evaluate_model(test_loader, model, save_path=None):
     plt.xlabel("Time Step")
     plt.ylabel("Value")
 
-    if save_path:
+    if save_path:  # 저장 경로가 제공된 경우
         plt.savefig(save_path)
         print(f"Prediction graph saved to {save_path}")
-    else:
-        plt.show()
-
-def plot_training_curves(train_losses, save_path=None):
-    # Loss 변화 시각화
-    plt.figure(figsize=(10, 6))
-    plt.plot(train_losses, label="Training Loss", marker="o")
-    plt.title("Training Loss Curve")
-    plt.xlabel("Epoch")
-    plt.ylabel("Loss")
-    plt.legend()
-
-    if save_path:
-        plt.savefig(save_path)
-        print(f"Training loss curve saved to {save_path}")
-    else:
+    else:  # 제공되지 않은 경우 시각화
         plt.show()
