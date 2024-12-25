@@ -112,7 +112,7 @@ Class scores output shape: torch.Size([1, 4400, 21])
 | train                         | 76.3  | 74.1  | 82.7  | 83.2  |
 | tvmonitor                     | 50.2  | 56.5  | 65.7  | 65.5  |
 | **Mean Average Precision (mAP)** | 57.5  | 59.5  | 70.3  | 70.6  |
-| **Total Prior Boxes**           | 1212  | 6600  | 4400  | 4400  |
+| **Total Prior Boxes**           | 1,212  | 6,600  | 4,400  | 4,400  |
 
 
 논문 SSD mAP
