@@ -47,6 +47,7 @@ class LSTM(nn.Module):
         # 마지막 타임스텝의 출력 사용
         out = self.dropout(h[-1])  # 가장 마지막 레이어의 hidden state
         out = self.fc(out)  # 출력 레이어 통과
+        out = torch.sigmoid(out)
         return out
 
     def init_hidden(self, batch_size, device):
