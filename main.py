@@ -21,7 +21,7 @@ train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
 val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False)
 
 # 모델 초기화
-input_dim = len(vocab) + 1  # 단어 사전 크기 (패딩을 위한 추가 값 포함)
+input_dim = 1  # 단어 사전 크기 (패딩을 위한 추가 값 포함)
 hidden_dim = 256
 layer_dim = 2  # LSTM 레이어 수
 output_dim = 1

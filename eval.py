@@ -27,7 +27,7 @@ def evaluate_model(test_loader, model, device, save_path=None):
             sequences = sequences.float()
             
             # 입력 데이터에 추가 차원을 삽입 (batch_size, seq_length, 1)
-            # sequences = sequences.unsqueeze(-1)
+            sequences = sequences.unsqueeze(-1)
 
             # 모델 예측
             outputs = model(sequences)
