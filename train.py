@@ -13,21 +13,15 @@ def train_model(train_loader, valid_loader, model, criterion, optimizer, num_epo
         model.train()  # 모델을 학습 모드로 설정
 
         # 학습 루프
-# 학습 루프
         for inputs, labels in train_loader:
             inputs, labels = inputs.to(device), labels.to(device)
 
             # LSTM hidden state 초기화
-            h = model.init_hidden(inputs.size(0), device)  # batch_size와 device 전달
-            h = tuple([each.data for each in h])  # hidden state와 cell state 분리
+            h, c = model.init_hidden(inputs.size(0), device)  # batch_size와 device 전달
 
-            # 옵티마이저 초기화
+            # Forward pass
             optimizer.zero_grad()
-
-            # Forward
-            output, h = model(inputs, h)
-
-            # 손실 계산 및 역전파
+            output = model(inputs, (h, c))  # hidden state 전달
             loss = criterion(output.squeeze(), labels.float())
             loss.backward()
 
@@ -42,14 +36,16 @@ def train_model(train_loader, valid_loader, model, criterion, optimizer, num_epo
         # 검증 루프
         val_losses = []
         val_acc = 0.0
-        model.eval()  # 모델을 평가 모드로 설정
+        model.eval()
         with torch.no_grad():
             for inputs, labels in valid_loader:
                 inputs, labels = inputs.to(device), labels.to(device)
-                val_h = model.init_hidden(inputs.size(0))
-                val_h = tuple([each.data for each in val_h])
 
-                output, val_h = model(inputs, val_h)
+                # LSTM hidden state 초기화
+                h, c = model.init_hidden(inputs.size(0), device)  # 검증용 hidden state
+
+                # Forward pass
+                output = model(inputs, (h, c))
                 val_loss = criterion(output.squeeze(), labels.float())
                 val_losses.append(val_loss.item())
                 val_acc += acc(output, labels)
