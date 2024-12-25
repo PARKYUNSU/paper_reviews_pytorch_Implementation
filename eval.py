@@ -1,6 +1,8 @@
 import torch
 import matplotlib.pyplot as plt
 import numpy as np
+from tqdm import tqdm
+
 
 def evaluate_model(test_loader, model, device, save_path=None):
     """
@@ -20,19 +22,20 @@ def evaluate_model(test_loader, model, device, save_path=None):
     actuals = []
 
     with torch.no_grad():
-        for sequences, labels in test_loader:
-            sequences, labels = sequences.to(device), labels.to(device)
+        with tqdm(test_loader, desc="Evaluating", unit="batch") as tbar:
+            for sequences, labels in test_loader:
+                sequences, labels = sequences.to(device), labels.to(device)
 
-            # 데이터 타입 변환
-            sequences = sequences.float()
-            
-            # 입력 데이터에 추가 차원을 삽입 (batch_size, seq_length, 1)
-            sequences = sequences.unsqueeze(-1)
+                # 데이터 타입 변환
+                sequences = sequences.float()
+                
+                # 입력 데이터에 추가 차원을 삽입 (batch_size, seq_length, 1)
+                sequences = sequences.unsqueeze(-1)
 
-            # 모델 예측
-            outputs = model(sequences)
-            predictions.extend(outputs.squeeze().tolist())
-            actuals.extend(labels.squeeze().tolist())
+                # 모델 예측
+                outputs = model(sequences)
+                predictions.extend(outputs.squeeze().tolist())
+                actuals.extend(labels.squeeze().tolist())
 
 
     # 예측 결과 vs 실제 값 시각화
