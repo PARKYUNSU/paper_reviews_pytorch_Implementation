@@ -13,12 +13,13 @@ def train_model(train_loader, valid_loader, model, criterion, optimizer, num_epo
         model.train()  # 모델을 학습 모드로 설정
 
         # 학습 루프
+# 학습 루프
         for inputs, labels in train_loader:
             inputs, labels = inputs.to(device), labels.to(device)
 
-            # LSTM의 hidden state 초기화
-            h = model.init_hidden(inputs.size(0))
-            h = tuple([each.data for each in h])  # History를 방지하기 위해 새 hidden state 생성
+            # LSTM hidden state 초기화
+            h = model.init_hidden(inputs.size(0), device)  # batch_size와 device 전달
+            h = tuple([each.data for each in h])  # hidden state와 cell state 분리
 
             # 옵티마이저 초기화
             optimizer.zero_grad()

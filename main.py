@@ -34,8 +34,7 @@ optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 # 학습
 num_epochs = 10
 train_losses, val_losses, train_acc, val_acc = train_model(
-    train_loader, val_loader, model, criterion, optimizer, num_epochs, device
-)
+    train_loader, val_loader, model, criterion, optimizer, num_epochs, device)
 
 # 학습 곡선 시각화
 plot_training_curves(train_losses, val_losses, save_path="training_loss_curve.png")
