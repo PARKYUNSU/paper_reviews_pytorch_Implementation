@@ -50,7 +50,7 @@ def preprocess_string(s):
     # 숫자 제거
     s = re.sub(r"\d", '', s)
     # 소문자로 변환
-    return s.lower()
+    return s.strip().lower()  # 공백 제거 후 소문자로 변환
 
 
 def build_vocab(reviews, max_vocab_size=1000):
@@ -68,7 +68,7 @@ def build_vocab(reviews, max_vocab_size=1000):
     stop_words = set(stopwords.words('english'))
     for review in reviews:
         for word in preprocess_string(review).split():
-            if word not in stop_words:
+            if word not in stop_words:  # 불용어 제거
                 word_list.append(word)
     
     corpus = Counter(word_list)
@@ -94,8 +94,6 @@ def pad_sequence(sequence, seq_length):
         return [0] * (seq_length - len(sequence)) + sequence
 
 
-
-
 def prepare_imdb_data(csv_path, seq_length, max_vocab_size=1000):
     """
     IMDB 데이터셋 준비
@@ -110,10 +108,13 @@ def prepare_imdb_data(csv_path, seq_length, max_vocab_size=1000):
     """
     # CSV 파일 로드
     df = pd.read_csv(csv_path)
-    
+
+    # Null 값 제거
+    df = df.dropna(subset=['review', 'sentiment'])
+
     # 리뷰와 라벨 추출
     reviews = df['review'].values
-    labels = [1 if sentiment == 'positive' else 0 for sentiment in df['sentiment'].values]
+    labels = [1 if sentiment.lower() == 'positive' else 0 for sentiment in df['sentiment'].values]
     
     # 데이터셋 분할
     train_size = int(0.8 * len(reviews))
