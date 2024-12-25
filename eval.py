@@ -19,15 +19,18 @@ def evaluate_model(test_loader, model, device, save_path=None):
     predictions = []
     actuals = []
 
-    with torch.no_grad():  # 그래디언트 계산 비활성화
+    with torch.no_grad():
         for sequences, labels in test_loader:
-            sequences = sequences.to(device)  # 데이터를 디바이스로 이동
-            labels = labels.to(device)  # 데이터를 디바이스로 이동
+            sequences, labels = sequences.to(device), labels.to(device)
+
+            # 입력 데이터에 추가 차원을 삽입 (batch_size, seq_length, 1)
+            sequences = sequences.unsqueeze(-1)
 
             # 모델 예측
             outputs = model(sequences)
             predictions.extend(outputs.squeeze().tolist())
             actuals.extend(labels.squeeze().tolist())
+
 
     # 예측 결과 vs 실제 값 시각화
     plt.figure(figsize=(10, 6))

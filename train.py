@@ -12,16 +12,19 @@ def train_model(train_loader, valid_loader, model, criterion, optimizer, num_epo
         train_acc = 0.0
         model.train()  # 모델을 학습 모드로 설정
 
-        # 학습 루프
+        # 학습 루프# 학습 루프
         for inputs, labels in train_loader:
             inputs, labels = inputs.to(device), labels.to(device)
+            
+            # 입력 데이터에 추가 차원을 삽입 (batch_size, seq_length, 1)
+            inputs = inputs.unsqueeze(-1)
 
             # LSTM hidden state 초기화
-            h, c = model.init_hidden(inputs.size(0), device)  # batch_size와 device 전달
+            h, c = model.init_hidden(inputs.size(0), device)
 
             # Forward pass
             optimizer.zero_grad()
-            output = model(inputs, (h, c))  # hidden state 전달
+            output = model(inputs, (h, c))
             loss = criterion(output.squeeze(), labels.float())
             loss.backward()
 
@@ -32,6 +35,7 @@ def train_model(train_loader, valid_loader, model, criterion, optimizer, num_epo
             # 손실 및 정확도 계산
             train_losses.append(loss.item())
             train_acc += acc(output, labels)
+
 
         # 검증 루프
         val_losses = []
