@@ -118,18 +118,12 @@ Class scores output shape: torch.Size([1, 4400, 21])
 논문 SSD mAP
 ![](https://velog.velcdn.com/images/qkrdbstn24/post/901ea880-0c9c-4671-b3b1-14aa6dbb4101/image.png)
 
-정리
 
-| 모델              | 백본(Backbone)    | 데이터셋        | mAP  |
-|-------------------|-------------------|-----------------|------|
-| SSD300            | VGG16             | Pascal 2007+2012 | 72.4 |
-| SSD(MobileNetV2)  | MobileNetV2        | Pascal 2007+2012 | 70.6 |
+## Conclusion
 
+| 모델                | 백본(Backbone)    | 데이터셋            | mAP   | FLOPs                 |
+|---------------------|------------------|--------------------|-------|-----------------------|
+| SSD300             | VGG16           | Pascal 2007+2012  | 72.4  | 31,373,537,792 (약 31.37 GFLOPs) |
+| SSD(MobileNetV2)   | MobileNetV2     | Pascal 2007+2012  | 70.6  | 6,945,977,920 (약 6.95 GFLOPs)  |
 
-## 3) FLOPs
-
-FLOPs 비교:
-VGG16 기반 SSD: 31,373,537,792 FLOPs (약 31.37 GFLOPs)
-MobileNetV2 기반 SSD: 6,945,977,920 FLOPs (약 6.95 GFLOPs)
-
-약 4.5배 적은 FLOPs로 적은 연산량 요구
+변경한 SSD MobileNetV2가 약 4.5배 적은 FLOPs로 적은 연산량 요구
