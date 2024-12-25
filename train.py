@@ -16,6 +16,9 @@ def train_model(train_loader, valid_loader, model, criterion, optimizer, num_epo
         for inputs, labels in train_loader:
             inputs, labels = inputs.to(device), labels.to(device)
             
+            # 데이터 타입 변환
+            inputs = inputs.float()
+            
             # 입력 데이터에 추가 차원을 삽입 (batch_size, seq_length, 1)
             inputs = inputs.unsqueeze(-1)
 
