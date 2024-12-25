@@ -20,7 +20,7 @@ def train_model(train_loader, valid_loader, model, criterion, optimizer, num_epo
             inputs = inputs.float()
             
             # 입력 데이터에 추가 차원을 삽입 (batch_size, seq_length, 1)
-            inputs = inputs.unsqueeze(-1)
+            # inputs = inputs.unsqueeze(-1)
 
             # LSTM hidden state 초기화
             h, c = model.init_hidden(inputs.size(0), device)
