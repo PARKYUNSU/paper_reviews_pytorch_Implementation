@@ -11,7 +11,7 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(f"Using device: {device}")
 
 # IMDB 데이터 로드 및 준비
-csv_path = "IMDB Dataset.csv"
+csv_path = "/kaggle/input/imdb-dataset/IMDB Dataset.csv"
 seq_length = 500  # 고정된 시퀀스 길이
 train_dataset, val_dataset, vocab = prepare_imdb_data(csv_path, seq_length)
 
