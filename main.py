@@ -32,7 +32,7 @@ criterion = torch.nn.BCELoss()  # Binary Cross-Entropy Loss
 optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 
 # 학습
-num_epochs = 10
+num_epochs = 40
 train_losses, val_losses, train_acc, val_acc = train_model(
     train_loader, val_loader, model, criterion, optimizer, num_epochs, device)
 

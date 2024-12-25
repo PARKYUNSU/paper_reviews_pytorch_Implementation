@@ -3,7 +3,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 from tqdm import tqdm
 
-
 def evaluate_model(test_loader, model, device, save_path=None):
     """
     모델 평가 함수: 테스트 데이터를 사용해 모델의 예측값과 실제값을 비교하고 시각화.
@@ -22,8 +21,8 @@ def evaluate_model(test_loader, model, device, save_path=None):
     actuals = []
 
     with torch.no_grad():
-        with tqdm(test_loader, desc="Evaluating", unit="batch") as tbar:
-            for sequences, labels in test_loader:
+        with tqdm(test_loader, desc="Evaluating", unit="batch") as tbar:  # tqdm 추가
+            for sequences, labels in tbar:
                 sequences, labels = sequences.to(device), labels.to(device)
 
                 # 데이터 타입 변환
@@ -32,11 +31,13 @@ def evaluate_model(test_loader, model, device, save_path=None):
                 # 입력 데이터에 추가 차원을 삽입 (batch_size, seq_length, 1)
                 sequences = sequences.unsqueeze(-1)
 
+                # LSTM hidden state 초기화
+                h, c = model.init_hidden(sequences.size(0), device)
+
                 # 모델 예측
-                outputs = model(sequences)
+                outputs = model(sequences, (h, c))  # hidden 전달
                 predictions.extend(outputs.squeeze().tolist())
                 actuals.extend(labels.squeeze().tolist())
-
 
     # 예측 결과 vs 실제 값 시각화
     plt.figure(figsize=(10, 6))
