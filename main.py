@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from model.lstm import TextClassificationModel
+from torchtext.data.utils import get_tokenizer
 from data import load_data, create_dataloaders
 from train import train_one_epoch
 from eval import evaluate_one_epoch
@@ -9,10 +10,13 @@ from utils import save_checkpoint, load_checkpoint
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-# 데이터 및 전처리
 tokenizer = get_tokenizer("basic_english")
 x_train, x_test, y_train, y_test, vocab = load_data(
-    'sarcasm.json', tokenizer, min_freq=2, max_tokens=1000
+    file_path='sarcasm.json', 
+    tokenizer=tokenizer, 
+    min_freq=2, 
+    max_tokens=1000,
+    url='https://storage.googleapis.com/download.tensorflow.org/data/sarcasm.json'
 )
 
 train_loader, valid_loader = create_dataloaders(

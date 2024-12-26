@@ -1,9 +1,14 @@
 import pandas as pd
 import torch
+import urllib
+import os
+import json
+from sklearn.model_selection import train_test_split
 from torch.utils.data import Dataset, DataLoader
 from torchtext.data.utils import get_tokenizer
 from torchtext.vocab import build_vocab_from_iterator
 from torch.nn.utils.rnn import pad_sequence
+
 
 class SarcasmDataset(Dataset):
     def __init__(self, texts, labels, vocab, tokenizer):
@@ -22,7 +27,12 @@ class SarcasmDataset(Dataset):
         return self.vocab(self.tokenizer(text)), label
 
 
-def load_data(file_path, tokenizer, min_freq=2, max_tokens=1000):
+def load_data(file_path, tokenizer, min_freq=2, max_tokens=1000, url=None):
+    # 데이터 다운로드 (필요 시)
+    if url and not os.path.exists(file_path):
+        print(f"Downloading dataset from {url}...")
+        urllib.request.urlretrieve(url, file_path)
+
     # 데이터 로드
     with open(file_path, 'r') as f:
         data = pd.DataFrame(json.load(f))
@@ -37,7 +47,7 @@ def load_data(file_path, tokenizer, min_freq=2, max_tokens=1000):
     vocab.set_default_index(vocab['<UNK>'])
 
     # Train/Test 분리
-    from sklearn.model_selection import train_test_split
+
     x_train, x_test, y_train, y_test = train_test_split(
         data['headline'], 
         data['is_sarcastic'], 
