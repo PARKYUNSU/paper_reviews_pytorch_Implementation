@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from model.lstm import LSTM
+from .lstm import LSTM
 from torchtext.data.utils import get_tokenizer
 
 class TextClassificationModel(nn.Module):

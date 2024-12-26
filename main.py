@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from model.lstm import TextClassificationModel
+from model.text_cl_model import TextClassificationModel
 from torchtext.data.utils import get_tokenizer
 from data import load_data, create_dataloaders
 from train import train_one_epoch
