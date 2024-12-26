@@ -5,7 +5,7 @@ from .lstm import LSTM
 from torchtext.data.utils import get_tokenizer
 
 class TextClassificationModel(nn.Module):
-    def __init__(self, num_classes, vocab_size, embedding_dim, hidden_size, num_layers, bidirectional=True, dropout_prob=0.5):
+    def __init__(self, num_classes, vocab_size, embedding_dim, hidden_size, num_layers, bidirectional=True, dropout_prob=0.5, output_activation=None):
         super(TextClassificationModel, self).__init__()
         self.embedding = nn.Embedding(vocab_size, embedding_dim)
         self.hidden_size = hidden_size
@@ -18,6 +18,7 @@ class TextClassificationModel(nn.Module):
             hidden_dim=hidden_size,
             layer_dim=num_layers,
             output_dim=num_classes,
+            output_activation=output_activation,
             dropout_prob=dropout_prob,
         )
 

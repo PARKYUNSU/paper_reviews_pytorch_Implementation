@@ -1,9 +1,10 @@
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 from .lstm_cell import LSTMCell
 
 class LSTM(nn.Module):
-    def __init__(self, input_dim, hidden_dim, layer_dim, output_dim, dropout_prob=0.5):
+    def __init__(self, input_dim, hidden_dim, layer_dim, output_dim, dropout_prob=0.5, output_activation=None):
         """
         커스텀 LSTM 클래스
         Args:
@@ -12,12 +13,12 @@ class LSTM(nn.Module):
             layer_dim (int): LSTM 레이어 수
             output_dim (int): 최종 출력 크기
             dropout_prob (float): Dropout 확률
+            output_activation (str): 출력 활성화 함수 ('sigmoid', 'softmax', 또는 None)
         """
         super(LSTM, self).__init__()
         self.hidden_dim = hidden_dim
         self.layer_dim = layer_dim
-
-        # 여러 LSTM 레이어를 위한 LSTMCell 배열
+        self.output_activation = output_activation  # 추가
         self.lstm_cells = nn.ModuleList([
             LSTMCell(input_dim if i == 0 else hidden_dim, hidden_dim)
             for i in range(layer_dim)
@@ -26,27 +27,19 @@ class LSTM(nn.Module):
         self.fc = nn.Linear(hidden_dim, output_dim)
 
     def forward(self, x, hidden):
-        """
-        Args:
-            x: 입력 시퀀스, [batch_size, seq_length, input_dim]
-            hidden: 초기 hidden state와 cell state (h, c)
-
-        Returns:
-            out: 모델 출력, [batch_size, output_dim]
-        """
         batch_size, seq_length, _ = x.size()
-        h, c = hidden  # 초기 hidden state와 cell state 분리
+        h, c = hidden
 
-        # 시간 축을 따라 순환
         for t in range(seq_length):
-            input_t = x[:, t, :]  # 현재 타임스텝 입력
+            input_t = x[:, t, :]
             for layer in range(self.layer_dim):
                 h[layer], c[layer] = self.lstm_cells[layer](input_t, (h[layer], c[layer]))
-                input_t = h[layer]  # 다음 레이어로 전달
+                input_t = h[layer]
 
-        # 마지막 타임스텝의 출력 사용
-        out = self.dropout(h[-1])  # 가장 마지막 레이어의 hidden state
-        out = self.fc(out)  # 출력 레이어 통과
+        out = self.dropout(h[-1])
+        out = self.fc(out)
+
+        # 출력 활성화 함수 적용
         if self.output_activation == "sigmoid":
             out = torch.sigmoid(out)
         elif self.output_activation == "softmax":
