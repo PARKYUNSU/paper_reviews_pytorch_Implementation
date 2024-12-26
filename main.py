@@ -68,5 +68,5 @@ for epoch in range(1, num_epochs + 1):
         best_val_loss = val_loss
         save_checkpoint(model, optimizer, epoch, path=f"LSTM_Best.pth")
 
-# 학습 및 평가 결과 시각화
-plot_metrics(train_losses, val_losses, train_accuracies, val_accuracies)
+# 학습 및 평가 결과 시각화 및 저장
+plot_metrics(train_losses, val_losses, train_accuracies, val_accuracies, save_path="training_metrics.png")

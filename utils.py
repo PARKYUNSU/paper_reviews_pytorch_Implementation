@@ -18,15 +18,17 @@ def load_checkpoint(model, optimizer, path="checkpoint.pth"):
         return checkpoint['epoch']
     return 0
 
-def plot_metrics(train_losses, val_losses, train_accuracies, val_accuracies):
+
+def plot_metrics(train_losses, val_losses, train_accuracies, val_accuracies, save_path='metrics_plot.png'):
     """
-    Plots the training and validation loss and accuracy over epochs.
+    Plots the training and validation loss and accuracy over epochs, and saves the plot to a file.
 
     Args:
         train_losses (list): List of training loss values for each epoch.
         val_losses (list): List of validation loss values for each epoch.
         train_accuracies (list): List of training accuracy values for each epoch.
         val_accuracies (list): List of validation accuracy values for each epoch.
+        save_path (str): Path to save the plot image.
     """
     epochs = range(1, len(train_losses) + 1)
 
@@ -51,5 +53,8 @@ def plot_metrics(train_losses, val_losses, train_accuracies, val_accuracies):
     plt.legend()
     plt.grid()
 
+    # Save the plot as an image
     plt.tight_layout()
-    plt.show()
+    plt.savefig(save_path)
+    print(f"Metrics plot saved to {save_path}")
+    plt.close()
