@@ -41,7 +41,7 @@ loss_fn = nn.CrossEntropyLoss()
 optimizer = optim.Adam(model.parameters(), lr=0.001)
 
 # 학습 및 평가 루프
-num_epochs = 10
+num_epochs = 20
 best_val_loss = float('inf')
 
 for epoch in range(1, num_epochs + 1):
