@@ -1,59 +1,54 @@
 import torch
-from data_generate import load_nsmc_data
-from utils import LSTM, get_optimizer_and_criterion
-from eval import evaluate
+import torch.nn as nn
+import torch.optim as optim
+from model.lstm import TextClassificationModel
+from data import load_data, create_dataloaders
+from train import train_one_epoch
+from eval import evaluate_one_epoch
+from utils import save_checkpoint, load_checkpoint
 
-def simple_tokenizer(text):
-    return text.split()
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-def main():
-    # 하이퍼파라미터 설정
-    max_length = 50
-    batch_size = 64
-    input_dim = 5000  # vocab 크기
-    hidden_dim = 128
-    layer_dim = 2
-    output_dim = 1
-    dropout_prob = 0.2
-    num_epochs = 10
-    learning_rate = 0.001
+# 데이터 및 전처리
+tokenizer = get_tokenizer("basic_english")
+x_train, x_test, y_train, y_test, vocab = load_data(
+    'sarcasm.json', tokenizer, min_freq=2, max_tokens=1000
+)
 
-    # 데이터 로드
-    train_loader, test_loader, vocab = load_nsmc_data(simple_tokenizer, max_length, batch_size)
+train_loader, valid_loader = create_dataloaders(
+    x_train, x_test, y_train, y_test, vocab, tokenizer, 
+    batch_size=32, max_sequence_length=120, device=device
+)
 
-    # 모델 초기화
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    model = LSTM(len(vocab), hidden_dim, layer_dim, output_dim, dropout_prob).to(device)
-    optimizer, criterion = get_optimizer_and_criterion(model, lr=learning_rate)
+# 모델 정의
+config = {
+    'num_classes': 2, 
+    'vocab_size': len(vocab), 
+    'embedding_dim': 16, 
+    'hidden_size': 32, 
+    'num_layers': 2, 
+    'bidirectional': True,
+}
 
-    # 학습 루프
-    for epoch in range(num_epochs):
-        model.train()
-        train_loss = 0.0
-        correct = 0
-        total = 0
+model = TextClassificationModel(**config)
+model.to(device)
 
-        for inputs, labels in train_loader:
-            inputs, labels = inputs.to(device), labels.float().to(device)
-            hidden = model.init_hidden(inputs.size(0), device)
+loss_fn = nn.CrossEntropyLoss()
+optimizer = optim.Adam(model.parameters(), lr=0.001)
 
-            optimizer.zero_grad()
-            outputs = model(inputs, hidden).squeeze()
-            loss = criterion(outputs, labels)
-            loss.backward()
-            optimizer.step()
+# 학습 및 평가 루프
+num_epochs = 10
+best_val_loss = float('inf')
 
-            train_loss += loss.item()
-            preds = (outputs >= 0.5).float()
-            correct += (preds == labels).sum().item()
-            total += labels.size(0)
+for epoch in range(1, num_epochs + 1):
+    print(f"Epoch {epoch}/{num_epochs}")
+    
+    train_loss, train_acc = train_one_epoch(model, train_loader, loss_fn, optimizer, device)
+    val_loss, val_acc = evaluate_one_epoch(model, valid_loader, loss_fn, device)
+    
+    print(f"Train Loss: {train_loss:.4f}, Train Accuracy: {train_acc:.4f}")
+    print(f"Validation Loss: {val_loss:.4f}, Validation Accuracy: {val_acc:.4f}")
 
-        train_accuracy = correct / total
-        val_loss, val_accuracy = evaluate(model, test_loader, criterion, device)
-
-        print(f"Epoch [{epoch+1}/{num_epochs}], "
-              f"Train Loss: {train_loss/len(train_loader):.4f}, Train Accuracy: {train_accuracy:.4f}, "
-              f"Val Loss: {val_loss:.4f}, Val Accuracy: {val_accuracy:.4f}")
-
-if __name__ == "__main__":
-    main()
+    if val_loss < best_val_loss:
+        best_val_loss = val_loss
+        save_checkpoint(model, optimizer, epoch, path=f"LSTM_Best.pth")

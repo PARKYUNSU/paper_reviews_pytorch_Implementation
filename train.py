@@ -1,50 +1,26 @@
+from tqdm import tqdm
 import torch
 
-def train_one_epoch(model, dataloader, criterion, optimizer, device):
-    """
-    한 epoch 동안 모델 학습을 수행하는 함수.
-
-    Args:
-        model (nn.Module): 학습할 모델.
-        dataloader (DataLoader): 학습 데이터 로더.
-        criterion (nn.Module): 손실 함수.
-        optimizer (Optimizer): 옵티마이저.
-        device (torch.device): 연산 장치 (CPU 또는 CUDA).
-
-    Returns:
-        tuple: 평균 학습 손실, 학습 정확도
-    """
+def train_one_epoch(model, data_loader, loss_fn, optimizer, device):
     model.train()
-    train_loss = 0.0
-    correct = 0
-    total = 0
-
-    for inputs, labels in dataloader:
-        inputs, labels = inputs.to(device), labels.float().to(device)
-        hidden = model.init_hidden(inputs.size(0), device)
-
-        # Gradients 초기화
+    running_loss, correct, total = 0.0, 0, 0
+    progress_bar = tqdm(data_loader, unit='batch', total=len(data_loader))
+    
+    for texts, labels in progress_bar:
+        texts, labels = texts.to(device), labels.to(device)
         optimizer.zero_grad()
 
-        # Forward
-        outputs = model(inputs, hidden).squeeze()
+        model.init_hidden_and_cell_state(len(texts), device)
+        outputs = model(texts)
+        loss = loss_fn(outputs, labels)
 
-        # Loss 계산
-        loss = criterion(outputs, labels)
-
-        # Backward
         loss.backward()
-
-        # Parameter 업데이트
         optimizer.step()
 
-        # Loss 및 Accuracy 집계
-        train_loss += loss.item()
-        preds = (outputs >= 0.5).float()
+        running_loss += loss.item()
+        preds = outputs.argmax(dim=1)
         correct += (preds == labels).sum().item()
         total += labels.size(0)
+        progress_bar.set_description(f"Train Loss: {running_loss/(total):.4f}, Accuracy: {correct/total:.4f}")
 
-    # 평균 Loss 및 Accuracy 계산
-    avg_loss = train_loss / len(dataloader)
-    accuracy = correct / total
-    return avg_loss, accuracy
+    return running_loss / total, correct / total

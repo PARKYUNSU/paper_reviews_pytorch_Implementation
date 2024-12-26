@@ -3,7 +3,7 @@ import torch.nn as nn
 from .lstm_cell import LSTMCell
 
 class LSTM(nn.Module):
-    def __init__(self, input_dim, hidden_dim, layer_dim, output_dim, dropout_prob=0.2):
+    def __init__(self, input_dim, hidden_dim, layer_dim, output_dim, dropout_prob=0.5):
         """
         커스텀 LSTM 클래스
         Args:

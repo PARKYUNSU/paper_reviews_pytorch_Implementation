@@ -4,7 +4,7 @@ import torch.nn.functional as F
 import math
 
 class LSTMCell(nn.Module):
-    def __init__(self, input_size, hidden_size, bias=True, dropout_prob=0.2):
+    def __init__(self, input_size, hidden_size, bias=True, dropout_prob=0.5):
         super(LSTMCell, self).__init__()
         self.input_size = input_size
         self.hidden_size = hidden_size

@@ -1,21 +1,20 @@
 import torch
 
-def evaluate(model, dataloader, criterion, device):
+def evaluate_one_epoch(model, data_loader, loss_fn, device):
     model.eval()
-    test_loss = 0.0
-    correct = 0
-    total = 0
-
+    running_loss, correct, total = 0.0, 0, 0
+    
     with torch.no_grad():
-        for inputs, labels in dataloader:
-            inputs, labels = inputs.to(device), labels.float().to(device)
-            hidden = model.init_hidden(inputs.size(0), device)
-            outputs = model(inputs, hidden).squeeze()
-            loss = criterion(outputs, labels)
-            test_loss += loss.item()
-            preds = (outputs >= 0.5).float()
+        for texts, labels in data_loader:
+            texts, labels = texts.to(device), labels.to(device)
+
+            model.init_hidden_and_cell_state(len(texts), device)
+            outputs = model(texts)
+            loss = loss_fn(outputs, labels)
+
+            running_loss += loss.item()
+            preds = outputs.argmax(dim=1)
             correct += (preds == labels).sum().item()
             total += labels.size(0)
 
-    accuracy = correct / total
-    return test_loss / len(dataloader), accuracy
+    return running_loss / total, correct / total
