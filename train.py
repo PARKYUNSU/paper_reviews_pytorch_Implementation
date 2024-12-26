@@ -1,98 +1,50 @@
 import torch
-import torch.nn as nn
-import numpy as np
-from tqdm import tqdm
 
-def train_model(train_loader, valid_loader, model, criterion, optimizer, num_epochs, device, clip=5):
-    valid_loss_min = np.Inf  # Validation 손실 초기화
-    epoch_tr_loss, epoch_vl_loss = [], []
-    epoch_tr_acc, epoch_vl_acc = [], []
+def train_one_epoch(model, dataloader, criterion, optimizer, device):
+    """
+    한 epoch 동안 모델 학습을 수행하는 함수.
 
-    for epoch in range(num_epochs):
-        train_losses = []
-        train_acc = 0.0
-        model.train()  # 모델을 학습 모드로 설정
+    Args:
+        model (nn.Module): 학습할 모델.
+        dataloader (DataLoader): 학습 데이터 로더.
+        criterion (nn.Module): 손실 함수.
+        optimizer (Optimizer): 옵티마이저.
+        device (torch.device): 연산 장치 (CPU 또는 CUDA).
 
-        # 학습 루프
-        print(f"Epoch {epoch+1}/{num_epochs}")
-        with tqdm(train_loader, desc="Training", unit="batch") as tbar:  # tqdm 사용
-            for inputs, labels in tbar:
-                inputs, labels = inputs.to(device), labels.to(device)
-                
-                # 데이터 타입 변환
-                inputs = inputs.float()
-                
-                # 입력 데이터에 추가 차원을 삽입 (batch_size, seq_length, 1)
-                inputs = inputs.unsqueeze(-1)
+    Returns:
+        tuple: 평균 학습 손실, 학습 정확도
+    """
+    model.train()
+    train_loss = 0.0
+    correct = 0
+    total = 0
 
-                # LSTM hidden state 초기화
-                h, c = model.init_hidden(inputs.size(0), device)
+    for inputs, labels in dataloader:
+        inputs, labels = inputs.to(device), labels.float().to(device)
+        hidden = model.init_hidden(inputs.size(0), device)
 
-                # Forward pass
-                optimizer.zero_grad()
-                output = model(inputs, (h, c))
-                loss = criterion(output.squeeze(), labels.float())
-                loss.backward()
+        # Gradients 초기화
+        optimizer.zero_grad()
 
-                # Gradient Clipping
-                nn.utils.clip_grad_norm_(model.parameters(), clip)
-                optimizer.step()
+        # Forward
+        outputs = model(inputs, hidden).squeeze()
 
-                # 손실 및 정확도 계산
-                train_losses.append(loss.item())
-                train_acc += acc(output, labels)
+        # Loss 계산
+        loss = criterion(outputs, labels)
 
-                # TQDM 진행 상태 업데이트
-                tbar.set_postfix(loss=loss.item())
+        # Backward
+        loss.backward()
 
-        # 검증 루프
-        val_losses = []
-        val_acc = 0.0
-        model.eval()
-        with torch.no_grad():
-            with tqdm(valid_loader, desc="Validating", unit="batch") as vbar:  # tqdm 사용
-                for inputs, labels in vbar:
-                    inputs, labels = inputs.to(device), labels.to(device)
+        # Parameter 업데이트
+        optimizer.step()
 
-                    # 데이터 타입 변환 및 hidden state 초기화
-                    inputs = inputs.float().unsqueeze(-1)
-                    h, c = model.init_hidden(inputs.size(0), device)
+        # Loss 및 Accuracy 집계
+        train_loss += loss.item()
+        preds = (outputs >= 0.5).float()
+        correct += (preds == labels).sum().item()
+        total += labels.size(0)
 
-                    # Forward pass
-                    output = model(inputs, (h, c))
-                    val_loss = criterion(output.squeeze(), labels.float())
-                    val_losses.append(val_loss.item())
-                    val_acc += acc(output, labels)
-
-                    # TQDM 진행 상태 업데이트
-                    vbar.set_postfix(val_loss=val_loss.item())
-
-        # 에포크 손실 및 정확도 저장
-        epoch_train_loss = np.mean(train_losses)
-        epoch_val_loss = np.mean(val_losses)
-        epoch_train_acc = train_acc / len(train_loader.dataset)
-        epoch_val_acc = val_acc / len(valid_loader.dataset)
-
-        epoch_tr_loss.append(epoch_train_loss)
-        epoch_vl_loss.append(epoch_val_loss)
-        epoch_tr_acc.append(epoch_train_acc)
-        epoch_vl_acc.append(epoch_val_acc)
-
-        print(f"train_loss: {epoch_train_loss:.6f}, val_loss: {epoch_val_loss:.6f}")
-        print(f"train_accuracy: {epoch_train_acc*100:.2f}%, val_accuracy: {epoch_val_acc*100:.2f}%")
-
-        # Validation loss가 감소하면 모델 저장
-        if epoch_val_loss <= valid_loss_min:
-            torch.save(model.state_dict(), "best_model.pt")
-            print(f"Validation loss decreased ({valid_loss_min:.6f} --> {epoch_val_loss:.6f}). Saving model...")
-            valid_loss_min = epoch_val_loss
-
-        print("=" * 50)
-
-    return epoch_tr_loss, epoch_vl_loss, epoch_tr_acc, epoch_vl_acc
-
-
-# 정확도 계산 함수
-def acc(pred, label):
-    pred = torch.round(pred.squeeze())
-    return torch.sum(pred == label.squeeze()).item()
+    # 평균 Loss 및 Accuracy 계산
+    avg_loss = train_loss / len(dataloader)
+    accuracy = correct / total
+    return avg_loss, accuracy
