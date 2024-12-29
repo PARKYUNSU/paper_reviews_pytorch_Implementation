@@ -105,6 +105,8 @@ RNN은 연속적인 데이터를 처리하는 데 적합하지만 몇 가지 한
 RNN의 한계점을 극복하기 위해 **LSTM(Long Short-Term Memory)** 이 제안되었습니다.  
 LSTM은 기존 RNN의 구조에 **셀 상태(Cell State)** 와 **게이트 구조** 를 추가하여 긴 시간 간격의 정보를 효과적으로 학습할 수 있습니다.
 
+<img src="https://github.com/user-attachments/assets/c40ee410-ab99-46fc-9f53-24f77aa8cf49" width=500>
+
 ### LSTM의 주요 특징
 1. **Cell State ($C_t$)**
 - 수평으로 흐르는 주요 경로로, 정보를 장기간 유지하거나 제거할 수 있는 컨베이어 벨트 역할을 합니다.
