@@ -24,10 +24,10 @@ class LSTMCell(nn.Module):
     def forward(self, x, hidden):
         hx, cx = hidden
         gates = self.x2h(x) + self.h2h(self.dropout(hx))
-        ingate, forgetgate, cellgate, outgate = gates.chunk(4, 1)
+        forgetgate, ingate, cellgate, outgate = gates.chunk(4, 1)
 
-        ingate = torch.sigmoid(ingate)
         forgetgate = torch.sigmoid(forgetgate)
+        ingate = torch.sigmoid(ingate)
         cellgate = torch.tanh(cellgate)
         outgate = torch.sigmoid(outgate)
 
