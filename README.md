@@ -107,6 +107,8 @@ LSTM은 기존 RNN의 구조에 **셀 상태(Cell State)** 와 **게이트 구�
 
 <img src="https://github.com/user-attachments/assets/c40ee410-ab99-46fc-9f53-24f77aa8cf49" width=500>
 
+| RNN to LSTM
+
 ### LSTM의 주요 특징
 1. **Cell State ($C_t$)**
 - 수평으로 흐르는 주요 경로로, 정보를 장기간 유지하거나 제거할 수 있는 컨베이어 벨트 역할을 합니다.
@@ -126,4 +128,29 @@ LSTM은 기존 RNN의 구조에 **셀 상태(Cell State)** 와 **게이트 구�
 LSTM은 이러한 구조를 통해 RNN의 단점을 완화하고, 긴 시계열 데이터에서도 안정적인 학습 성능을 제공합니다.
 
 ---
+LSTM의 단계별 동작
+1. Forget Gate Layer (기존 정보의 제거)
+이 단계에서는 **이전 상태 ($h_{t−1}$)** 와 **현재 입력 ($x_t$)** 를 기반으로, **Cell State ($C_{t−1}$)** 에서 어떤 정보를 버릴지 결정합니다.
+Sigmoid Layer를 통해 0과 1 사이의 값인 $f_t$를 계산하며, 값이 0에 가까울수록 해당 정보를 잊게 됩니다.
+
+2. Input Gate Layer (새로운 정보 추가)
+새로운 정보를 Cell State에 얼마나 추가할지 결정합니다.
+이 단계는 두 부분으로 나뉩니다:
+
+Input Gate ($i_t$): Sigmoid Layer가 어떤 값을 업데이트할지 결정.
+Candidate Value ($C~_t$): Tanh Layer를 통해 새롭게 추가할 후보 값을 생성.
+
+
+3. Cell State 업데이트
+이전 단계에서 계산한 값을 이용해 **Cell State ($C_t$)** 를 업데이트합니다.
+Forget Gate와 Input Gate의 결과를 조합하여 새 상태를 생성합니다.
+
+이 과정은 이전 상태에서 잊어야 할 정보는 제거하고, 새로운 정보를 추가하는 방식으로 이루어집니다.
+
+4. Output Gate Layer (출력 생성)
+최종적으로 어떤 정보를 출력할지 결정합니다.
+이 단계는 다음 두 단계로 이루어집니다:
+
+Output Gate ($o_t$): Sigmoid Layer가 출력할 정보를 결정.
+Filtered Output: Cell State를 Tanh Layer에 통과시켜 -1과 1 사이의 값으로 변환한 뒤, Output Gate와 곱하여 최종 출력값 생성.
 
