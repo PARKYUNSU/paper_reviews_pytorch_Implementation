@@ -138,6 +138,7 @@ Sigmoid Layer를 통해 0과 1 사이의 값인 $f_t$를 계산하며, 값이 0�
 
 <img src="https://github.com/user-attachments/assets/716dc352-b9b4-4e62-bb29-451b64de77f2" width=500>
 
+
 **2. Input Gate Layer (새로운 정보 추가)**
    
 새로운 정보를 Cell State에 얼마나 추가할지 결정합니다.
@@ -150,6 +151,7 @@ Candidate Value ($C~_t$): Tanh Layer를 통해 새롭게 추가할 후보 값을
 
 <img src="https://github.com/user-attachments/assets/b63407f1-bf32-4fbd-aa51-d2c84b0b99e8" width=500>
 
+
 **3. Cell State 업데이트**
    
 이전 단계에서 계산한 값을 이용해 **Cell State ($C_t$)** 를 업데이트합니다.
@@ -159,6 +161,7 @@ Forget Gate와 Input Gate의 결과를 조합하여 새 상태를 생성합니�
 이 과정은 이전 상태에서 잊어야 할 정보는 제거하고, 새로운 정보를 추가하는 방식으로 이루어집니다.
 
 <img src="https://github.com/user-attachments/assets/0e9c2cff-d915-472e-9380-487327af97ce" width=500>
+
 
 **4. Output Gate Layer (출력 생성)**
    
