@@ -128,6 +128,7 @@ LSTM은 기존 RNN의 구조에 **셀 상태(Cell State)** 와 **게이트 구�
 LSTM은 이러한 구조를 통해 RNN의 단점을 완화하고, 긴 시계열 데이터에서도 안정적인 학습 성능을 제공합니다.
 
 ---
+
 ## LSTM의 단계별 동작
 
 **1. Forget Gate Layer (기존 정보의 제거)**
@@ -175,6 +176,7 @@ Filtered Output: Cell State를 Tanh Layer에 통과시켜 -1과 1 사이의 값�
 
 <img src="https://github.com/user-attachments/assets/1660b37d-5d41-4b21-ad52-98e921074070" width=500>
 
+---
 
 ## Experiment
 
@@ -188,7 +190,6 @@ Filtered Output: Cell State를 Tanh Layer에 통과시켜 -1과 1 사이의 값�
 | Learning Rate      | 0.001                            |
 | Device             | kaggle, GPU P100                 |
 
----
 ### Data Description
 
 |                    | Details                                                                |
@@ -201,6 +202,7 @@ Filtered Output: Cell State를 Tanh Layer에 통과시켜 -1과 1 사이의 값�
 | Maximum Sentence Length | 120 tokens                                                     |
 | Train/Test Split   | 80:20                                                                 |
 
+---
 
 ### Result
 
@@ -210,8 +212,6 @@ Filtered Output: Cell State를 Tanh Layer에 통과시켜 -1과 1 사이의 값�
 |------------------------|-----------|-------------|
 | Best Validation Loss   | 13        | **0.0119**  |
 | Best Validation Accuracy | 24        | **0.8325**  |
-
----
 
 #### Additional Observations
 
