@@ -136,6 +136,8 @@ LSTM은 이러한 구조를 통해 RNN의 단점을 완화하고, 긴 시계열 
 
 Sigmoid Layer를 통해 0과 1 사이의 값인 $f_t$를 계산하며, 값이 0에 가까울수록 해당 정보를 잊게 됩니다.
 
+<img src="https://github.com/user-attachments/assets/716dc352-b9b4-4e62-bb29-451b64de77f2" width=500>
+
 **2. Input Gate Layer (새로운 정보 추가)**
    
 새로운 정보를 Cell State에 얼마나 추가할지 결정합니다.
@@ -146,6 +148,8 @@ Input Gate ($i_t$): Sigmoid Layer가 어떤 값을 업데이트할지 결정.
 
 Candidate Value ($C~_t$): Tanh Layer를 통해 새롭게 추가할 후보 값을 생성.
 
+<img src="https://github.com/user-attachments/assets/b63407f1-bf32-4fbd-aa51-d2c84b0b99e8" width=500>
+
 **3. Cell State 업데이트**
    
 이전 단계에서 계산한 값을 이용해 **Cell State ($C_t$)** 를 업데이트합니다.
@@ -153,6 +157,8 @@ Candidate Value ($C~_t$): Tanh Layer를 통해 새롭게 추가할 후보 값을
 Forget Gate와 Input Gate의 결과를 조합하여 새 상태를 생성합니다.
 
 이 과정은 이전 상태에서 잊어야 할 정보는 제거하고, 새로운 정보를 추가하는 방식으로 이루어집니다.
+
+<img src="https://github.com/user-attachments/assets/0e9c2cff-d915-472e-9380-487327af97ce" width=500>
 
 **4. Output Gate Layer (출력 생성)**
    
@@ -163,4 +169,64 @@ Forget Gate와 Input Gate의 결과를 조합하여 새 상태를 생성합니�
 Output Gate ($o_t$): Sigmoid Layer가 출력할 정보를 결정.
 
 Filtered Output: Cell State를 Tanh Layer에 통과시켜 -1과 1 사이의 값으로 변환한 뒤, Output Gate와 곱하여 최종 출력값 생성.
+
+<img src="https://github.com/user-attachments/assets/1660b37d-5d41-4b21-ad52-98e921074070" width=500>
+
+
+## Experiment
+
+### Experimental Setup
+|                    | Details                          |
+|--------------------|----------------------------------|
+| Optimizer          | Adam                             |
+| Loss Function      | CrossEntropyLoss                 |
+| Number of Epochs   | 30                               |
+| Batch Size         | 32                               |
+| Learning Rate      | 0.001                            |
+| Device             | kaggle, GPU P100                 |
+
+---
+### Data Description
+
+|                    | Details                                                                |
+|--------------------|------------------------------------------------------------------------|
+| Dataset            | Sarcasm Dataset                                                       |
+| Number of Samples  | Approximately 26,000                                                 |
+| Number of Classes  | 2 (Sarcastic, Non-Sarcastic)                                          |
+| Vocabulary Size    | 1000 (max tokens)                                                    |
+| Minimum Word Frequency | 2                                                                |
+| Maximum Sentence Length | 120 tokens                                                     |
+| Train/Test Split   | 80:20                                                                 |
+
+
+### Result
+
+## Best Epoch Details
+
+| **Metric**            | **Epoch** | **Value**   |
+|------------------------|-----------|-------------|
+| Best Validation Loss   | 13        | **0.0119**  |
+| Best Validation Accuracy | 24        | **0.8325**  |
+
+---
+
+## Additional Observations
+
+1. **Best Validation Loss**:
+   - Occurred at **Epoch 13** with a value of **0.0119**.
+   - Corresponding Train Loss: **0.0099**.
+   - Corresponding Train Accuracy: **86.13% (0.8613)**.
+   - Validation Accuracy at this epoch: **82.83% (0.8283)**.
+
+2. **Best Validation Accuracy**:
+   - Achieved at **Epoch 24** with a value of **83.25% (0.8325)**.
+   - Corresponding Validation Loss: **0.0128**.
+   - Corresponding Train Loss: **0.0084**.
+   - Corresponding Train Accuracy: **87.94% (0.8794)**.
+
+3. **Final Epoch (30)**:
+   - Train Loss: **0.0077**, Train Accuracy: **88.95% (0.8895)**.
+   - Validation Loss: **0.0142**, Validation Accuracy: **82.55% (0.8255)**.
+
+<img src="https://github.com/user-attachments/assets/98da957e-f89a-44af-8442-bcf51580d769">
 
