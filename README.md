@@ -201,7 +201,7 @@ Filtered Output: Cell State를 Tanh Layer에 통과시켜 -1과 1 사이의 값�
 
 ### Result
 
-## Best Epoch Details
+#### Best Epoch Details
 
 | **Metric**            | **Epoch** | **Value**   |
 |------------------------|-----------|-------------|
@@ -210,7 +210,7 @@ Filtered Output: Cell State를 Tanh Layer에 통과시켜 -1과 1 사이의 값�
 
 ---
 
-## Additional Observations
+#### Additional Observations
 
 1. **Best Validation Loss**:
    - Occurred at **Epoch 13** with a value of **0.0119**.
