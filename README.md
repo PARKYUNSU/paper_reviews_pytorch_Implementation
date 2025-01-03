@@ -218,18 +218,18 @@ Filtered Output: Cell State를 Tanh Layer에 통과시켜 -1과 1 사이의 값�
 1. **Best Validation Loss**
    - Occurred at **Epoch 13** with a value of **0.0119**
    - Corresponding Train Loss: **0.0099**
-   - Corresponding Train Accuracy: **86.13% (0.8613)**
-   - Validation Accuracy at this epoch: **82.83% (0.8283)**
+   - Corresponding Train Accuracy: **86.13%**
+   - Validation Accuracy at this epoch: **82.83%**
 
 2. **Best Validation Accuracy**
-   - Achieved at **Epoch 24** with a value of **83.25% (0.8325)**
+   - Achieved at **Epoch 24** with a value of **83.25%**
    - Corresponding Validation Loss: **0.0128**
    - Corresponding Train Loss: **0.0084**
-   - Corresponding Train Accuracy: **87.94% (0.8794)**
+   - Corresponding Train Accuracy: **87.94%**
 
 3. **Final 30 Epoch**
-   - Train Loss: **0.0077**, Train Accuracy: **88.95% (0.8895)**
-   - Validation Loss: **0.0142**, Validation Accuracy: **82.55% (0.8255)**
+   - Train Loss: **0.0077**, Train Accuracy: **88.95%**
+   - Validation Loss: **0.0142**, Validation Accuracy: **82.55%**
 
 <img src="https://github.com/user-attachments/assets/98da957e-f89a-44af-8442-bcf51580d769">
 
