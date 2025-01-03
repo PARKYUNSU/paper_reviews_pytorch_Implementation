@@ -9,7 +9,7 @@ from torchtext.data.utils import get_tokenizer
 from torchtext.vocab import build_vocab_from_iterator
 from torch.nn.utils.rnn import pad_sequence
 
-
+123
 class SarcasmDataset(Dataset):
     def __init__(self, texts, labels, vocab, tokenizer):
         super().__init__()
