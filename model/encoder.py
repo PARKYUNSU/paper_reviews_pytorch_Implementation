@@ -44,4 +44,23 @@ class Multi_Head_Attention(nn.Module):
 
         # Concatenate heads
         attention_output = attention_output.transpose(1, 2).contiguous().view(batch_size, -1, self.num_heads * self.depth)
-        return self.output_dense(attention_output)  # Final linear layer    
+        return self.output_dense(attention_output)  # Final linear layer
+    
+class PositionwiseFF(nn.Module):
+    def __init__(self, d_model, d_ff, dropout=0.1):
+        super(PositionwiseFF, self).__init__()
+        self.ffnn = nn.Sequential(
+            nn.Linear(d_model, d_ff),
+            nn.ReLU(),
+            nn.Dropout(dropout),
+            nn.Linear(d_ff, d_model)
+        )
+    
+    def forward(self, x):
+        x = self.ffnn(x)
+        return x
+    
+class Encoder_Layer(nn.Module):
+    def __init__(self, d_model, num_heads, d_ff, dropout=0.1):
+        super(Encoder_Layer, self).__init__()
+        
