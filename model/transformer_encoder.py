@@ -12,12 +12,10 @@ class TransformerEncoder(nn.Module):
         self.dropout = nn.Dropout(dropout)
 
     def forward(self, x, mask=None):
-        # Embedding + Positional Encoding
         seq_len = x.size(1)  # Get the sequence length dynamically
-        x = self.embedding(x) + self.positional_encoding(x)  # Ensure the position encoding matches the input length
+        x = self.embedding(x) + self.positional_encoding(x)  # Ensure position encoding matches input length
         x = self.dropout(x)
 
-        # Pass through each encoder layer
         for layer in self.layers:
             x = layer(x, mask)
-        return 
+        return x
