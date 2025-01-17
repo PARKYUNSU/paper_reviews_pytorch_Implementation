@@ -1,7 +1,7 @@
 import torch
-from model.transformer import Transformer
-from data import generate_random_data, batchify_data
-from train import fit
+from model import Transformer
+from data_utils import generate_random_data, batchify_data
+from train import fit  # fit 함수 임포트
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
@@ -26,4 +26,4 @@ opt = torch.optim.SGD(model.parameters(), lr=0.01)
 loss_fn = torch.nn.CrossEntropyLoss()
 
 # 모델 훈련
-train_loss_list, validation_loss_list = fit(model, opt, loss_fn, train_dataloader, val_dataloader, epochs=10)
+train_loss_list, validation_loss_list = fit(model, opt, loss_fn, train_dataloader, val_dataloader, epochs=10, device=device)
