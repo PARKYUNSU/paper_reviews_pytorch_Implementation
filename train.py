@@ -1,14 +1,15 @@
 import torch
+import torch.nn as nn
 
-# train.py
 def train_loop(model, opt, loss_fn, dataloader, device):
     model.train()
     total_loss = 0
 
     for batch in dataloader:
         X, y = batch[:, 0], batch[:, 1]
-        X, y = torch.tensor(X).to(device), torch.tensor(y).to(device)
+        X, y = torch.tensor(X, dtype=torch.long, device=device), torch.tensor(y, dtype=torch.long, device=device)
 
+        # 여기서 y_input은 <SOS> 제외, y_expected는 <EOS> 제외
         y_input = y[:, :-1]
         y_expected = y[:, 1:]
 
@@ -17,9 +18,9 @@ def train_loop(model, opt, loss_fn, dataloader, device):
 
         pred = model(X, y_input, tgt_mask)
 
-        # Make sure the prediction and expected target have the same dimensions
+        # Flatten to match target
         pred = pred.view(-1, pred.size(-1))  # Flatten the output
-        y_expected = y_expected.reshape(-1)  # Flatten the target using reshape
+        y_expected = y_expected.reshape(-1)  # Flatten the target
 
         loss = loss_fn(pred, y_expected)
 
@@ -31,7 +32,6 @@ def train_loop(model, opt, loss_fn, dataloader, device):
 
     return total_loss / len(dataloader)
 
-# train.py
 def validation_loop(model, loss_fn, dataloader, device):
     model.eval()
     total_loss = 0
@@ -49,12 +49,9 @@ def validation_loop(model, loss_fn, dataloader, device):
 
             pred = model(X, y_input, tgt_mask)
 
-            # Ensure pred and y_expected have the same shape
+            # Flatten to match target
             pred = pred.view(-1, pred.size(-1))  # Flatten the output
-            y_expected = y_expected.reshape(-1)  # Flatten the target using reshape
-
-            # Ensure batch size match
-            assert pred.size(0) == y_expected.size(0), f"Batch size mismatch: {pred.size(0)} vs {y_expected.size(0)}"
+            y_expected = y_expected.reshape(-1)  # Flatten the target
 
             loss = loss_fn(pred, y_expected)
             total_loss += loss.detach().item()
@@ -66,13 +63,13 @@ def fit(model, opt, loss_fn, train_dataloader, val_dataloader, epochs, device):
 
     print("Training and validating model")
     for epoch in range(epochs):
-        print("-" * 25, f"Epoch {epoch + 1}", "-" * 25)
+        print("-"*25, f"Epoch {epoch + 1}","-"*25)
 
         train_loss = train_loop(model, opt, loss_fn, train_dataloader, device)
-        train_loss_list.append(train_loss)
+        train_loss_list += [train_loss]
 
         validation_loss = validation_loop(model, loss_fn, val_dataloader, device)
-        validation_loss_list.append(validation_loss)
+        validation_loss_list += [validation_loss]
 
         print(f"Training loss: {train_loss:.4f}")
         print(f"Validation loss: {validation_loss:.4f}")
