@@ -10,21 +10,27 @@ class PositionalEncoding(nn.Module):
  
         # Encoding - From formula
         pos_encoding = torch.zeros(max_seq_len, dim_model)
-        positions_list = torch.arange(0, max_seq_len, dtype=torch.float).view(-1, 1)  # 0, 1, 2, 3, 4, 5
-        division_term = torch.exp(torch.arange(0, dim_model, 2).float() * (-math.log(10000.0)) / dim_model)  # 1000^(2i/dim_model)
+        positions_list = torch.arange(0, max_seq_len, dtype=torch.float).view(-1, 1)
+        division_term = torch.exp(torch.arange(0, dim_model, 2).float() * (-math.log(10000.0)) / dim_model)
  
         pos_encoding[:, 0::2] = torch.sin(positions_list * division_term)
         pos_encoding[:, 1::2] = torch.cos(positions_list * division_term)
- 
-        # Saving buffer (same as parameter without gradients needed)
-        pos_encoding = pos_encoding.unsqueeze(0).transpose(0, 1)
+
+        # pos_encoding shape: (max_seq_len, dim_model)
+
+        # (1, max_seq_len, dim_model) 형태로 만들어서 batch 차원과 broadcast 가능하게 만듦
+        pos_encoding = pos_encoding.unsqueeze(0)  # (1, max_seq_len, d_model)
         self.register_buffer("pos_encoding", pos_encoding)
  
     def forward(self, token_embedding: torch.tensor) -> torch.tensor:
-        seq_len = token_embedding.size(1)  # Get the sequence length dynamically
-        # Ensure pos_encoding is sliced to match the input sequence length
-        if seq_len > self.pos_encoding.size(0):
-            raise ValueError(f"Input sequence length {seq_len} exceeds max_seq_len {self.pos_encoding.size(0)}")
+        """
+        token_embedding: (batch_size, seq_len, d_model)
+        """
+        seq_len = token_embedding.size(1)
+        
+        # pos_encoding: (1, max_seq_len, d_model)
+        # 필요 길이만큼 슬라이싱: (1, seq_len, d_model)
+        pos_encoding = self.pos_encoding[:, :seq_len, :]
 
-        pos_encoding = self.pos_encoding[:seq_len, :]
+        # 최종 덧셈 시: (batch_size, seq_len, d_model) + (1, seq_len, d_model)
         return self.dropout(token_embedding + pos_encoding)
