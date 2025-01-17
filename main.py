@@ -1,9 +1,8 @@
-# main.py
-
 import argparse
 import torch
 import torch.nn as nn
 import torch.optim as optim
+import matplotlib.pyplot as plt
 
 from data import get_dataloader
 from train import train_one_epoch
@@ -28,7 +27,6 @@ def main():
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     print(f"Using device: {device}")
 
-    # 1) Dataloader 준비
     dataloader = get_dataloader(
         batch_size=args.batch_size,
         seq_len=args.seq_len,
@@ -36,7 +34,6 @@ def main():
         total_samples=args.total_samples
     )
 
-    # 2) 모델 준비
     model = Transformer(
         num_layers=args.num_layers,
         d_model=args.d_model,
@@ -47,14 +44,30 @@ def main():
         dropout=args.dropout
     ).to(device)
 
-    # 3) Loss, Optimizer
-    criterion = nn.CrossEntropyLoss(ignore_index=0)  # pad_idx를 무시
+    criterion = nn.CrossEntropyLoss(ignore_index=0)
     optimizer = optim.Adam(model.parameters(), lr=args.lr)
 
-    # 4) 학습 루프
+    losses = []
+
     for epoch in range(1, args.epochs + 1):
         avg_loss = train_one_epoch(model, dataloader, criterion, optimizer, device)
         print(f"Epoch [{epoch}/{args.epochs}] - Loss: {avg_loss:.4f}")
+        losses.append(avg_loss)
+    
+    plt.figure(figsize=(8, 5))
+    plt.plot(range(1, args.epochs + 1), losses, marker='o', label='Training Loss')
+    plt.title('Loss over Epochs')
+    plt.xlabel('Epoch')
+    plt.ylabel('Loss')
+    plt.grid(True)
+    plt.legend()
+
+    # --save_fig 옵션이 주어지면 PNG로 저장, 그렇지 않으면 단순히 show
+    if args.save_fig:
+        plt.savefig('loss_plot.png')
+        print("Loss plot saved as 'loss_plot.png'")
+    else:
+        plt.show()
 
 if __name__ == '__main__':
     main()
