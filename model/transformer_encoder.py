@@ -19,6 +19,6 @@ class TransformerEncoder(nn.Module):
         # Dropout
         x = self.dropout(x)
         # Encoder Layers
-        for layer in enumerate(self.layers, 1):
+        for i, layer in enumerate(self.layers, 1):
             x = layer(x, mask)
         return x

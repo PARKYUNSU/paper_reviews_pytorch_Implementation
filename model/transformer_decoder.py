@@ -19,7 +19,7 @@ class TransformerDecoder(nn.Module):
         x = x + self.positional_encoding(x)
         x = self.dropout(x)
         # Decoder Layers
-        for layer in enumerate(self.layers, 1):
+        for i, layer in enumerate(self.layers, 1):
             x = layer(x, enc_output, tgt_mask, memory_mask)
 
         # Final Linear
