@@ -1,5 +1,6 @@
 import torch
 
+# train.py
 def train_loop(model, opt, loss_fn, dataloader, device):
     model.train()
     total_loss = 0
@@ -18,7 +19,7 @@ def train_loop(model, opt, loss_fn, dataloader, device):
 
         # Make sure the prediction and expected target have the same dimensions
         pred = pred.view(-1, pred.size(-1))  # Flatten the output
-        y_expected = y_expected.view(-1)  # Flatten the target
+        y_expected = y_expected.reshape(-1)  # Flatten the target using reshape
 
         loss = loss_fn(pred, y_expected)
 
