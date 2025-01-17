@@ -22,18 +22,6 @@ class Multi_Head_Attention(nn.Module):
         x = x.view(batch_size, -1, self.num_heads, self.depth)
         return x.transpose(1, 2)
 
-    def generate_square_subsequent_mask(self, sz):
-        """
-        Generate a mask for the self-attention mechanism.
-        Args:
-            sz: Sequence length
-        Returns:
-            mask: Lower triangular matrix (seq_len, seq_len)
-        """
-        mask = torch.triu(torch.ones(sz, sz), diagonal=1)  # 상삼각 행렬
-        mask = mask.masked_fill(mask == 1, float('-inf')).masked_fill(mask == 0, float(0.0))
-        return mask
-
     def forward(self, query, key, value, mask=None):
         batch_size = query.size(0)
 
