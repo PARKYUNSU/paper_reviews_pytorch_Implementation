@@ -1,31 +1,60 @@
+# main.py
+
+import argparse
 import torch
-from model import Transformer
-from data import generate_random_data, batchify_data
-from train import fit
+import torch.nn as nn
+import torch.optim as optim
 
-device = "cuda" if torch.cuda.is_available() else "cpu"
+from data import get_dataloader
+from train import train_one_epoch
+from model.transformer import Transformer
 
-# 하이퍼파라미터 설정
-num_layers = 3
-d_model = 8
-num_heads = 2
-d_ff = 16
-vocab_size = 4  # vocab_size는 실제 데이터에 맞게 설정
-max_seq_len = 8
-dropout = 0.1
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--num_layers', type=int, default=2)
+    parser.add_argument('--d_model', type=int, default=128)
+    parser.add_argument('--num_heads', type=int, default=4)
+    parser.add_argument('--d_ff', type=int, default=256)
+    parser.add_argument('--vocab_size', type=int, default=100)
+    parser.add_argument('--max_seq_len', type=int, default=50)
+    parser.add_argument('--dropout', type=float, default=0.1)
+    parser.add_argument('--batch_size', type=int, default=32)
+    parser.add_argument('--total_samples', type=int, default=1000)
+    parser.add_argument('--seq_len', type=int, default=10)
+    parser.add_argument('--lr', type=float, default=1e-3)
+    parser.add_argument('--epochs', type=int, default=10)
+    args = parser.parse_args()
 
-train_data = generate_random_data(9000)
-val_data = generate_random_data(3000)
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    print(f"Using device: {device}")
 
-train_dataloader = batchify_data(train_data)
-val_dataloader = batchify_data(val_data)
+    # 1) Dataloader 준비
+    dataloader = get_dataloader(
+        batch_size=args.batch_size,
+        seq_len=args.seq_len,
+        vocab_size=args.vocab_size,
+        total_samples=args.total_samples
+    )
 
-# 모델 인스턴스화
-model = Transformer(num_layers=num_layers, d_model=d_model, num_heads=num_heads, d_ff=d_ff, vocab_size=vocab_size, max_seq_len=max_seq_len, dropout=dropout).to(device)
+    # 2) 모델 준비
+    model = Transformer(
+        num_layers=args.num_layers,
+        d_model=args.d_model,
+        num_heads=args.num_heads,
+        d_ff=args.d_ff,
+        vocab_size=args.vocab_size,
+        max_seq_len=args.max_seq_len,
+        dropout=args.dropout
+    ).to(device)
 
-# 옵티마이저와 손실 함수 설정
-opt = torch.optim.SGD(model.parameters(), lr=0.01)
-loss_fn = torch.nn.CrossEntropyLoss()
+    # 3) Loss, Optimizer
+    criterion = nn.CrossEntropyLoss(ignore_index=0)  # pad_idx를 무시
+    optimizer = optim.Adam(model.parameters(), lr=args.lr)
 
-# 모델 훈련
-train_loss_list, validation_loss_list = fit(model, opt, loss_fn, train_dataloader, val_dataloader, epochs=10, device=device)
+    # 4) 학습 루프
+    for epoch in range(1, args.epochs + 1):
+        avg_loss = train_one_epoch(model, dataloader, criterion, optimizer, device)
+        print(f"Epoch [{epoch}/{args.epochs}] - Loss: {avg_loss:.4f}")
+
+if __name__ == '__main__':
+    main()
