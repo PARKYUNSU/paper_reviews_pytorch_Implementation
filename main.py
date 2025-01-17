@@ -1,6 +1,7 @@
 import torch
 from model.transformer import Transformer
 from data import generate_random_data, batchify_data
+from train import fit
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
