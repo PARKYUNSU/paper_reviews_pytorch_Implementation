@@ -12,12 +12,10 @@ class Decoder_Layer(nn.Module):
         self.self_attention = Multi_Head_Attention(d_model, num_heads)
         self.norm1 = nn.LayerNorm(d_model)
         self.dropout1 = nn.Dropout(dropout)
-
         # Encoder-Decoder Attention
         self.enc_dec_attention = Multi_Head_Attention(d_model, num_heads)
         self.norm2 = nn.LayerNorm(d_model)
         self.dropout2 = nn.Dropout(dropout)
-
         # Position-wise Feed Foward Network
         self.ffnn = PositionwiseFF(d_model, d_ff, dropout)
         self.norm3 = nn.LayerNorm(d_model)
@@ -25,14 +23,6 @@ class Decoder_Layer(nn.Module):
 
 
     def forward(self, x, enc_output, tgt_mask=None, memory_mask=None):
-        """
-        Decoder layer에서의 Forward pass
-        Args:
-            x: Target sequence embeddings (batch_size, tgt_seq_len, d_model)
-            enc_output: Encoder output (batch_size, src_seq_len, d_model)
-            tgt_mask: Target sequence mask (batch_size, tgt_seq_len, tgt_seq_len)
-            memory_mask: Encoder-decoder attention mask (batch_size, src_seq_len, tgt_seq_len)
-        """
         # Masked Multi Head Attention
         self_attn_output = self.self_attention(x, x, x, mask=tgt_mask)  # tgt_mask 사용
         x = self.norm1(x + self.dropout1(self_attn_output))
