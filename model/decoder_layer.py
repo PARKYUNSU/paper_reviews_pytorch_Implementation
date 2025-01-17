@@ -9,12 +9,12 @@ class Decoder_Layer(nn.Module):
         super(Decoder_Layer, self).__init__()
         
         # Masked Mutil Head Attention
-        self.self_attetion = Multi_Head_Attention(d_model, num_heads)
+        self.self_attention = Multi_Head_Attention(d_model, num_heads)
         self.norm1 = nn.LayerNorm(d_model)
         self.dropout1 = nn.Dropout(dropout)
 
         # Encoder-Decoder Attention
-        self.enc_dec_attentnion = Multi_Head_Attention(d_model, num_heads)
+        self.enc_dec_attention = Multi_Head_Attention(d_model, num_heads)
         self.norm2 = nn.LayerNorm(d_model)
         self.dropout2 = nn.Dropout(dropout)
 
