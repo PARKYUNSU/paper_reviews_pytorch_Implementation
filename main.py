@@ -9,7 +9,7 @@ num_layers = 6
 d_model = 512
 num_heads = 8
 d_ff = 2048
-vocab_size = 10000
+vocab_size = 10000  # vocab_size는 모델에서 사용될 토큰 수
 max_seq_len = 100
 dropout = 0.1
 
@@ -20,7 +20,7 @@ train_dataloader = batchify_data(train_data)
 val_dataloader = batchify_data(val_data)
 
 # 모델, 옵티마이저, 손실 함수 설정
-model = Transformer(num_tokens=4, dim_model=d_model, num_heads=num_heads, num_encoder_layers=num_layers, num_decoder_layers=num_layers, dropout_p=dropout).to(device)
+model = Transformer(num_layers=num_layers, d_model=d_model, num_heads=num_heads, d_ff=d_ff, vocab_size=vocab_size, max_seq_len=max_seq_len, dropout=dropout).to(device)
 opt = torch.optim.SGD(model.parameters(), lr=0.01)
 loss_fn = torch.nn.CrossEntropyLoss()
 
