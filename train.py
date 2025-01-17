@@ -3,21 +3,23 @@ import torch
 def train_loop(model, opt, loss_fn, dataloader, device):
     model.train()
     total_loss = 0
+
     for batch in dataloader:
         X, y = batch[:, 0], batch[:, 1]
         X, y = torch.tensor(X).to(device), torch.tensor(y).to(device)
 
-        # 이제 tgt를 1만큼 이동하여 <SOS>를 사용하여 pos 1에서 토큰을 예측
         y_input = y[:, :-1]
         y_expected = y[:, 1:]
 
-        # 다음 단어를 마스킹하려면 마스크 가져오기
         sequence_length = y_input.size(1)
         tgt_mask = model.get_tgt_mask(sequence_length).to(device)
 
-        # X, y_input 및 tgt_mask를 전달하여 표준 training
         pred = model(X, y_input, tgt_mask)
-        pred = pred.permute(1, 2, 0)
+
+        # Make sure the prediction and expected target have the same dimensions
+        pred = pred.view(-1, pred.size(-1))  # Flatten the output
+        y_expected = y_expected.view(-1)  # Flatten the target
+
         loss = loss_fn(pred, y_expected)
 
         opt.zero_grad()
