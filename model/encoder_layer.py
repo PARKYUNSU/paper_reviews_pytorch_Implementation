@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from .multi_head_attention import Multi_Head_Attention
-from .position_ffnn import PositionwiseFF
+from .positionwise_ffnn import PositionwiseFF
 
 class Encoder_Layer(nn.Module):
     def __init__(self, d_model, num_heads, d_ff, dropout=0.1):
