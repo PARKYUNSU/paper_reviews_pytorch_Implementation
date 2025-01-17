@@ -12,5 +12,5 @@ class PositionalEncoding(nn.Module):
         self.encoding = self.encoding.unsqueeze(0)
 
     def forward(self, x):
-        seq_len = x.size(1)
+        seq_len = x.size(1)  # Get the sequence length dynamically
         return self.encoding[:, :seq_len, :].to(x.device)
