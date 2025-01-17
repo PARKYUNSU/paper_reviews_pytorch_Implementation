@@ -20,28 +20,28 @@ class TransformerDecoder(nn.Module):
         Returns:
             logits: (batch_size, tgt_seq_len, vocab_size)
         """
-        print("Decoder input shape (tgt):", tgt.shape)  
-        print("Encoder output shape (enc_output):", enc_output.shape)
+        # print("Decoder input shape (tgt):", tgt.shape)  
+        # print("Encoder output shape (enc_output):", enc_output.shape)
 
         # Embedding
         x = self.embedding(tgt)
-        print("Decoder after embedding:", x.shape)  # (batch_size, tgt_seq_len, d_model)
+        # print("Decoder after embedding:", x.shape)  # (batch_size, tgt_seq_len, d_model)
 
         # Positional Encoding
         x = x + self.positional_encoding(x)
-        print("Decoder after positional encoding:", x.shape)  # (batch_size, tgt_seq_len, d_model)
+        # print("Decoder after positional encoding:", x.shape)  # (batch_size, tgt_seq_len, d_model)
 
         # Dropout
         x = self.dropout(x)
-        print("Decoder after dropout:", x.shape)  # (batch_size, tgt_seq_len, d_model)
+        # print("Decoder after dropout:", x.shape)  # (batch_size, tgt_seq_len, d_model)
 
         # Decoder Layers
         for i, layer in enumerate(self.layers, 1):
             x = layer(x, enc_output, tgt_mask, memory_mask)
-            print(f"After Decoder Layer {i}:", x.shape)
+            # print(f"After Decoder Layer {i}:", x.shape)
 
         # Final Linear
         logits = self.fc_out(x)
-        print("Decoder final logits shape:", logits.shape)  # (batch_size, tgt_seq_len, vocab_size)
+        # print("Decoder final logits shape:", logits.shape)  # (batch_size, tgt_seq_len, vocab_size)
 
         return logits

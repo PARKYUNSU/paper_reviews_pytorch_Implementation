@@ -19,23 +19,23 @@ class TransformerEncoder(nn.Module):
         Returns:
             (batch_size, seq_len, d_model)
         """
-        print("Encoder input shape:", x.shape)  # shape 확인 (batch_size, seq_len)
+        # print("Encoder input shape:", x.shape)  # shape 확인 (batch_size, seq_len)
 
         # Embedding
         x = self.embedding(x)
-        print("After embedding:", x.shape)      # shape 확인 (batch_size, seq_len, d_model)
+        # print("After embedding:", x.shape)      # shape 확인 (batch_size, seq_len, d_model)
 
         # Positional Encoding
         x = x + self.positional_encoding(x)
-        print("After positional encoding:", x.shape)  # (batch_size, seq_len, d_model)
+        # print("After positional encoding:", x.shape)  # (batch_size, seq_len, d_model)
 
         # Dropout
         x = self.dropout(x)
-        print("After dropout:", x.shape)        # (batch_size, seq_len, d_model)
+        # print("After dropout:", x.shape)        # (batch_size, seq_len, d_model)
 
         # Encoder Layers
         for i, layer in enumerate(self.layers, 1):
             x = layer(x, mask)
-            print(f"After Encoder Layer {i}:", x.shape)
+            # print(f"After Encoder Layer {i}:", x.shape)
 
         return x
