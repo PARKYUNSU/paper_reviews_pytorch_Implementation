@@ -13,10 +13,11 @@ class TransformerEncoder(nn.Module):
 
     def forward(self, x, mask=None):
         # Embedding + Positional Encoding
-        x = self.embedding(x) + self.positional_encoding(x)
+        seq_len = x.size(1)  # Get the sequence length dynamically
+        x = self.embedding(x) + self.positional_encoding(x)  # Ensure the position encoding matches the input length
         x = self.dropout(x)
 
         # Pass through each encoder layer
         for layer in self.layers:
             x = layer(x, mask)
-        return x
+        return 
