@@ -1,7 +1,7 @@
 import torch
-from model import Transformer
-from data_utils import generate_random_data, batchify_data
-from train import fit  # fit 함수 임포트
+from model.transformer import Transformer
+from data import generate_random_data, batchify_data
+from train import fit
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
