@@ -4,15 +4,6 @@ import math
 
 class PositionalEncoding(nn.Module):
     def __init__(self, d_model: int, dropout_p: float, max_seq_len: int):
-        """
-        Args:
-            d_model (int): 임베딩 차원 (토큰 임베딩의 마지막 차원).
-            dropout_p (float): 드롭아웃 비율.
-            max_seq_len (int): 시퀀스의 최대 길이.
-        Shape:
-            - Forward Input:  (batch_size, seq_len, d_model)
-            - Forward Output: (batch_size, seq_len, d_model)
-        """
         super().__init__()
         self.dropout = nn.Dropout(dropout_p)
 
@@ -38,12 +29,6 @@ class PositionalEncoding(nn.Module):
         self.register_buffer('pe', pe)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        """
-        Args:
-            x (Tensor): (batch_size, seq_len, d_model) 형태의 입력 텐서
-        Returns:
-            Tensor: 위치 인코딩이 더해진 (batch_size, seq_len, d_model) 형태 텐서
-        """
         # 입력 시퀀스 길이에 맞게 슬라이싱
         seq_len = x.size(1)  # 실제 seq_len
         pe_slice = self.pe[:, :seq_len, :].to(x.device)
