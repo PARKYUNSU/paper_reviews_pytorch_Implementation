@@ -19,8 +19,8 @@ def train_one_epoch(model, dataloader, criterion, optimizer, device):
         memory_mask = memory_mask.to(device)
 
         outputs = model(src, tgt_in, tgt_mask=tgt_mask, memory_mask=memory_mask)
-        outputs_reshaped = outputs.view(-1, outputs.size(-1))
-        tgt_out_reshaped = tgt_out.view(-1)
+        outputs_reshaped = outputs.reshape(-1, outputs.size(-1))
+        tgt_out_reshaped = tgt_out.reshape(-1)
 
         loss = criterion(outputs_reshaped, tgt_out_reshaped)
 
@@ -52,8 +52,8 @@ def validate_one_epoch(model, dataloader, criterion, device):
             memory_mask = memory_mask.to(device)
 
             outputs = model(src, tgt_in, tgt_mask=tgt_mask, memory_mask=memory_mask)
-            outputs_reshaped = outputs.view(-1, outputs.size(-1))
-            tgt_out_reshaped = tgt_out.view(-1)
+            outputs_reshaped = outputs.reshape(-1, outputs.size(-1))
+            tgt_out_reshaped = tgt_out.reshape(-1)
 
             loss = criterion(outputs_reshaped, tgt_out_reshaped)
             total_loss += loss.item()
