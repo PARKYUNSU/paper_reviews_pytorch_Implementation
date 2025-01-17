@@ -304,7 +304,7 @@ Ghost Bottleneck은 다음과 같이 구성
 
 ## 7. Conclusion
 - GhostNet은 파라미터 수, 연산량, 메모리 사용량 면에서 MobileNetV3보다 효율적입니다.
-- MobileNetV3는 약간 더 높은 계산 비용을 요구하지만, **정확도(Accuracy)**에서 약간의 성능 향상을 보여줍니다.
+- MobileNetV3는 약간 더 높은 계산 비용을 요구하지만, **정확도(Accuracy)** 에서 약간의 성능 향상을 보여줍니다.
 - GhostNet은 MobileNetV3와 비교해 성능(Accuracy) 차이가 미미하면서도 계산 효율성이 높아,
 리소스가 제한된 환경(예: 모바일, 임베디드 기기)에서 더 적합한 선택이 될 수 있습니다.
 - 결론적으로, GhostNet은 경량 모델로서 효율성과 성능의 균형을 잘 맞춘 모델입니다.
