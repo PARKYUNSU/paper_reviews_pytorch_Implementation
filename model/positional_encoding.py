@@ -1,16 +1,24 @@
 import torch
 import torch.nn as nn
+import math
 
 class PositionalEncoding(nn.Module):
-    def __init__(self, d_model, max_seq_len):
-        super(PositionalEncoding, self).__init__()
-        self.encoding = torch.zeros(max_seq_len, d_model)
-        position = torch.arange(0, max_seq_len, dtype=torch.float).unsqueeze(1)
-        div_term = torch.exp(torch.arange(0, d_model, 2).float() * (-torch.log(torch.tensor(10000.0)) / d_model))
-        self.encoding[:, 0::2] = torch.sin(position * div_term)
-        self.encoding[:, 1::2] = torch.cos(position * div_term)
-        self.encoding = self.encoding.unsqueeze(0)
-
-    def forward(self, x):
-        seq_len = x.size(1)  # Get the sequence length dynamically
-        return self.encoding[:, :seq_len, :].to(x.device)
+    def __init__(self, dim_model, dropout_p, max_len):
+        super().__init__()
+        
+        self.dropout = nn.Dropout(dropout_p)
+ 
+        # Encoding - From formula
+        pos_encoding = torch.zeros(max_len, dim_model)
+        positions_list = torch.arange(0, max_len, dtype=torch.float).view(-1, 1) # 0, 1, 2, 3, 4, 5
+        division_term = torch.exp(torch.arange(0, dim_model, 2).float() * (-math.log(10000.0)) / dim_model) # 1000^(2i/dim_model)
+ 
+        pos_encoding[:, 0::2] = torch.sin(positions_list * division_term)
+        pos_encoding[:, 1::2] = torch.cos(positions_list * division_term)
+ 
+        # Saving buffer (same as parameter without gradients needed)
+        pos_encoding = pos_encoding.unsqueeze(0).transpose(0, 1)
+        self.register_buffer("pos_encoding", pos_encoding)
+ 
+    def forward(self, token_embedding: torch.tensor) -> torch.tensor:
+        return self.dropout(token_embedding + self.pos_encoding[:token_embedding.size(0), :])
