@@ -1,4 +1,5 @@
 import torch
+import torch.nn as nn
 from model.transformer import Transformer
 from data import generate_random_data, batchify_data
 from train import fit
@@ -14,6 +15,17 @@ vocab_size = 10000  # vocab_size는 모델에서 사용될 토큰 수
 max_seq_len = 100
 dropout = 0.1
 
+
+model = Transformer(num_layers=num_layers, d_model=d_model, num_heads=num_heads, d_ff=d_ff, vocab_size=vocab_size, max_seq_len=max_seq_len, dropout=dropout).to(device)
+def init_weights(m):
+    if isinstance(m, nn.Linear):
+        nn.init.xavier_normal_(m.weight)  # Xavier 초기화
+        if m.bias is not None:
+            nn.init.zeros_(m.bias)  # 바이어스는 0으로 초기화
+
+model.apply(init_weights)
+
+
 train_data = generate_random_data(9000)
 val_data = generate_random_data(3000)
 
@@ -21,7 +33,6 @@ train_dataloader = batchify_data(train_data)
 val_dataloader = batchify_data(val_data)
 
 # 모델, 옵티마이저, 손실 함수 설정
-model = Transformer(num_layers=num_layers, d_model=d_model, num_heads=num_heads, d_ff=d_ff, vocab_size=vocab_size, max_seq_len=max_seq_len, dropout=dropout).to(device)
 opt = torch.optim.SGD(model.parameters(), lr=0.01)
 loss_fn = torch.nn.CrossEntropyLoss()
 
