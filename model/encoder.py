@@ -63,4 +63,32 @@ class PositionwiseFF(nn.Module):
 class Encoder_Layer(nn.Module):
     def __init__(self, d_model, num_heads, d_ff, dropout=0.1):
         super(Encoder_Layer, self).__init__()
-        
+        self.self_attention = Multi_Head_Attention(d_model, num_heads)
+        self.ffnn = PositionwiseFF(d_model, d_ff, dropout)
+        self.norm1 = nn.LayerNorm(d_model) # layer Normalization
+        self.norm2 = nn.LayerNorm(d_model) # layer Normalization
+        self.dropout1 = nn.Dropout(dropout)
+        self.dropout2 = nn.Dropout(dropout)
+
+    def forward(self, x, mask=None):
+        attention_output = self.self_attention(x, x, x, mask)
+        x = self.norm1(x + self.dropout1(attention_output))
+
+        ffnn_output = self.ffnn(x)
+        x = self.norm2(x + self.dropout2(ffnn_output))
+
+        return x
+    
+class PositionalEncoding(nn.Module):
+    def __init__(self, d_model, max_seq_len):
+        super(PositionalEncoding, self).__init__()
+        self.encoding = torch.zeros(max_seq_len, d_model)
+        position = torch.arange(0, max_seq_len, dtype=torch.float).unsqueeze(1)
+        div_term = torch.exp(torch.arange(0, d_model, 2).float() * (-torch.log(torch.tensor(10000.0)) / d_model))
+        self.encoding[:, 0::2] = torch.sin(position * div_term)
+        self.encoding[:, 1::2] = torch.cos(position * div_term)
+        self.encoding = self.encoding.unsqueeze(0)
+
+    def forward(self, x):
+        seq_len = x.size(1)
+        return self.encoding[:, :seq_len, :].to(x.device)
