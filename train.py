@@ -31,6 +31,7 @@ def train_loop(model, opt, loss_fn, dataloader, device):
 
     return total_loss / len(dataloader)
 
+# train.py
 def validation_loop(model, loss_fn, dataloader, device):
     model.eval()
     total_loss = 0
@@ -47,7 +48,14 @@ def validation_loop(model, loss_fn, dataloader, device):
             tgt_mask = model.get_tgt_mask(sequence_length).to(device)
 
             pred = model(X, y_input, tgt_mask)
-            pred = pred.permute(1, 2, 0)
+
+            # Ensure pred and y_expected have the same shape
+            pred = pred.view(-1, pred.size(-1))  # Flatten the output
+            y_expected = y_expected.reshape(-1)  # Flatten the target using reshape
+
+            # Ensure batch size match
+            assert pred.size(0) == y_expected.size(0), f"Batch size mismatch: {pred.size(0)} vs {y_expected.size(0)}"
+
             loss = loss_fn(pred, y_expected)
             total_loss += loss.detach().item()
 
