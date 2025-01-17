@@ -3,14 +3,14 @@ import torch.nn as nn
 import math
 
 class PositionalEncoding(nn.Module):
-    def __init__(self, dim_model, dropout_p, max_len):
+    def __init__(self, dim_model, dropout_p, max_seq_len):
         super().__init__()
         
         self.dropout = nn.Dropout(dropout_p)
  
         # Encoding - From formula
-        pos_encoding = torch.zeros(max_len, dim_model)
-        positions_list = torch.arange(0, max_len, dtype=torch.float).view(-1, 1) # 0, 1, 2, 3, 4, 5
+        pos_encoding = torch.zeros(max_seq_len, dim_model)
+        positions_list = torch.arange(0, max_seq_len, dtype=torch.float).view(-1, 1) # 0, 1, 2, 3, 4, 5
         division_term = torch.exp(torch.arange(0, dim_model, 2).float() * (-math.log(10000.0)) / dim_model) # 1000^(2i/dim_model)
  
         pos_encoding[:, 0::2] = torch.sin(positions_list * division_term)
