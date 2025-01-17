@@ -21,5 +21,7 @@ class PositionalEncoding(nn.Module):
         self.register_buffer("pos_encoding", pos_encoding)
  
     def forward(self, token_embedding: torch.tensor) -> torch.tensor:
-        # Ensure the token_embedding size is correct
-        return self.dropout(token_embedding + self.pos_encoding[:token_embedding.size(0), :])
+        seq_len = token_embedding.size(1)  # Get the sequence length dynamically
+        # Ensure pos_encoding is sliced to match the input sequence length
+        pos_encoding = self.pos_encoding[:seq_len, :]
+        return self.dropout(token_embedding + pos_encoding)
