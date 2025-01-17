@@ -7,7 +7,9 @@ from .positionwise_ffnn import PositionwiseFF
 class Encoder_Layer(nn.Module):
     def __init__(self, d_model, num_heads, d_ff, dropout=0.1):
         super(Encoder_Layer, self).__init__()
+        # Mutli Head Attetion
         self.self_attention = Multi_Head_Attention(d_model, num_heads)
+        # Position-wise Feed Foward Network
         self.ffnn = PositionwiseFF(d_model, d_ff, dropout)
         self.norm1 = nn.LayerNorm(d_model) # layer Normalization
         self.norm2 = nn.LayerNorm(d_model) # layer Normalization
