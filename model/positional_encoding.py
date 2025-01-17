@@ -23,5 +23,8 @@ class PositionalEncoding(nn.Module):
     def forward(self, token_embedding: torch.tensor) -> torch.tensor:
         seq_len = token_embedding.size(1)  # Get the sequence length dynamically
         # Ensure pos_encoding is sliced to match the input sequence length
+        if seq_len > self.pos_encoding.size(0):
+            raise ValueError(f"Input sequence length {seq_len} exceeds max_seq_len {self.pos_encoding.size(0)}")
+
         pos_encoding = self.pos_encoding[:seq_len, :]
         return self.dropout(token_embedding + pos_encoding)
