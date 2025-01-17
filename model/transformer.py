@@ -21,3 +21,5 @@ class Transformer(nn.Module):
         mask = torch.triu(torch.ones(size, size), diagonal=1)  # 상삼각 행렬
         mask = mask.masked_fill(mask == 1, float('-inf')).masked_fill(mask == 0, float(0.0))
         return mask
+    
+    
