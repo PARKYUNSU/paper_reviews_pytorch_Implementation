@@ -22,6 +22,8 @@ def main():
     parser.add_argument('--seq_len', type=int, default=10)
     parser.add_argument('--lr', type=float, default=1e-3)
     parser.add_argument('--epochs', type=int, default=10)
+    parser.add_argument('--save_fig', action='store_true', help='If set, saves the loss plot as a PNG file')
+
     args = parser.parse_args()
 
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
