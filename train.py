@@ -1,78 +1,52 @@
+# train.py
+
 import torch
 import torch.nn as nn
+import torch.optim as optim
 
-def train_loop(model, opt, loss_fn, dataloader, device):
+def train_one_epoch(model, dataloader, criterion, optimizer, device):
+    """
+    모델, dataloader, loss 함수, optimizer, device를 받아
+    한 번의 epoch 훈련을 수행하는 예시 함수.
+    """
     model.train()
-    total_loss = 0
+    total_loss = 0.0
 
-    for batch in dataloader:
-        X, y = batch[:, 0], batch[:, 1]
-        X, y = torch.tensor(X, dtype=torch.long, device=device), torch.tensor(y, dtype=torch.long, device=device)
+    for batch_idx, (src, tgt) in enumerate(dataloader):
+        src = src.to(device)  # (batch_size, seq_len)
+        tgt = tgt.to(device)  # (batch_size, seq_len)
+        
+        # 타겟을 <start_token>, <end_token> 등으로 분리해서 쓰는 경우도 많으나,
+        # 여기서는 간단히 tgt = src 복사 형태이므로 그대로 사용
+        # 실제로는 tgt_in, tgt_out 분리 로직 필요할 수 있음
+        tgt_in = tgt[:, :-1]  # 마지막 토큰 제외한 입력
+        tgt_out = tgt[:, 1:]  # 첫 번째 토큰 제외한 정답
+        
+        # 마스크 생성
+        # 여기서는 간단하게 사용하지만, 프로젝트 요구사항에 맞춰 수정
+        from data import create_mask
+        src_mask, tgt_mask, memory_mask = create_mask(src, tgt_in, pad_idx=0)
+        src_mask = src_mask.to(device)
+        tgt_mask = tgt_mask.to(device)
+        memory_mask = memory_mask.to(device)
 
-        # 여기서 y_input은 <SOS> 제외, y_expected는 <EOS> 제외
-        y_input = y[:, :-1]
-        y_expected = y[:, 1:]
+        # 모델 forward
+        outputs = model(src, tgt_in, tgt_mask=tgt_mask, memory_mask=memory_mask)
+        # outputs shape: (batch_size, seq_len-1, vocab_size)
 
-        sequence_length = y_input.size(1)
-        tgt_mask = model.get_tgt_mask(sequence_length).to(device)
+        # Loss 계산
+        # CrossEntropyLoss를 위해 view를 변환
+        outputs_reshaped = outputs.view(-1, outputs.size(-1))  # (batch_size*(seq_len-1), vocab_size)
+        tgt_out_reshaped = tgt_out.reshape(-1)                 # (batch_size*(seq_len-1))
 
-        pred = model(X, y_input, tgt_mask)
+        loss = criterion(outputs_reshaped, tgt_out_reshaped)
 
-        # Flatten to match target
-        pred = pred.view(-1, pred.size(-1))  # Flatten the output
-        y_expected = y_expected.reshape(-1)  # Flatten the target
-
-        loss = loss_fn(pred, y_expected)
-
-        opt.zero_grad()
+        # 역전파
+        optimizer.zero_grad()
         loss.backward()
-        opt.step()
+        optimizer.step()
 
-        total_loss += loss.detach().item()
+        total_loss += loss.item()
 
-    return total_loss / len(dataloader)
-
-def validation_loop(model, loss_fn, dataloader, device):
-    model.eval()
-    total_loss = 0
-
-    with torch.no_grad():
-        for batch in dataloader:
-            X, y = batch[:, 0], batch[:, 1]
-            X, y = torch.tensor(X, dtype=torch.long, device=device), torch.tensor(y, dtype=torch.long, device=device)
-
-            y_input = y[:, :-1]
-            y_expected = y[:, 1:]
-
-            sequence_length = y_input.size(1)
-            tgt_mask = model.get_tgt_mask(sequence_length).to(device)
-
-            pred = model(X, y_input, tgt_mask)
-
-            # Flatten to match target
-            pred = pred.view(-1, pred.size(-1))  # Flatten the output
-            y_expected = y_expected.reshape(-1)  # Flatten the target
-
-            loss = loss_fn(pred, y_expected)
-            total_loss += loss.detach().item()
-
-    return total_loss / len(dataloader)
-
-def fit(model, opt, loss_fn, train_dataloader, val_dataloader, epochs, device):
-    train_loss_list, validation_loss_list = [], []
-
-    print("Training and validating model")
-    for epoch in range(epochs):
-        print("-"*25, f"Epoch {epoch + 1}","-"*25)
-
-        train_loss = train_loop(model, opt, loss_fn, train_dataloader, device)
-        train_loss_list += [train_loss]
-
-        validation_loss = validation_loop(model, loss_fn, val_dataloader, device)
-        validation_loss_list += [validation_loss]
-
-        print(f"Training loss: {train_loss:.4f}")
-        print(f"Validation loss: {validation_loss:.4f}")
-        print()
-
-    return train_loss_list, validation_loss_list
+    avg_loss = total_loss / len(dataloader)
+    return avg_loss
