@@ -148,7 +148,9 @@ $$
 
 $Where:$
   $pos$ : 입력 문장의 임베딩 벡터의 위치
+  
   $i$ : 임베딩 베터 내의 차원의 인덱스
+  
   $d_{model}$ : Transformer의 모든 층의 출력 차원 (Transformer Hyperparameter, 그림에서는 4, But 논문에서는 512)
 
 <p align="left"><img src="https://github.com/user-attachments/assets/8bac064e-36cb-4da5-8492-0fff88be6bd3" width=600>
