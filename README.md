@@ -154,7 +154,7 @@ $Where:$
 <p align="left"><img src="https://github.com/user-attachments/assets/8bac064e-36cb-4da5-8492-0fff88be6bd3" width=600>
  <img src="https://github.com/user-attachments/assets/103574bc-89b0-4fc2-aa22-6bbd3a5e1ef7" width=400></p>
 
-임베딩 벡터 내의 각 차원의 인데스가 짝수인 경우 $$(pos, 2i)$$에는 사인 함수를 사용하고, 홀수인 경우$$(pos, 2i + 1)$$에는 코사인 함수를 사용
+임베딩 벡터 내의 각 차원의 인데스가 짝수인 경우 $$(pos, 2i)$$에는 Sine 함수를 사용하고, 홀수인 경우 $$(pos, 2i + 1)$$ 에는 Cosine 함수를 사용
 
 
 ### 2.2.2 Attention
