@@ -173,6 +173,7 @@ Transforemr에서는 Attention이 어디서 이루어지는지에 떄라 즉, �
 
 
 
+
 <img src="https://github.com/user-attachments/assets/186e71aa-0f9c-45f9-94ce-604d61e1495d" width=400>
 
 위의 예시 문장을 번역하면 "그 동물은 길을 건너지 않았다. 왜냐하면 그것은 너무 피곤하였기 때문이다." 라는 의미입니다. 그러나 여기서 그것(It)에 해당하는 것이 Street인지 동물인지 사람은 구분 할 수 있지만, 기계는 그렇지 않습니다.
