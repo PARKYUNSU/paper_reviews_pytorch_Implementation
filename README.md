@@ -154,3 +154,20 @@ $Where:$
 <p align="left"><img src="https://github.com/user-attachments/assets/8bac064e-36cb-4da5-8492-0fff88be6bd3" width=600>
  <img src="https://github.com/user-attachments/assets/103574bc-89b0-4fc2-aa22-6bbd3a5e1ef7" width=400></p>
 
+임베딩 벡터 내의 각 차원의 인데스가 짝수인 경우 $$(pos, 2i)$$에는 사인 함수를 사용하고, 홀수인 경우$$(pos, 2i + 1)$$에는 코사인 함수를 사용
+
+
+### 2.2.2 Attention
+
+<img src="https://github.com/user-attachments/assets/16837e94-898c-48e9-a6de-cbb914890068" width=400>
+
+Transforemr에서는 Attention이 어디서 이루어지는지에 떄라 즉, 벡터의 출처가 어디냐에 따라 부르는 이름이 달라집니다.
+
+```
+인코더 Self Attention : Query = Key = Value
+디코더 Masked Self Attention : Query = Key = Value
+디코더 Encdoer-Decoder Attention : Query : 디코더 벡터 / Key = Value : 인코더 벡터
+```
+
+<img src="https://github.com/user-attachments/assets/2fa2e6d6-067c-4907-9433-9dc8a577a598" width=600>
+
