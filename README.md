@@ -171,7 +171,23 @@ Transforemr에서는 Attention이 어디서 이루어지는지에 떄라 즉, �
 
 <img src="https://github.com/user-attachments/assets/2fa2e6d6-067c-4907-9433-9dc8a577a598" width=600>
 
+### 2.2.2.1. Attention 함수
 
+파이썬의 딕셔너리 자료형은 키(Key)와 값(Value)이라는 두 개의 쌍으로 구성되어, 키를 통해서 맵핑된 값을 찾아낼 수 있다는 특징이 있습니다.
+
+```
+# 파이썬의 딕셔너리 자료형
+# 키(Key) : 값(value)의 형식으로 키와 값의 쌍(Pair)을 선언한다.
+dict = {"A" : "Apple", "B" : "Banana"}
+```
+```
+print(dict["A"]) # A이라는 키에 해당되는 값을 출력
+Apple
+```
+```
+print(dict["B"])  # B이라는 키에 해당되는 값을 출력
+Banana
+```
 
 
 <img src="https://github.com/user-attachments/assets/186e71aa-0f9c-45f9-94ce-604d61e1495d" width=400>
