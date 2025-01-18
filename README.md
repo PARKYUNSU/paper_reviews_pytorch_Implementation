@@ -171,3 +171,10 @@ Transforemr에서는 Attention이 어디서 이루어지는지에 떄라 즉, �
 
 <img src="https://github.com/user-attachments/assets/2fa2e6d6-067c-4907-9433-9dc8a577a598" width=600>
 
+
+
+<img src="https://github.com/user-attachments/assets/186e71aa-0f9c-45f9-94ce-604d61e1495d" width=600>
+
+위의 예시 문장을 번역하면 "그 동물은 길을 건너지 않았다. 왜냐하면 그것은 너무 피곤하였기 때문이다." 라는 의미입니다. 그러나 여기서 그것(It)에 해당하는 것이 Street인지 동물인지 사람은 구분 할 수 있지만, 기계는 그렇지 않습니다.
+
+하지만 Attention에서는 입력 문장 내의 단어들 끼리 유사도를 구하므로 그것(it)이 동물과 연관되었을 확률이 높음을 알아냅니다.
