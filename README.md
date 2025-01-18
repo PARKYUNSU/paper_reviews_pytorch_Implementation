@@ -197,7 +197,7 @@ $$Attention(Q, K, V) = Attention Value$$
 
 어텐션 함수는 주어진 '쿼리(Query)'에 대해서 모든 '키(Key)'와의 유사도를 각각 구합니다. 그리고 구해낸 이 유사도를 키와 맵핑되어있는 각각의 '값(Value)'에 반영해줍니다. 
 
-그리고 유사도가 반영된 '값(Value)'을 모두 더해서 리턴합니다. 여기서는 이를 어텐션 값(Attention Value)
+그리고 유사도가 반영된 '값(Value)'을 모두 더해서 리턴합니다. 여기서는 이를 어텐션 값(Attention Value)이라고 합니다.
 
 
 <img src="https://github.com/user-attachments/assets/186e71aa-0f9c-45f9-94ce-604d61e1495d" width=400>
