@@ -181,11 +181,11 @@ Transforemr에서는 Attention이 어디서 이루어지는지에 떄라 즉, �
 dict = {"A" : "Apple", "B" : "Banana"}
 ```
 ```
-print(dict["A"]) # A이라는 키에 해당되는 값을 출력
+print(dict["A"]) # A 라는 키에 해당되는 값을 출력
 Apple
 ```
 ```
-print(dict["B"])  # B이라는 키에 해당되는 값을 출력
+print(dict["B"])  # B 라는 키에 해당되는 값을 출력
 Banana
 ```
 
