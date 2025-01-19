@@ -312,7 +312,7 @@ LayerNorm은 활성화 배치의 각 항목의 평균과 분산을 계산하여 
 
 여기서 $ϵ$은 분모가 0이 되는 것을 방지하기 위한 작은 값
 
-$$\hat{x}_{i,k} = \frac{x_{i,k} - \mu_i}{\sqrt{\sigma_i^2 + \epsilon}}$$
+$\hat{x}_{i,k} = \frac{x_{i,k} - \mu_i}{\sqrt{\sigma_i^2 + \epsilon}}$
 
 감마와 베타
 
