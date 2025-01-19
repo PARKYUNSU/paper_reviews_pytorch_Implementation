@@ -337,7 +337,7 @@ $γ$와 $β$는 초기값으로 각각 1과 0을 설정하며 학습을 통해 �
 예를 들어, "suis"를 예측할 때, <sos> je뿐만 아니라 suis étudiant도 참고 가능해집니다.
 
 
-### 2.2.1 Look-ahead Mask
+### 2.2.1. Look-ahead Mask
 
 디코더의 첫 번째 서브층인 멀티 헤드 셀프 어텐션에서 미래 단어를 참고하지 못하도록 마스킹 수행합니다.
 
@@ -346,3 +346,7 @@ $γ$와 $β$는 초기값으로 각각 1과 0을 설정하며 학습을 통해 �
 <img src="https://github.com/user-attachments/assets/94bb7080-8ca7-42b8-ae1b-08be4545e590" width=500>
 
 <img src="https://github.com/user-attachments/assets/4531c300-3623-43f3-9ca1-f8649ee40526" width=300>
+
+
+### 2.2.2. Encoder-Decoder Attention
+
