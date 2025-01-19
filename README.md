@@ -326,3 +326,23 @@ $γ$와 $β$는 초기값으로 각각 1과 0을 설정하며 학습을 통해 �
 ## 2.2. Decoder
 
 <img src="https://github.com/user-attachments/assets/c9000ed1-be63-4386-a242-b21ebdd8c10b" width=400>
+
+
+디코더는 임베딩과 포지셔널 인코딩을 거친 입력 문장 행렬을 받습니다. 트랜스포머는 seq2seq처럼 교사 강요(Teacher Forcing)를 사용하여 학습됩니다.
+
+즉, 디코더는 번역할 문장의 전체 입력(<sos> je suis étudiant)을 한 번에 받습니다.
+
+그러나, 트랜스포머는 입력 문장 행렬을 한 번에 받으므로, 현재 시점의 단어 예측 시 미래 시점의 단어 정보까지 참고할 수 있는 문제가 발생합니다.
+
+예를 들어, "suis"를 예측할 때, <sos> je뿐만 아니라 suis étudiant도 참고 가능해집니다.
+
+
+### 2.2.1 Look-ahead Mask
+
+디코더의 첫 번째 서브층인 멀티 헤드 셀프 어텐션에서 미래 단어를 참고하지 못하도록 마스킹 수행합니다.
+
+자기 자신과 이전 단어만을 참조 가능하도록 제한을 둬서 단어 예측 과정에서 올바른 정보 흐름을 유지하는 중요한 역할을 합니다.
+
+<img src="https://github.com/user-attachments/assets/94bb7080-8ca7-42b8-ae1b-08be4545e590" width=500>
+
+<img src="https://github.com/user-attachments/assets/4531c300-3623-43f3-9ca1-f8649ee40526" width=300>
