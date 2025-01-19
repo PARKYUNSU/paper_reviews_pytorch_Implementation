@@ -199,12 +199,13 @@ $$Attention(Q, K, V) = Attention Value$$
 
 그리고 유사도가 반영된 '값(Value)'을 모두 더해서 리턴합니다. 여기서는 이를 어텐션 값(Attention Value)이라고 합니다.
 
+"The cat sat on the mat because it was soft and warm."
 
-<img src="https://github.com/user-attachments/assets/186e71aa-0f9c-45f9-94ce-604d61e1495d" width=400>
+위의 예시 문장을 번역하면 "그 고양이는 매트에 앉았다, 왜냐하면 그것은 부드럽고 따뜻하기 떄문이다." 라는 의미입니다. 그러나 여기서 그것(It)에 해당하는 것이 cat 인지 사람은 구분할 수 있지만, 기계는 그렇지 않습니다.
 
-위의 예시 문장을 번역하면 "그 동물은 길을 건너지 않았다. 왜냐하면 그것은 너무 피곤하였기 때문이다." 라는 의미입니다. 그러나 여기서 그것(It)에 해당하는 것이 Street인지 동물인지 사람은 구분 할 수 있지만, 기계는 그렇지 않습니다.
+하지만 Attention에서는 입력 문장 내의 단어들 끼리 유사도를 구하므로, "it"이 참조하는 대상인 "The cat"에 강한 어텐션 값을 가지게 됩니다.
 
-하지만 Attention에서는 입력 문장 내의 단어들 끼리 유사도를 구하므로, 그것(it)이 동물과 연관되었을 확률이 높음을 알아냅니다.
+또한 "soft"와 "warm" 같은 형용사들은 문맥상 "The mat"와 연결될 수 있어 약한 어텐션 값을 가지게 됩니다.
 
 ### 2.2.2.2. Q, K, V 벡터 생성
 
@@ -230,7 +231,7 @@ Q, K, V 벡터를 생성후, 각 Q 벡터는 모든 K 벡터와 어텐션 스코
 
 그러나 효율적인 연산을 위해 하나씩 Attention Value를 구하는 것이 아니라, 행렬 연산으로 처리합니다.
 
-문장 전체 단어 벡터를 모아 문장 행렬$$(seq-len, d_[model])$$을을 구성하고, 문장행렬에 학습 가능한 가중치 행렬 $W_Q, W_K, W_V$를 곱해 $Q, K, V$ 행렬을 생성합니다.
+문장 전체 단어 벡터를 모아 문장 행렬 $$(seq-len, d_{model})$$을을 구성하고, 문장행렬에 학습 가능한 가중치 행렬 $W_Q, W_K, W_V$를 곱해 $Q, K, V$ 행렬을 생성합니다.
 
 <img src="https://github.com/user-attachments/assets/2dda0632-412d-4b8c-98ed-082e42777cb8" width=500>
 
@@ -341,9 +342,10 @@ $γ$와 $β$는 초기값으로 각각 1과 0을 설정하며 학습을 통해 �
 
 자기 자신과 이전 단어만을 참조 가능하도록 제한을 둬서 단어 예측 과정에서 올바른 정보 흐름을 유지하는 중요한 역할을 합니다.
 
-<img src="https://github.com/user-attachments/assets/94bb7080-8ca7-42b8-ae1b-08be4545e590" width=500>
 
-<img src="https://github.com/user-attachments/assets/4531c300-3623-43f3-9ca1-f8649ee40526" width=300>
+<img src="https://github.com/user-attachments/assets/688c6f09-15b8-43bb-a970-cdf11a7f5294" width=500>
+
+<img src="https://github.com/user-attachments/assets/4531c300-3623-43f3-9ca1-f8649ee40526" width=250>
 
 
 ### 2.2.2. Encoder-Decoder Attention
@@ -351,4 +353,40 @@ $γ$와 $β$는 초기값으로 각각 1과 0을 설정하며 학습을 통해 �
 <img src="https://github.com/user-attachments/assets/0621c51a-521e-4649-81cf-aaba96f5ad8a" width=300>
 
 디코더의 두 번째 서브층은 인코더의 정보를 활용하여 입력과 출력 간의 관계를 모델링하며, 인코더-디코더 구조에서 중요한 연결 역할을 수행합니다.
+
+Query가 디코더 행렬, Key가 인코더 행렬일 때, 어텐션 스코어 행렬을 구하는 과정은 다음과 같습니다.
+
+<img src="https://github.com/user-attachments/assets/94bb7080-8ca7-42b8-ae1b-08be4545e590" width=500>
+
+## Experiment
+
+### Data Info
+
+| 항목                      | 내용                                                               |
+|-----------------------|------------------------------------------------------------------|
+| `seq_len`            | 입력 시퀀스의 길이 (10)                                          |
+| `vocab_size`         | 단어 집합의 크기 (100)                                          |
+| `total_samples`      | 전체 샘플 수 (`train: 1000`, `val: 200`)                         |
+| `batch_size`         | 배치 크기 (32)                                                  |
+| 데이터 구성           | `src`(입력 시퀀스), `tgt`(출력 시퀀스)                          |
+| 마스킹 종류           | Padding Mask, Look Ahead Mask                                   |
+
+
+### 실험 설정
+
+| 하이퍼파라미터        | 값                                                              |
+|-----------------------|------------------------------------------------------------------|
+| `num_layers`         | 2                                                               |
+| `d_model`            | 128                                                             |
+| `num_heads`          | 4                                                               |
+| `d_ff`               | 256                                                             |
+| `dropout`            | 0.1                                                             |
+| `lr` (학습률)        | 1e-3                                                            |
+| `epochs`             | 10                                                              |
+
+---
+
+### Result
+
+<img src="https://github.com/user-attachments/assets/d38334e2-25fb-4c67-bc76-315a6ec5803e" width=600>
 
