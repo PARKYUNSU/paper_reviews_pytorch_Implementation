@@ -312,7 +312,7 @@ LayerNorm은 활성화 배치의 각 항목의 평균과 분산을 계산하여 
 
 여기서 $ϵ$은 분모가 0이 되는 것을 방지하기 위한 작은 값
 
-$\hat{x}_{i,k} = \frac{x_{i,k} - \mu_i}{\sqrt{\sigma_i^2 + \epsilon}}$
+$$x̂ᵢₖ = (xᵢₖ - μᵢ) / √(σᵢ² + ε)$$
 
 감마와 베타
 
@@ -321,3 +321,8 @@ $\hat{x}_{i,k} = \frac{x_{i,k} - \mu_i}{\sqrt{\sigma_i^2 + \epsilon}}$
 $$yk =γ\hat{h}_k+β$$
 
 $γ$와 $β$는 초기값으로 각각 1과 0을 설정하며 학습을 통해 최적화합니다.
+
+
+## 2.2. Decoder
+
+<img src="https://github.com/user-attachments/assets/c9000ed1-be63-4386-a242-b21ebdd8c10b" width=400>
