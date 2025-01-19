@@ -266,3 +266,14 @@ ex) head 1 은 it ↔ animal 연관도를 강조하며, head 2 는 it ↔ tired 
 
 <img src="https://github.com/user-attachments/assets/68acda6e-6d2a-40e5-bf6a-10c9a20308d0" width=500>
 
+
+### 2.2.2.5. Position-Wise FFNN
+
+안코더와 디코더의 공통 서브층으로 각 단어(벡터) 별로 독립적으로 작동하는 완전 연결 신경망입니다. Multi-head Attention 결과를 입력으로 받아 추가 변환을 수행합니다.
+
+$$FFNN(x) = ReLU(xW_1 + b_1)W_2 + b_2$$
+
+<img src="https://github.com/user-attachments/assets/ef7bc2c5-a74f-4430-ad49-396f1391ef8c" width=300>
+
+FFNN은 어텐션 결과를 기반으로 단어별 독립적인 특징 변환을 수행하며, 이를 통해 모델의 표현력을 강화하고 더 복잡한 관계를 학습할 수 있도록 돕습니다. 동시에 입력 크기를 유지하여 다음 층에서 처리가 용이하도록 만듭니다.
+
