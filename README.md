@@ -205,3 +205,64 @@ $$Attention(Q, K, V) = Attention Value$$
 위의 예시 문장을 번역하면 "그 동물은 길을 건너지 않았다. 왜냐하면 그것은 너무 피곤하였기 때문이다." 라는 의미입니다. 그러나 여기서 그것(It)에 해당하는 것이 Street인지 동물인지 사람은 구분 할 수 있지만, 기계는 그렇지 않습니다.
 
 하지만 Attention에서는 입력 문장 내의 단어들 끼리 유사도를 구하므로, 그것(it)이 동물과 연관되었을 확률이 높음을 알아냅니다.
+
+### 2.2.2.2. Q, K, V 벡터 생성
+
+Self Attention은 입력 문장의 단어 벡터로 부터 Q(Query) K(Key) V(Value) 벡터를 생성합니다.
+
+각 단어 벡터는 초기 차원($d_{model} = 512$ 논문기준)에서 더 작은 차원 ($d_k=d_v=64$) 로 변환합니다
+
+단어 벡터에 학습 가능한 가중치 행렬($W_Q, W_K, W_V$)을 곱해서 Q, K, V 벡터를 생성합니다.
+
+- $d_{model}=512, h = 8, d_k = \frac{d_{model}}h = 64$
+
+<img src="https://github.com/user-attachments/assets/70a15c72-4df7-4f04-94cd-96717cd243ea" width=400>
+
+### 2.2.2.3. Scaled Dot Product Attention
+
+Q, K, V 벡터를 생성후, 각 Q 벡터는 모든 K 벡터와 어텐션 스코어를 계산합니다.
+
+스코어는 두 벡터 간의 내적을 사용하여, 이를 K 벡터 차원 $$\sqrt{d_k}$$으로 나눠 스케일링 합니다.
+
+스코어에 Softmax를 취해 어텐션 분포를 구하고 이를 V 벡터와 가중합해 Attetion Value를 생성합니다.
+
+<img src="https://github.com/user-attachments/assets/348e4ca4-208f-4afc-b229-c90b4e177993" width=600>
+
+<img src="https://github.com/user-attachments/assets/085ebc7a-aef7-4893-8328-a09f48886914" width=600>
+
+그러나 효율적인 연산을 위해 하나씩 Attention Value를 구하는 것이 아니라, 행렬 연산으로 처리합니다.
+
+문장 전체 단어 벡터를 모아 문장 행렬$$(seq-len, d_[model])$$을을 구성하고, 문장행렬에 학습 가능한 가중치 행렬 $W_Q, W_K, W_V$를 곱해 $Q, K, V$ 행렬을 생성합니다.
+
+<img src="https://github.com/user-attachments/assets/2dda0632-412d-4b8c-98ed-082e42777cb8" width=500>
+
+그리고 행렬 연산을 수행하는데,
+
+$Q$와 $K^T$의행렬 곱으로 어텐션 스코어 행렬을 생성하고, Softmax를 적용해 어텐션 분포 행렬을 만든고, 어텐션 분포 행렬과 V 행렬 곱으로 최종 Attention Value $$(Seq-len, d_v)$$ 행렬을 만듭니다.
+
+이 과정을 수식으로 표현하면 다음과 같습니다.
+
+$$Attention(Q,K,V) = Softmax\left(\frac{QK^T}{\sqrt{d_k}}\right)V$$
+
+<img src="https://github.com/user-attachments/assets/84435fef-5049-4331-b30b-0a71bdef48d9" width=500>
+
+### 2.2.2.4. Multi-head Attention
+
+논문의 저자는 한 번의 어텐션을 하는 것보다 여러번의 어텐션을 병렬로 사용하는 것이 더 효과적이라고 판단하였습니다. 그래서 $d_{model}$의 차원을 $num-heads$개로 나누어 
+$d_{model}/num-heads$의 차원을 가지는 Q, K, V에 대해서 $num-heads$개의 병렬 어텐션을 수행합니다.
+
+여러 개의 어텐션 헤드를 병별로 수행하여 정보를 다양한 관점에서 수집이 가능해집니다.
+```
+ex) head 1 은 it ↔ animal 연관도를 강조하며, head 2 는 it ↔ tired 연관도를 강조합니다.
+```
+
+<img src="https://github.com/user-attachments/assets/b0d2374d-5471-48a6-a792-6a2e3663832e" width=500>
+
+병렬 어텐션을 모두 수행하였다면 모든 어텐션 헤드를 연결(concatenate)합니다. 모두 연결된 어텐션 헤드 행렬의 크기는 $$(Seq-len, d_{model})$$ 가 됩니다.
+
+<img src="https://github.com/user-attachments/assets/06709c5a-4679-4776-9815-2ecce92fa089" width=400>
+
+병렬로 게산되어 합쳐진 행렬은 최종 가중치 행렬과 곱해서 최종 경과를 생성합니다.
+
+<img src="https://github.com/user-attachments/assets/68acda6e-6d2a-40e5-bf6a-10c9a20308d0" width=500>
+
