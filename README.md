@@ -350,3 +350,7 @@ $γ$와 $β$는 초기값으로 각각 1과 0을 설정하며 학습을 통해 �
 
 ### 2.2.2. Encoder-Decoder Attention
 
+<img src="https://github.com/user-attachments/assets/0621c51a-521e-4649-81cf-aaba96f5ad8a" width=300>
+
+디코더의 두 번째 서브층은 인코더의 정보를 활용하여 입력과 출력 간의 관계를 모델링하며, 인코더-디코더 구조에서 중요한 연결 역할을 수행합니다.
+
