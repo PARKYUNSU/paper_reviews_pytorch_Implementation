@@ -149,7 +149,7 @@ $$
 $Where:$
   - $pos$ : 입력 문장의 임베딩 벡터의 위치
   - $i$ : 임베딩 베터 내의 차원의 인덱스
-  - $d_{model}$ : Transformer의 모든 층의 출력 차원 (Transformer Hyperparameter, 그림에서는 4, But 논문에서는 512)
+  - $d_{model}$ : Transformer의 모든 층의 출력 차원 (Transformer Hyperparameter, 그림에서는 4)
 
 <p align="left"><img src="https://github.com/user-attachments/assets/8bac064e-36cb-4da5-8492-0fff88be6bd3" width=600>
  <img src="https://github.com/user-attachments/assets/103574bc-89b0-4fc2-aa22-6bbd3a5e1ef7" width=400></p>
@@ -210,11 +210,9 @@ $$Attention(Q, K, V) = Attention Value$$
 
 Self Attention은 입력 문장의 단어 벡터로 부터 Q(Query) K(Key) V(Value) 벡터를 생성합니다.
 
-각 단어 벡터는 초기 차원($d_{model} = 512$ 논문기준)에서 더 작은 차원 ($d_k=d_v=64$) 로 변환합니다
+각 단어 벡터는 초기 차원($d_{model})에서 더 작은 차원 ($d_k=d_v=64$) 로 변환합니다
 
 단어 벡터에 학습 가능한 가중치 행렬($W_Q, W_K, W_V$)을 곱해서 Q, K, V 벡터를 생성합니다.
-
-- $d_{model}=512, h = 8, d_k = \frac{d_{model}}h = 64$
 
 <img src="https://github.com/user-attachments/assets/70a15c72-4df7-4f04-94cd-96717cd243ea" width=400>
 
@@ -325,7 +323,7 @@ $γ$와 $β$는 초기값으로 각각 1과 0을 설정하며 학습을 통해 �
 
 ## 2.2. Decoder
 
-<img src="https://github.com/user-attachments/assets/c9000ed1-be63-4386-a242-b21ebdd8c10b" width=400>
+<img src="https://github.com/user-attachments/assets/a92046da-6fef-4240-827e-6f2b0371c5b6" width=200>
 
 
 디코더는 임베딩과 포지셔널 인코딩을 거친 입력 문장 행렬을 받습니다. 트랜스포머는 seq2seq처럼 교사 강요(Teacher Forcing)를 사용하여 학습됩니다.
