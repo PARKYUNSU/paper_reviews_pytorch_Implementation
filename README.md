@@ -211,7 +211,7 @@ $$Attention(Q, K, V) = Attention Value$$
 
 Self Attention은 입력 문장의 단어 벡터로 부터 Q(Query) K(Key) V(Value) 벡터를 생성합니다.
 
-각 단어 벡터는 초기 차원($d_{model})에서 더 작은 차원 ($d_k=d_v=64$) 로 변환합니다
+각 단어 벡터는 초기 차원($d_{model}$)에서 더 작은 차원 ($d_k=d_v=64$) 로 변환합니다
 
 단어 벡터에 학습 가능한 가중치 행렬($W_Q, W_K, W_V$)을 곱해서 Q, K, V 벡터를 생성합니다.
 
