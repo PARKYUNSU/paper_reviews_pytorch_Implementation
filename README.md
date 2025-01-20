@@ -204,12 +204,14 @@ $$Attention(Q, K, V) = Attention Value$$
 그리고 유사도가 반영된 '값(Value)'을 모두 더해서 리턴합니다. 여기서는 이를 어텐션 값(Attention Value)이라고 합니다.
 
 <img src="https://github.com/user-attachments/assets/8bc41c7d-1ddf-4201-a2d6-6e843c4dff5c" width=400>
+
 ```
 "The cat sat on the mat because it was soft and warm."
 ```
+
 위의 예시 문장을 번역하면 "그 고양이는 매트에 앉았다, 왜냐하면 그것은 부드럽고 따뜻하기 떄문이다." 라는 의미입니다. 그러나 여기서 그것(It)에 해당하는 것이 cat 인지 사람은 구분할 수 있지만, 기계는 그렇지 않습니다.
 
-하지만 Attention에서는 입력 문장 내의 단어들 끼리 유사도를 구하므로, "it"이 참조하는 대상인 "The cat"에 강한 어텐션 값을 가지게 됩니다.
+하지만 Attention에서는 입력 문장 내의 단어들 끼리 유사도를 구하므로, "it"이 참조하는 대상인 "cat"에 강한 어텐션 값을 가지게 됩니다.
 
 또한 "soft"와 "warm" 같은 형용사들은 문맥상 "The mat"와 연결될 수 있어 약한 어텐션 값을 가지게 됩니다.
 
