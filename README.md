@@ -47,7 +47,7 @@ Trnasformer 모델 구조적 위해를 위해 "입력 부분" → "인코더 부
 
 위에서 서술한 것처럼 Trnasformer는 seq2seq 처럼 인코더 디코더 구조를 가지고 있으며, 인코더에서 정보를 받아 디코더가 결과를 생성합니다.
 
-Trnasformer 디코더는 seq2seq 구조처럼 \text{<sos>} → text\{<eos>} 출력 까지 연산을 진행 합니다.
+Trnasformer 디코더는 seq2seq 구조처럼 $\text{<sos>} → text\{<eos>}$ 출력 까지 연산을 진행 합니다.
 
 
 ## 2.2. Encoder
