@@ -78,9 +78,9 @@ class VGG16_FCN(nn.Module):
             nn.ReLU(inplace=True),
             nn.Dropout2d(0.5) # [1, 4096, 7, 7]
         )
-        self.score = nn.Conv2d(4096, num_classes, kernel_size=1)  # [1, 21, 7, 7]
-
-    def forward(self, x):
+        self.score4 = nn.Conv2d(512, num_classes, kernel_size=1)   # features4 (14x14)
+        self.score3 = nn.Conv2d(256, num_classes, kernel_size=1)   # features3 (28x28)    def forward(self, x):
+        
         # VGG16
         x1 = self.features1(x)  # [1, 64, 112, 112]
         x2 = self.features2(x1)  # [1, 128, 56, 56]
