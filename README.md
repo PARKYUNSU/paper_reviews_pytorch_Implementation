@@ -69,7 +69,7 @@ Trnasformer 디코더는 seq2seq 구조처럼 <sos> → <eos> 출력 까지 연�
 논문에서는 이를 해결하기 위해 **Positional Encoding** 을 사용해서 입력 데이터에 순서 정보를 추가합니다.
 
 <details>
-<summary>💡🅾️Positional Encoding 톺아보기🅾️💡</summary>
+<summary>Positional Encoding 톺아보기⁉️💡</summary>
 
  ### 2.2.1.1. Position Information
 
