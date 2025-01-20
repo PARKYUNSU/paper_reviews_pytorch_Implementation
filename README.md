@@ -142,7 +142,7 @@ DeepLabV3는 **Atrous Spatial Pyramid Pooling(ASPP)** 모듈을 통해서 여러
 
 기존 Conv는 Pooling 및 Stride로 인해 Feature map의 크기가 작아져 더 깊이 들어가면 갈 수록 공간적 정보가 손실 되어 Segmentation에 불리할 수 있습니다.
 
-그로 인해 DeepLabV2에서 “**Atrous Spatial Pyramid Pooling”**을 제안함으로 Output stride를 유지하면서 계산량 및 파라미터 수를 늘리지 않고 더 큰 FOV(Filed of View)를 사용합니다.
+그로 인해 DeepLabV2에서 **“Atrous Spatial Pyramid Pooling”** 을 제안함으로 Output stride를 유지하면서 계산량 및 파라미터 수를 늘리지 않고 더 큰 FOV(Filed of View)를 사용합니다.
 
 `(batch_size, channels, height, width)`
 
