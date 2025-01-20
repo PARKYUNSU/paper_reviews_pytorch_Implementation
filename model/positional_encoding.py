@@ -3,9 +3,9 @@ from torch import nn
 import math
 
 class PositionalEncoding(nn.Module):
-    def __init__(self, d_model, dropout_p, max_seq_len):
+    def __init__(self, d_model, dropout, max_seq_len):
         super().__init__()
-        self.dropout = nn.Dropout(dropout_p)
+        self.dropout = nn.Dropout(dropout)
 
         # (max_seq_len, d_model) 형태의 zero 텐서 준비
         pe = torch.zeros(max_seq_len, d_model)  # (max_seq_len, d_model)
