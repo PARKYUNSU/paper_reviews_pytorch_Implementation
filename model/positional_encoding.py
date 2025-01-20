@@ -3,7 +3,7 @@ from torch import nn
 import math
 
 class PositionalEncoding(nn.Module):
-    def __init__(self, d_model: int, dropout_p: float, max_seq_len: int):
+    def __init__(self, d_model, dropout_p, max_seq_len):
         super().__init__()
         self.dropout = nn.Dropout(dropout_p)
 
@@ -28,7 +28,7 @@ class PositionalEncoding(nn.Module):
         # 학습되지 않는 버퍼로 등록 (매개변수 X)
         self.register_buffer('pe', pe)
 
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
+    def forward(self, x):
         # 입력 시퀀스 길이에 맞게 슬라이싱
         seq_len = x.size(1)  # 실제 seq_len
         pe_slice = self.pe[:, :seq_len, :].to(x.device)
