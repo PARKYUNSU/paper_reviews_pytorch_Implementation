@@ -28,7 +28,7 @@ RNN, LSTM, gated recurrent 신경망은 언어 모델과 번역에 많이 사용
 
 | 간단한 Encoder-Decoder 구조
 
-Transformer는 기존의 seq2seq 모델처럼 인코더-디코더 구조를 가지지만,RNN 없이 오직 어텐션 메커니즘만으로 시퀀스를 처리합니다.
+Transformer는 기존의 seq2seq 모델처럼 인코더-디코더 구조를 가지지만, RNN 없이 오직 어텐션 메커니즘만으로 시퀀스를 처리합니다.
 
 인코더 디코더 각각 하나의 RNN이 시간축 $t$를 가지는 구조 → 인코더 디코더 각각 $N$개의 블록으로 구성
 
@@ -110,7 +110,7 @@ Positional Encoding에는 2가지 규칙이 있습니다.
 
 ### 2.2.1.3. Positional Encoding with Sine & Cosine 함수
 
-Sine, Cosing 함수는 위의 2가지 규칙을 만족하면서 위치벡터를 추가할 수 있습니다.
+Sine, Cosine 함수는 위의 2가지 규칙을 만족하면서 위치벡터를 추가할 수 있습니다.
 
 ### 1) 모든 위치 값은 너무 크면 안된다.
  - Sine & Cosine은 "-1 ~ 1" 사이를 반복하는 주기함수이다. 즉, 1을 초과하지 않으며, -1로 미만으로 가지 않으므로 두 번째 규칙을 지킬 수 있다.
@@ -118,7 +118,7 @@ Sine, Cosing 함수는 위의 2가지 규칙을 만족하면서 위치벡터를 
   <img src="https://github.com/user-attachments/assets/e1b7785f-6bde-4324-aea6-86618b733a16" width=600>
 
 ### 2) 같은 위치의 토큰은 항상 같은 위치 벡터값을 가지고 있어야 한다.
-- Sine &  Cosine 은 주기함수로 -1 ~ 1 사이를 반복하므로 단어 토크들의 위치 벡터 값이 중복 될 수 있다.
+- Sine &  Cosine은 주기함수로 -1 ~ 1 사이를 반복하므로 단어 토크들의 위치 벡터 값이 중복 될 수 있다.
 
    Sine 함수를 예를들어, 단어 토큰이 주어졌을 때, 1 번째 토큰(position 0)과 9 번째 토큰(position 8)의 경우 위치 벡터 값이 같아지는 문제가 발생한다.
 
@@ -276,7 +276,7 @@ ex) head 1 은 it ↔ mat 연관도를 강조하며, head 2 는 it ↔ soft 연�
 
 ### 2.2.2.5. Position-Wise FFNN
 
-안코더와 디코더의 공통 서브층으로 각 단어(벡터) 별로 독립적으로 작동하는 완전 연결 신경망입니다. Multi-head Attention 결과를 입력으로 받아 추가 변환을 수행합니다.
+인코더와 디코더의 공통 서브층으로 각 단어(벡터) 별로 독립적으로 작동하는 완전 연결 신경망입니다. Multi-head Attention 결과를 입력으로 받아 추가 변환을 수행합니다.
 
 $$FFNN(x) = ReLU(xW_1 + b_1)W_2 + b_2$$
 
