@@ -161,11 +161,11 @@ $Where:$
 임베딩 벡터 내의 각 차원의 인데스가 짝수인 경우 $$(pos, 2i)$$에는 Sine 함수를 사용하고, 홀수인 경우 $$(pos, 2i + 1)$$ 에는 Cosine 함수를 사용
 
 
-### 2.2.2 Attention
+### 2.2.2. Attention
 
 <img src="https://github.com/user-attachments/assets/16837e94-898c-48e9-a6de-cbb914890068" width=400>
 
-Transforemr에서는 Attention이 어디서 이루어지는지에 떄라 즉, 벡터의 출처가 어디냐에 따라 부르는 이름이 달라집니다.
+Transforemr에서는 Attention이 어디서 이루어지는지에 따라 즉, 벡터의 출처가 어디냐에 따라 부르는 이름이 달라집니다.
 
 ```
 인코더 Self Attention : Query = Key = Value
