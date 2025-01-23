@@ -20,6 +20,14 @@ class Attention(nn.Module):
         self.proj_dropout = nn.Linear(config.transformer["attention_dropout_rate"])
         self.softmax = nn.Softmax(dim=-1)
     
+
+    def transpose_for_score(self, x):
+        # x: (B, N, all_head_dim) -> (B, num_heads, N, head_dim)
+        new_shape = x.size()[:-1] + (self.num_heads, self.head_dim)
+        x = x.view(*new_shape)
+        return x.permute(0, 2, 1, 3)
+    
+    
     def forward(self, x):
 
         x = 
