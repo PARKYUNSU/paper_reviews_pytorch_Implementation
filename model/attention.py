@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+import math
 
 class Attention(nn.Module):
     def __init__(self, config):
@@ -29,5 +30,24 @@ class Attention(nn.Module):
     
     
     def forward(self, x):
+        B, N, C = x.shape
 
-        x = 
+        query = self.query_dense(x)
+        key = self.key_dense(x)
+        value = self.value_dense(x)
+
+        query = query.view(B, N, self.num_heads, self.head_dim).permute(0, 2, 1, 3)
+        key = key.view(B, N, self.num_heads, self.head_dim).permute(0, 2, 1, 3)
+        value = value.view(B, N, self.num_heads, self.head_dim).permute(0, 2, 1, 3)
+
+        attention_scores = torch.matmul(query, key.transpose(-1, -2)) / math.sqrt(self.all_head_dim)
+        attention_probs = self.softmax(attention_scores)
+        attention_probs = self.attn_dropout(attention_probs)
+
+        # Context (Attention Value)
+        context = torch.matmul(attention_probs, value).permute(0, 2, 1, 3).reshape(B, N, C)
+
+        output = self.output_dense(context)
+        output = self.proj_dropout(output)
+
+        return output
