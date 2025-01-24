@@ -1,6 +1,7 @@
 import ml_collections
 
 def get_b16_config():
+    """ ViT-B/16 """
     config = ml_collections.ConfigDict()
     config.patches = ml_collections.ConfigDict({'size': (16, 16)})
     config.hidden_size = 768
@@ -15,13 +16,13 @@ def get_b16_config():
     return config
 
 def get_b32_config():
-    """Returns the ViT-B/32 configuration."""
-    config = get_b16_config()  # b16 설정을 복사
-    config.patches.size = (32, 32)  # 패치 크기만 (32, 32)로 변경
+    """ ViT-B/32 """
+    config = get_b16_config()
+    config.patches.size = (32, 32)  # patch (32, 32)
     return config
 
 def get_l16_config():
-    """Returns the ViT-L/16 configuration."""
+    """ ViT-L/16 """
     config = ml_collections.ConfigDict()
     config.patches = ml_collections.ConfigDict({'size': (16, 16)})
     config.hidden_size = 1024
@@ -36,13 +37,13 @@ def get_l16_config():
     return config
 
 def get_l32_config():
-    """Returns the ViT-L/32 configuration."""
+    """ ViT-L/32 """
     config = get_l16_config()
     config.patches.size = (32, 32)
     return config
 
 def get_h14_config():
-    """Returns the ViT-H/14 configuration."""
+    """ ViT-H/14 """
     config = ml_collections.ConfigDict()
     config.patches = ml_collections.ConfigDict({'size': (14, 14)})
     config.hidden_size = 1280
