@@ -8,7 +8,7 @@ from pathc_embedding import Patch_Embedding
 from utils import np2th
 
 class Vision_Transformer(nn.Module):
-    def __init__(self, config, img_size=224, num_classes=1000, in_channels=3):
+    def __init__(self, config, img_size=224, num_classes=1000, in_channels=3,  pretrained=False, pretrained_path=None):
         super(Vision_Transformer, self).__init__()
         self.num_classes = num_classes
 
@@ -29,6 +29,9 @@ class Vision_Transformer(nn.Module):
 
         self._init_weights()
 
+        if pretrained and pretrained_path is not None:
+            self.load_from(torch.load(pretrained_path, map_location="cpu"))
+            
     def _init_weights(self):
         nn.init.trunc_normal_(self.pos_embed, std=0.02)
         nn.init.trunc_normal_(self.cls_token, std=0.02)
