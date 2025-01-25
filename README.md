@@ -22,23 +22,23 @@ Vision Transformer(ViT)는 규모가 큰 데이터셋(ex, JFT-300M, ImageNet-21k
 이전에는 이미지 처리에 Transformer를 적용하는 다양한 방법들이 시도되었습니다.
 
 1. Self-Attentino을 이미지에 적용
-  -  모든 픽셀 간의 상호작용을 고려해야 하며, **$$O(N^2)$$** 의 시간 복잡도를 가짐
+   -  모든 픽셀 간의 상호작용을 고려해야 하며, **$$O(N^2)$$** 의 시간 복잡도를 가짐
  
 2. 각 쿼리 픽셀에 Local 영역 내에서 Self-Attention을 적용
-  - Global 영역을 대상으로 하지 않고 Local Self-Attention을 적용
+   - Global 영역을 대상으로 하지 않고 Local Self-Attention을 적용
 
 3. Sparse Transformer
-  - Global Self-Attention을 효율적으로 근사하여 이미지 처리
+   - Global Self-Attention을 효율적으로 근사하여 이미지 처리
 
 이런 방식은 하드웨어 가속기에서 연산을 효율적으로 수행하기에는 다소 번거로운 작업이며, 더 나은 성능을 위해 여러가지 최적화가 필요했습니다.
 
 # 2.2. ViT 유사 접근법
 
 1. 이미지를 2X2의 패치로 쪼개서 Self-Attention을 적용
-  - 이 방식은 작은 패치 크기를 사용하여 해상도가 작은 이미지에만 적용 가능
+   - 이 방식은 작은 패치 크기를 사용하여 해상도가 작은 이미지에만 적용 가능
 
 2. 이미지 해상도 및 새강고오간 축소후 픽셀단위로 Transformer 적용
-  - iGPT(Image GPT) 모델로 비지도 학습 방식으로 훈련되며, ImageNet에서 최대 72%의 정확도를 달성
+   - iGPT(Image GPT) 모델로 비지도 학습 방식으로 훈련되며, ImageNet에서 최대 72%의 정확도를 달성
 
 # 2.3. Vision Transformer
 
