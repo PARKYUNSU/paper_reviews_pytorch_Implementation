@@ -56,7 +56,7 @@ ViT는 기존의 Transformer 모델들이 가진 한계를 극복하기 위해, 
 
 <img src="https://github.com/user-attachments/assets/1db9cbe3-324c-4dfd-ade8-4011bee04c7e" width=800>
 
-## 3.1. Patch
+## 3.1. Patch Embedding
 Transformer는 1D 시퀀스를 입력으로 받기 때문에, ViT에서는 이미지를 $$2D$$ 형태에서 $$1D$$ 시퀀스로 변환해야합니다. 이미지는 원래 $$x \in \mathbb{R}^{H \times W \times C}$$ 형태에서, $$P \times P$$ 크기의 작은 패치들로 나눕니다.
 
 
@@ -75,4 +75,32 @@ $Where:$
 
 이렇게 나눈 패치는 $$N \times (P^2⋅C)$$ 크기의 $$1D$$ 시퀀스로 변환되어 Transformer의 입력값으로 들어갑니다.
 
-## 3.2 Embedding
+<img src="https://github.com/user-attachments/assets/628c82f5-ca66-42b8-a4b8-e15f9f577947" width=600>
+
+따라서 $1D$로 변환되는 시퀀스의 계산은 다음과 같습니다.
+
+$Input Img(H \times W) = 224 X 224$
+
+$Patch = 16 \times 16$
+
+$Channel = 3(RGB)$
+
+$N = \frac{224 \times 224}{16^2} = 256$
+
+$Final Sequence = 256 \times (14^2 \times 3) = 150,528$
+
+Input Img 224를 크기가 16인 패치로 나누면 가로 세로 14개로 196개의 패치가 생기고, 가로세로 16인 각 패치가 총 3개의 채널 (RGB)를 가지고 있기에, 그 식은 다음과 같습니다.
+
+$16 \times 16 \times 3 \times 14 \times 14 = 150,528$
+
+## 3.2. [CLS]token & Position Embeddings
+## 3.2.1. [CLS]token
+ViT 모델은 Image Classification을 위해 [CLS] = Classification 토큰을 추가합니다. 이 토큰은 앞서 만든 Patch Embedding 앞에 위치하며, Transformer에서 출력할때 최종 이미지를 결정하는 정보를 추출합니다.
+
+<img src="https://github.com/user-attachments/assets/2cca2a31-ec89-4e78-ab7a-b4e8cad93604" width=500>
+
+
+[CLS]token은 그림에서 파란색 부분으로 그 크기는 $1 \times 768$ 텐서입니다. (ViT의 hidden size) 이 [CLS]token은 Patch Embedding 맨 앞에 추가되며, 그림처럼 패치 수가 196개라면, Transformer 입력 시퀀스의 크기는 $197 \times 768$ (196개의 패치 + 1개 class token)
+
+## 3.2.2. Positinoal Embedding
+
