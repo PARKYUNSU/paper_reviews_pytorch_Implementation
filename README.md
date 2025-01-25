@@ -66,7 +66,7 @@ $$ x \in \mathbb{R}^{H \times W \times C} $$
 
 $$ x_p \in \mathbb{R}^{N \times (P^2 \times C)}, \quad N = \frac{H \times W}{P^2} $$
 
-$$Where:$$
+$Where:$
 - $H$ : 이미지 높이
 - $W$ : 이미지 너비
 - $C$ : 채널 수
