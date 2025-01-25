@@ -59,11 +59,12 @@ ViT는 기존의 Transformer 모델들이 가진 한계를 극복하기 위해, 
 ## 3.1. Patch
 Transformer는 1D 시퀀스를 입력으로 받기 때문에, ViT에서는 이미지를 $$2D$$ 형태에서 $$1D$$ 시퀀스로 변환해야합니다. 이미지는 원래 $$x \in \mathbb{R}^{H \times W \times C}$$ 형태에서, $$P \times P$$ 크기의 작은 패치들로 나눕니다.
 
+
 $$ x \in \mathbb{R}^{H \times W \times C} $$
 
-$$↓$$
+하나의 이미지가 $P \times P$ 크기의 패치들로 나누어진 후, 각 패치는 $P^2 \times C$ 크기의 벡터로 변환됩니다. 이때, 패치의 개수 $N$은 다음과 같이 정의됩니다
 
-$$x_p ∈ R^{N \times (P^2 \times C)},   N = \frac{H \times W}{P^2}$$
+$$ x_p \in \mathbb{R}^{N \times (P^2 \times C)}, \quad N = \frac{H \times W}{P^2} $$
 
 $$Where:$$
 $H$ : 이미지 높이
