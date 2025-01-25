@@ -7,6 +7,8 @@ Google Research, Brain Team
  
 https://arxiv.org/pdf/2010.11929
 
+---
+
 # 1. Introduction
 
 Self-Attention 기반 아키텍처를 활용한 Transformer는 NLP 분야에서 선두 주자로 자리매김 했었습니다. Transformer의 계산 효율성 및 확장석 덕분에 1,000억 개가 넘는 파라미터를 가진 모델들도 학습이 가능해졌으며, 모델 및 데이터셋이 점점 커져가면서 성능 포화 현상이 이루어지 않고 지속적으로 개선이 가능해졌습니다.
