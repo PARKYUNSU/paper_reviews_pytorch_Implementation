@@ -57,7 +57,7 @@ ViT는 기존의 Transformer 모델들이 가진 한계를 극복하기 위해, 
 <img src="https://github.com/user-attachments/assets/1db9cbe3-324c-4dfd-ade8-4011bee04c7e" width=800>
 
 ## 3.1. Patch
-Transformer는 1D 시퀀스를 입력으로 받기 때문에, ViT에서는 이미지를 $$2D$$ 형태에서 $$1D$$ 시퀀스로 변환해야합니다. 이미지는 원래 $$x \in \mathbb{R}^{H \times W \times C}$$ 형태에서, $$P * P$$ 크기의 작은 패치들로 나눕니다.
+Transformer는 1D 시퀀스를 입력으로 받기 때문에, ViT에서는 이미지를 $$2D$$ 형태에서 $$1D$$ 시퀀스로 변환해야합니다. 이미지는 원래 $$x \in \mathbb{R}^{H \times W \times C}$$ 형태에서, $$P \times P$$ 크기의 작은 패치들로 나눕니다.
 
 $$ x \in \mathbb{R}^{H \times W \times C} $$
 
