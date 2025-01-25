@@ -2,6 +2,7 @@
 AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE
 
 -Alexey Dosovitskiy, Lucas Beyer
+
 Google Research, Brain Team
  
 https://arxiv.org/pdf/2010.11929
