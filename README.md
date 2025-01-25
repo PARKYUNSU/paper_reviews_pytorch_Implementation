@@ -113,8 +113,52 @@ Positional Embedding은 학습 가능한 $197 \times 768$ 텐서로, **1D** 형�
  
 ViT에서는 **2D Positional Embedding** 대신 **1D Positional Embedding**을 사용하지만, 성능 차이가 크게 나지 않았습니다. 이는 이미지를 패치로 나누는 과정에서 공간적 정보가 상대적으로 덜 중요해지기 때문입니다. 
 
-<img src="https://github.com/user-attachments/assets/e20cc90f-1ca8-40ae-a895-2ee564017e97" width=500>
+<img src="https://github.com/user-attachments/assets/e20cc90f-1ca8-40ae-a895-2ee564017e97" width=1100>
 
 **Positional Embedding**은 **[CLS] token**과 결합되어 최종적으로 입력 시퀀스를 형성하고, 이를 Transformer에 입력하여 이미지를 처리합니다. 이를 통해 모델은 각 패치의 상대적인 위치를 학습할 수 있게 되어 Img Classification 작업에 도움을 줍니다.
 
+# 3.3. Transformer Encoder
+ViT의 핵심부분인 Transformer Encoder 입니다. Transformer Encoder는 여러 개의 Self-Attentino 및 MLP (FFNN) Blcok이 번갈아 쌓인 구조로 이루어져 있습니다.
 
+- Self-Attention : 각 Patch가 다른 Patch들과 어떻게 관련이 있는지를 계산하는 메커니즘.
+- MLP : Self-Attention 계산 후에 비선형 변환을 수행하는 층으로, 모델의 표현력을 높입니다.
+- LayerNorm : 각 Block에 대한 정규화 기법으로, 학습의 안정성을 높이고 성능을 개선합니다.
+
+<details>
+  <summary>Layer Normalization</summary>
+
+LayerNorm은 활성화 배치의 각 항목의 평균과 분산을 계산하여 이를 사용해 데이터를 정규화하는 기법입니다.
+
+기존 Batch Normalization에서 Layer Normalization으로 변경하는데, Batch가 많아야지 적용이 잘되는 Batch Normalization인데, 자연어 데이터는 너무 많아 배치 크기를 줄이는 경우가 많습니다.
+
+그로 인해 배치 크기가 작아져 평균과 분산 추정이 부정확해져 성능이 저하됩니다.
+
+입력 데이터의 모양이 $[N,C,H,W]$일 때, 각 배치 내에서 $[C,H,W]$ 모양의 모든 요소에 대해 평균과 분산을 계산합니다.
+
+배치 크기에 의존하지 않아 배치 정규화에서 생기는 문제를 해결하며, 평균과 분산 값을 따로 저장할 필요가 없습니다.
+
+| **특징**           | **BatchNorm**                     | **LayerNorm**                 |
+|--------------------|-----------------------------------|-------------------------------|
+| **평균/분산 계산 기준** | 배치 단위                        | 각 샘플(feature 차원)         |
+| **배치 크기 의존성** | 크면 안정적, 작으면 성능 저하      | 독립적, 소규모 배치에서도 안정 |
+| **순차 데이터 처리**  | 비효율적                         | 적합                          |
+| **추론 단계**       | 평균/분산 저장 필요              | 추가 저장 필요 없음            |
+
+<img src="https://github.com/user-attachments/assets/40930afb-50c9-4a99-9fd2-5b630d39b8e3" width=600>
+
+층 정규화 수식은 다음과 같습니다.
+벡터 $h$의 평균 $\mu$와 분산 $\sigma^2$을 계산한 후, 각 차원 $h_k$의 값을 아래 수식으로 정규화합니다.
+
+여기서 $ϵ$ 은 분모가 0이 되는 것을 방지하기 위한 작은 값입니다.
+
+$$x̂ᵢₖ = (xᵢₖ - μᵢ) / √{(σᵢ² + ε)}$$
+
+정규화된 값에 학습 가능한 파라미터 $\gamma$와 $\beta$를 적용하여 최종 정규화 값을 계산합니다.
+
+$$y_k = \gamma \hat{h}_k + \beta$$
+
+$\gamma$와 $\beta$는 초기값으로 각각 1과 0을 설정하며 학습을 통해 최적화합니다.
+</details>
+
+  
+<img src="https://github.com/user-attachments/assets/c5c532c5-d5a8-4606-8af9-1fe51bb5080b" width=300>
