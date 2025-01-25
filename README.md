@@ -63,7 +63,7 @@ $$ x \in \mathbb{R}^{H \times W \times C} $$
 
 $$↓$$
 
-$$x_p ∈ R^{N \times (P^2 \times C)}, N = \frac{H \times W}{P^2}$$
+$$x_p ∈ R^{N \times (P^2 \times C)},   N = \frac{H \times W}{P^2}$$
 
 $$Where:$$
 $H$ : 이미지 높이
