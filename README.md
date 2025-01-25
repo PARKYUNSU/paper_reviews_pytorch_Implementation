@@ -105,6 +105,16 @@ ViT 모델은 Image Classification을 위해 [CLS] = Classification 토큰을 �
 이 [CLS]token은 Patch Embedding 맨 앞에 추가되며, 그림처럼 패치 수가 196개라면, Transformer 입력 시퀀스의 크기는 $197 \times 768$ (196개의 패치 + 1개 class token)
 
 ## 3.2.2. Positinoal Embedding
-Trnasformer 모델은 기본적으로 입력 시퀀스의 순서에 대한 정보를 스스로 처리할 수 없습니다. 그래서 Positional Embedding을 사용하여 입력 시퀀스에 각 위치 정보를 부여합니다.
+Transformer 모델은 기본적으로 입력 시퀀스의 순서에 대한 정보를 스스로 처리할 수 없습니다. 그래서 **Positional Embedding**을 사용하여 입력 시퀀스에 각 위치 정보를 부여합니다. 이 정보는 모델이 시퀀스 내의 요소들 간의 상대적인 위치 관계를 학습하는 데 도움을 줍니다.
+
+<img src="https://github.com/user-attachments/assets/270d4bd2-a55c-45fd-88e9-6c4d19339f55" width=700>
+
+Positional Embedding은 학습 가능한 $197 \times 768$ 텐서로, **1D** 형태입니다. 여기서 **197**은 이미지 패치 196개와 **[CLS] token**을 포함한 총 시퀀스 길이를 의미하며, **768**은 ViT 모델의 hidden size와 동일합니다.
+ 
+ViT에서는 **2D Positional Embedding** 대신 **1D Positional Embedding**을 사용하지만, 성능 차이가 크게 나지 않았습니다. 이는 이미지를 패치로 나누는 과정에서 공간적 정보가 상대적으로 덜 중요해지기 때문입니다. 
+
+<img src="https://github.com/user-attachments/assets/e20cc90f-1ca8-40ae-a895-2ee564017e97" width=500>
+
+**Positional Embedding**은 **[CLS] token**과 결합되어 최종적으로 입력 시퀀스를 형성하고, 이를 Transformer에 입력하여 이미지를 처리합니다. 이를 통해 모델은 각 패치의 상대적인 위치를 학습할 수 있게 되어 Img Classification 작업에 도움을 줍니다.
 
 
