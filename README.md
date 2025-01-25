@@ -105,4 +105,6 @@ ViT 모델은 Image Classification을 위해 [CLS] = Classification 토큰을 �
 이 [CLS]token은 Patch Embedding 맨 앞에 추가되며, 그림처럼 패치 수가 196개라면, Transformer 입력 시퀀스의 크기는 $197 \times 768$ (196개의 패치 + 1개 class token)
 
 ## 3.2.2. Positinoal Embedding
+Trnasformer 모델은 기본적으로 입력 시퀀스의 순서에 대한 정보를 스스로 처리할 수 없습니다. 그래서 Positional Embedding을 사용하여 입력 시퀀스에 각 위치 정보를 부여합니다.
+
 
