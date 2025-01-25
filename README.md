@@ -20,7 +20,10 @@ Self-Attention 기반 아키텍처를 활용한 Transformer는 NLP 분야에서 
 
 Vision Transformer(ViT)는 규모가 큰 데이터셋(ex, JFT-300M, ImageNet-21k)으로 학습하면 ResNet 보다 더 뛰어난 성능을 발휘할 수 있습니다. 이 말은 위에서 언급한 ViT가 CNN과 다르게 모델의 규모가 커지고 데이터셋 크기가 증가해도 성능 포화 되지 않고 지속적으로 향상되는 특징을 가지기 때문입니다.
 
-# 2.1. 기존 Transformer의 이미지 처리 접근법
+
+# Related Work
+
+## 2.1. 기존 Transformer의 이미지 처리 접근법
 
 이전에는 이미지 처리에 Transformer를 적용하는 다양한 방법들이 시도되었습니다.
 
@@ -35,7 +38,7 @@ Vision Transformer(ViT)는 규모가 큰 데이터셋(ex, JFT-300M, ImageNet-21k
 
 이런 방식은 하드웨어 가속기에서 연산을 효율적으로 수행하기에는 다소 번거로운 작업이며, 더 나은 성능을 위해 여러가지 최적화가 필요했습니다.
 
-# 2.2. ViT 유사 접근법
+## 2.2. ViT 유사 접근법
 
 1. 이미지를 2X2의 패치로 쪼개서 Self-Attention을 적용
    - 이 방식은 작은 패치 크기를 사용하여 해상도가 작은 이미지에만 적용 가능
@@ -43,7 +46,7 @@ Vision Transformer(ViT)는 규모가 큰 데이터셋(ex, JFT-300M, ImageNet-21k
 2. 이미지 해상도 및 새강고오간 축소후 픽셀단위로 Transformer 적용
    - iGPT(Image GPT) 모델로 비지도 학습 방식으로 훈련되며, ImageNet에서 최대 72%의 정확도를 달성
 
-# 2.3. Vision Transformer
+## 2.3. Vision Transformer
 
 ViT는 기존의 Transformer 모델들이 가진 한계를 극복하기 위해, 이미지 데이터를 16X16, 32X32와 같은 상대적으로 큰 패치 크기로 분할하여 Self-Attention을 적용합니다. 그로인해 이미지의 각 부분에 대한 정보를 보다 효과적으로 캡쳐할 수 있도록 도와주며, 높은 해상도의 이미지 처리를 가능하게 해줍니다.
 
