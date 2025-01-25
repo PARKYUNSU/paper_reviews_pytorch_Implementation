@@ -53,3 +53,27 @@ ViT는 기존의 Transformer 모델들이 가진 한계를 극복하기 위해, 
 결론적으로 ViT를 표준 ImageNet 데이터셋 보다 더 큰 크기의 데이터 셋에서 Image Recognition 실험을 진행하였고, 더 큰 크기의 데이터 셋으로 학습시켜서 기존 ResNet 기반 CNN 모델모다 더 좋은 성능을 내는 Vision Transformer 모델을 만들 수 있었습니다.
 
 # 3. Architecture
+
+<img src="https://github.com/user-attachments/assets/1db9cbe3-324c-4dfd-ade8-4011bee04c7e" width=800>
+
+## 3.1. Patch
+Transformer는 1D 시퀀스를 입력으로 받기 때문에, ViT에서는 이미지를 $$2D$$ 형태에서 $$1D$$ 시퀀스로 변환해야합니다. 이미지는 원래 $$x ∈ R^{H*W*C}$$ 형태에서, $$P * P$$ 크기의 작은 패치들로 나눕니다.
+
+$$x ∈ R^{H*W*C}$$
+
+$$↓$$
+
+$$x_p ∈ R^{N*(P^2*C)}$$
+
+$$N = \frac{H * W}{P^2}$$
+
+$$Where:$$
+$H$ : 이미지 높이
+$W$ : 이미지 너비
+$C$ : 채널 수
+$P$ : 패치 크기
+$N$ : 패치 갯수
+
+이렇게 나눈 패치는 $$N * (P^2⋅C)$$ 크기의 $$1D$$ 시퀀스로 변환되어 Transformer의 입력값으로 들어간다.
+
+## 3.2 Embedding
