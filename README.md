@@ -67,15 +67,11 @@ $$ x \in \mathbb{R}^{H \times W \times C} $$
 $$ x_p \in \mathbb{R}^{N \times (P^2 \times C)}, \quad N = \frac{H \times W}{P^2} $$
 
 $$Where:$$
-$H$ : 이미지 높이
-
-$W$ : 이미지 너비
-
-$C$ : 채널 수
-
-$P$ : 패치 크기
-
-$N$ : 패치 갯수
+- $H$ : 이미지 높이
+- $W$ : 이미지 너비
+- $C$ : 채널 수
+- $P$ : 패치 크기
+- $N$ : 패치 갯수
 
 이렇게 나눈 패치는 $$N \times (P^2⋅C)$$ 크기의 $$1D$$ 시퀀스로 변환되어 Transformer의 입력값으로 들어간다.
 
