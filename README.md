@@ -125,15 +125,18 @@ ViT의 핵심부분인 Transformer Encoder 입니다. Transformer Encoder는 여
   <summary>Self-Attention</summary>
   
 1. Image Patch
-     [CLS]token & Position Embeddings 과정이 끝난 $1D$ 시퀀스를 Transformer 모델에 입력으로 받습니다.
+   
+[CLS]token & Position Embeddings 과정이 끝난 $1D$ 시퀀스를 Transformer 모델에 입력으로 받습니다.
 
 2. Q, K, V Vector
-     각 Patch Embedding은 학습 가능한 가중치 행렬을 곱해 Query(Q), Key(K), Value(V) 벡터를 생성합니다. QKV 벡터를 활용하여 Self-Attention을 계산하는데, Q 벡터와 K 벡터와 내적을 통해 Attention Score를 계산하고, 이 Score는 $\sqrt{d_k}$ (K 벡터 차원)에 대해 스케일 후, Softmax로 Attention Distribution을 생성합니다.
+   
+각 Patch Embedding은 학습 가능한 가중치 행렬을 곱해 Query(Q), Key(K), Value(V) 벡터를 생성합니다. QKV 벡터를 활용하여 Self-Attention을 계산하는데, Q 벡터와 K 벡터와 내적을 통해 Attention Score를 계산하고, 이 Score는 $\sqrt{d_k}$ (K 벡터 차원)에 대해 스케일 후, Softmax로 Attention Distribution을 생성합니다.
      
-     $$Attention(Q,K,V) = Softmax\left(\frac{QK^T}{\sqrt{d_k}}\right)V$$
+   $$Attention(Q,K,V) = Softmax\left(\frac{QK^T}{\sqrt{d_k}}\right)V$$
 
 3. Multi-head Attention
-     ViT는 여러 개의 Attention Head를 병렬로 사용하는 Multi-head Attention을 사용합니다. 기존 Self-Attention 연산을 여러 개를 한 번에 처리해서 패치 간의 어텐션 연산을 병렬 처리로 수행하게끔 합니다. 각 헤드는 서로 다른 부분들을 집중할 수 있어 다양한 관계를 학습할 수 있습니다.
+   
+ViT는 여러 개의 Attention Head를 병렬로 사용하는 Multi-head Attention을 사용합니다. 기존 Self-Attention 연산을 여러 개를 한 번에 처리해서 패치 간의 어텐션 연산을 병렬 처리로 수행하게끔 합니다. 각 헤드는 서로 다른 부분들을 집중할 수 있어 다양한 관계를 학습할 수 있습니다.
 </details>
    
     
