@@ -122,7 +122,7 @@ ViT의 핵심부분인 Transformer Encoder 입니다. Transformer Encoder는 여
 
 - Self-Attention : 각 Patch가 다른 Patch들과 어떻게 관련이 있는지를 계산하는 메커니즘.
     <details>
-     <summary>Self-Attention</summary>/
+     <summary>Self-Attention</summary>
     1. Image Patch
     [CLS]token & Position Embeddings 과정이 끝난 $1D$ 시퀀스를 Transformer 모델에 입력으로 받습니다.
 
