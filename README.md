@@ -138,8 +138,9 @@ ViT의 핵심부분인 Transformer Encoder 입니다. Transformer Encoder는 여
    
     
 - MLP : Self-Attention 계산 후에 비선형 변환을 수행하는 층으로, 모델의 표현력을 높입니다.
-    <details>
-      <summary>MLP</summary>
+
+  <details>
+   <summary>MLP</summary>
 1. MLP
      
      MLP는 Transformer 내에서 Self-Attention으로 얻은 패치들 간의 관계 정보를 비선형적으로 변환하는 역할을 합니다. MLP가 포함된 Block은 정보 간의 관계를 확장 및 더 정교한 표현을 학습하는데 도움을 줍니다.
@@ -159,7 +160,7 @@ ViT의 핵심부분인 Transformer Encoder 입니다. Transformer Encoder는 여
      - 비선형성: 활성화 함수를 통해 비선형 변환을 추가함으로써 모델의 표현 능력을 향상시킵니다.
      - 연산 효율성: 선형 변환과 활성화 함수만을 사용하여 효율적인 계산을 할 수 있습니다.
      - 정보 확장: Self-Attention에서 얻은 정보를 더 높은 차원으로 변환하여, 모델이 더 복잡한 관계를 학습할 수 있도록 합니다.
-    </details>
+   </details>
 
     
 - LayerNorm : 각 Block에 대한 정규화 기법으로, 학습의 안정성을 높이고 성능을 개선합니다.
