@@ -120,8 +120,8 @@ ViT에서는 **2D Positional Embedding** 대신 **1D Positional Embedding**을 �
 # 3.3. Transformer Encoder
 ViT의 핵심부분인 Transformer Encoder 입니다. Transformer Encoder는 여러 개의 Self-Attentino 및 MLP (FFNN) Blcok이 번갈아 쌓인 구조로 이루어져 있습니다.
 
-- Self-Attention : 각 Patch가 다른 Patch들과 어떻게 관련이 있는지를 계산하는 메커니즘.
-  <details>
+- Self-Attention : 각 Patch가 다른 Patch들과 어떻게 관련이 있는지를 계산하는 메커니즘.\
+<details>
   <summary>Self-Attention</summary>
   
 1. Image Patch
@@ -134,7 +134,7 @@ ViT의 핵심부분인 Transformer Encoder 입니다. Transformer Encoder는 여
 
 3. Multi-head Attention
      ViT는 여러 개의 Attention Head를 병렬로 사용하는 Multi-head Attention을 사용합니다. 기존 Self-Attention 연산을 여러 개를 한 번에 처리해서 패치 간의 어텐션 연산을 병렬 처리로 수행하게끔 합니다. 각 헤드는 서로 다른 부분들을 집중할 수 있어 다양한 관계를 학습할 수 있습니다.
-  </details>
+</details>
    
     
 - MLP : Self-Attention 계산 후에 비선형 변환을 수행하는 층으로, 모델의 표현력을 높입니다.
