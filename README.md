@@ -173,7 +173,7 @@ MLP는 두 개의 선형 계층을 포함하며, 각 계층 후에 활성화함�
     
 LayerNorm은 활성화 배치의 각 항목의 평균과 분산을 계산하여 이를 사용해 데이터를 정규화하는 기법입니다.
     
-기존 Batch Normalization에서 Layer Normalization으로 변경하는데, Batch가 많아야지 적용이 잘되는 Batch Normalization인데, 자연어 데이터는 너무 많아 배치 크기를 줄이는 경우가 많습니다.
+기존 Batch Normalization에서 Layer Normalization으로 변경하는데, Batch가 많아야지 적용이 잘되는 Batch Normalization인데, 데이터가 너무 많아 배치 크기를 줄이는 경우가 많습니다.
     
 그로 인해 배치 크기가 작아져 평균과 분산 추정이 부정확해져 성능이 저하됩니다.
     
