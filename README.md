@@ -120,7 +120,7 @@ ViT에서는 **2D Positional Embedding** 대신 **1D Positional Embedding**을 �
 # 3.3. Transformer Encoder
 ViT의 핵심부분인 Transformer Encoder 입니다. Transformer Encoder는 여러 개의 Self-Attentino 및 MLP (FFNN) Blcok이 번갈아 쌓인 구조로 이루어져 있습니다.
 
-- Self-Attention : 각 Patch가 다른 Patch들과 어떻게 관련이 있는지를 계산하는 메커니즘.\
+- Self-Attention : 각 Patch가 다른 Patch들과 어떻게 관련이 있는지를 계산하는 메커니즘
 <details>
   <summary>Self-Attention</summary>
   
