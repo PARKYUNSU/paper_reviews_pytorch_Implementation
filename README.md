@@ -121,44 +121,77 @@ ViT에서는 **2D Positional Embedding** 대신 **1D Positional Embedding**을 �
 ViT의 핵심부분인 Transformer Encoder 입니다. Transformer Encoder는 여러 개의 Self-Attentino 및 MLP (FFNN) Blcok이 번갈아 쌓인 구조로 이루어져 있습니다.
 
 - Self-Attention : 각 Patch가 다른 Patch들과 어떻게 관련이 있는지를 계산하는 메커니즘.
+    <details>
+     <summary>Self-Attention</summary>/
+    1. Image Patch
+    [CLS]token & Position Embeddings 과정이 끝난 $1D$ 시퀀스를 Transformer 모델에 입력으로 받습니다.
+
+    2. Q, K, V Vector
+    각 Patch Embedding은 학습 가능한 가중치 행렬을 곱해 Query(Q), Key(K), Value(V) 벡터를 생성합니다. QKV 벡터를 활용하여 Self-Attention을 계산하는데, Q 벡터와 K 벡터와 내적을 통해 Attetnion Score를 계산하고, 이 Score는 $\sqrt{d_k}$(K 벡터 차원)에 대해 스켕일 후, Softmax 로 Attention Distribution을 생성합니다.
+   
+  $$Attention(Q,K,V) = Softmax\left(\frac{QK^T}{\sqrt{d_k}}\right)V$$
+
+  3. Multi-head Attention
+  ViT는 여러개의 Attention Head를 병렬로 사용하는 Multi-heda Attention을 사용합니다. 기존 Self-Attention 연산을 여러개를 한번에 처리해서 패치간의 어텐션연산을 병렬처리로 수행하게 끔 합니다. 각 헤드는 서로 다른 부분들을 집중할 수 있어 다양한 관계를 학습할 수 있습니다.
+    </details>
+    
 - MLP : Self-Attention 계산 후에 비선형 변환을 수행하는 층으로, 모델의 표현력을 높입니다.
+    <details>
+      <summary>MLP</summary>
+     1. MLP
+     MLP는 Transformer 내에서 Self-Attention으로 얻은 패치들 간의 관계 정보를 비선형적으로 변환하는 역할을 합니다. MLP가 포함된 Block은 정보 간의 관계를 확장 및 더 정교한 표현을 학습하는데 도움을 줍니다.
+     2. MLP 수식
+     MLP는 두 개의 선형 계층을 포함하며, 각 계층 후에 활성화함수(GELU)가 적용됩니다.
+
+     $$z_1 = W_1x + b_1$$
+
+  $$z_2 = GELU(z_1)$$
+
+  $$z_3 = W_2z_2 + b_2$
+     3.MLP의 장점
+     - 비선형성: 활성화 함수를 통해 비선형 변환을 추가함으로써 모델의 표현 능력을 향상시킵니다.
+     - 연산 효율성: 선형 변환과 활성화 함수만을 사용하여 효율적인 계산을 할 수 있습니다.
+     - 정보 확장: Self-Attention에서 얻은 정보를 더 높은 차원으로 변환하여, 모델이 더 복잡한 관계를 학습할 수 있도록 합니다.
+    </details>
+
+    
 - LayerNorm : 각 Block에 대한 정규화 기법으로, 학습의 안정성을 높이고 성능을 개선합니다.
 
-<details>
-  <summary>Layer Normalization</summary>
-
-LayerNorm은 활성화 배치의 각 항목의 평균과 분산을 계산하여 이를 사용해 데이터를 정규화하는 기법입니다.
-
-기존 Batch Normalization에서 Layer Normalization으로 변경하는데, Batch가 많아야지 적용이 잘되는 Batch Normalization인데, 자연어 데이터는 너무 많아 배치 크기를 줄이는 경우가 많습니다.
-
-그로 인해 배치 크기가 작아져 평균과 분산 추정이 부정확해져 성능이 저하됩니다.
-
-입력 데이터의 모양이 $[N,C,H,W]$일 때, 각 배치 내에서 $[C,H,W]$ 모양의 모든 요소에 대해 평균과 분산을 계산합니다.
-
-배치 크기에 의존하지 않아 배치 정규화에서 생기는 문제를 해결하며, 평균과 분산 값을 따로 저장할 필요가 없습니다.
-
-| **특징**           | **BatchNorm**                     | **LayerNorm**                 |
-|--------------------|-----------------------------------|-------------------------------|
-| **평균/분산 계산 기준** | 배치 단위                        | 각 샘플(feature 차원)         |
-| **배치 크기 의존성** | 크면 안정적, 작으면 성능 저하      | 독립적, 소규모 배치에서도 안정 |
-| **순차 데이터 처리**  | 비효율적                         | 적합                          |
-| **추론 단계**       | 평균/분산 저장 필요              | 추가 저장 필요 없음            |
-
-<img src="https://github.com/user-attachments/assets/40930afb-50c9-4a99-9fd2-5b630d39b8e3" width=600>
-
-층 정규화 수식은 다음과 같습니다.
-벡터 $h$의 평균 $\mu$와 분산 $\sigma^2$을 계산한 후, 각 차원 $h_k$의 값을 아래 수식으로 정규화합니다.
-
-여기서 $ϵ$ 은 분모가 0이 되는 것을 방지하기 위한 작은 값입니다.
-
-$$x̂ᵢₖ = (xᵢₖ - μᵢ) / √{(σᵢ² + ε)}$$
-
-정규화된 값에 학습 가능한 파라미터 $\gamma$와 $\beta$를 적용하여 최종 정규화 값을 계산합니다.
-
-$$y_k = \gamma \hat{h}_k + \beta$$
-
-$\gamma$와 $\beta$는 초기값으로 각각 1과 0을 설정하며 학습을 통해 최적화합니다.
-</details>
+    <details>
+      <summary>Layer Normalization</summary>
+    
+    LayerNorm은 활성화 배치의 각 항목의 평균과 분산을 계산하여 이를 사용해 데이터를 정규화하는 기법입니다.
+    
+    기존 Batch Normalization에서 Layer Normalization으로 변경하는데, Batch가 많아야지 적용이 잘되는 Batch Normalization인데, 자연어 데이터는 너무 많아 배치 크기를 줄이는 경우가 많습니다.
+    
+    그로 인해 배치 크기가 작아져 평균과 분산 추정이 부정확해져 성능이 저하됩니다.
+    
+    입력 데이터의 모양이 $[N,C,H,W]$일 때, 각 배치 내에서 $[C,H,W]$ 모양의 모든 요소에 대해 평균과 분산을 계산합니다.
+    
+    배치 크기에 의존하지 않아 배치 정규화에서 생기는 문제를 해결하며, 평균과 분산 값을 따로 저장할 필요가 없습니다.
+    
+    | **특징**           | **BatchNorm**                     | **LayerNorm**                 |
+    |--------------------|-----------------------------------|-------------------------------|
+    | **평균/분산 계산 기준** | 배치 단위                        | 각 샘플(feature 차원)         |
+    | **배치 크기 의존성** | 크면 안정적, 작으면 성능 저하      | 독립적, 소규모 배치에서도 안정 |
+    | **순차 데이터 처리**  | 비효율적                         | 적합                          |
+    | **추론 단계**       | 평균/분산 저장 필요              | 추가 저장 필요 없음            |
+    
+    <img src="https://github.com/user-attachments/assets/40930afb-50c9-4a99-9fd2-5b630d39b8e3" width=600>
+    
+    층 정규화 수식은 다음과 같습니다.
+    벡터 $h$의 평균 $\mu$와 분산 $\sigma^2$을 계산한 후, 각 차원 $h_k$의 값을 아래 수식으로 정규화합니다.
+    
+    여기서 $ϵ$ 은 분모가 0이 되는 것을 방지하기 위한 작은 값입니다.
+    
+    $$x̂ᵢₖ = (xᵢₖ - μᵢ) / √{(σᵢ² + ε)}$$
+    
+    정규화된 값에 학습 가능한 파라미터 $\gamma$와 $\beta$를 적용하여 최종 정규화 값을 계산합니다.
+    
+    $$y_k = \gamma \hat{h}_k + \beta$$
+    
+    $\gamma$와 $\beta$는 초기값으로 각각 1과 0을 설정하며 학습을 통해 최적화합니다.
+    </details>
 
   
 <img src="https://github.com/user-attachments/assets/c5c532c5-d5a8-4606-8af9-1fe51bb5080b" width=300>
