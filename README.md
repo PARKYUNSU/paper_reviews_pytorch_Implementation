@@ -123,15 +123,15 @@ ViT의 핵심부분인 Transformer Encoder 입니다. Transformer Encoder는 여
 - Self-Attention : 각 Patch가 다른 Patch들과 어떻게 관련이 있는지를 계산하는 메커니즘.
     <details>
      <summary>Self-Attention</summary>
-    1. Image Patch
+   1. Image Patch
     [CLS]token & Position Embeddings 과정이 끝난 $1D$ 시퀀스를 Transformer 모델에 입력으로 받습니다.
 
-    2. Q, K, V Vector
+   2. Q, K, V Vector
     각 Patch Embedding은 학습 가능한 가중치 행렬을 곱해 Query(Q), Key(K), Value(V) 벡터를 생성합니다. QKV 벡터를 활용하여 Self-Attention을 계산하는데, Q 벡터와 K 벡터와 내적을 통해 Attetnion Score를 계산하고, 이 Score는 $\sqrt{d_k}$(K 벡터 차원)에 대해 스켕일 후, Softmax 로 Attention Distribution을 생성합니다.
    
   $$Attention(Q,K,V) = Softmax\left(\frac{QK^T}{\sqrt{d_k}}\right)V$$
 
-  3. Multi-head Attention
+3. Multi-head Attention
   ViT는 여러개의 Attention Head를 병렬로 사용하는 Multi-heda Attention을 사용합니다. 기존 Self-Attention 연산을 여러개를 한번에 처리해서 패치간의 어텐션연산을 병렬처리로 수행하게 끔 합니다. 각 헤드는 서로 다른 부분들을 집중할 수 있어 다양한 관계를 학습할 수 있습니다.
     </details>
     
@@ -143,11 +143,12 @@ ViT의 핵심부분인 Transformer Encoder 입니다. Transformer Encoder는 여
      2. MLP 수식
      MLP는 두 개의 선형 계층을 포함하며, 각 계층 후에 활성화함수(GELU)가 적용됩니다.
 
-     $$z_1 = W_1x + b_1$$
+  $$z_1 = W_1x + b_1$$
 
   $$z_2 = GELU(z_1)$$
 
   $$z_3 = W_2z_2 + b_2$
+  
      3.MLP의 장점
      - 비선형성: 활성화 함수를 통해 비선형 변환을 추가함으로써 모델의 표현 능력을 향상시킵니다.
      - 연산 효율성: 선형 변환과 활성화 함수만을 사용하여 효율적인 계산을 할 수 있습니다.
