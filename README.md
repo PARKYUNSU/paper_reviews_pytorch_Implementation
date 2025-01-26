@@ -123,10 +123,10 @@ ViT의 핵심부분인 Transformer Encoder 입니다. Transformer Encoder는 여
 - Self-Attention : 각 Patch가 다른 Patch들과 어떻게 관련이 있는지를 계산하는 메커니즘.
     <details>
      <summary>Self-Attention</summary>
-   1. Image Patch
+1. Image Patch
     [CLS]token & Position Embeddings 과정이 끝난 $1D$ 시퀀스를 Transformer 모델에 입력으로 받습니다.
 
-   2. Q, K, V Vector
+2. Q, K, V Vector
     각 Patch Embedding은 학습 가능한 가중치 행렬을 곱해 Query(Q), Key(K), Value(V) 벡터를 생성합니다. QKV 벡터를 활용하여 Self-Attention을 계산하는데, Q 벡터와 K 벡터와 내적을 통해 Attetnion Score를 계산하고, 이 Score는 $\sqrt{d_k}$(K 벡터 차원)에 대해 스켕일 후, Softmax 로 Attention Distribution을 생성합니다.
    
   $$Attention(Q,K,V) = Softmax\left(\frac{QK^T}{\sqrt{d_k}}\right)V$$
