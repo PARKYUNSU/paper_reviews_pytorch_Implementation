@@ -124,15 +124,15 @@ ViT의 핵심부분인 Transformer Encoder 입니다. Transformer Encoder는 여
   <details>
   <summary>Self-Attention</summary>
   
-  1. Image Patch
+1. Image Patch
      [CLS]token & Position Embeddings 과정이 끝난 $1D$ 시퀀스를 Transformer 모델에 입력으로 받습니다.
 
-  2. Q, K, V Vector
+2. Q, K, V Vector
      각 Patch Embedding은 학습 가능한 가중치 행렬을 곱해 Query(Q), Key(K), Value(V) 벡터를 생성합니다. QKV 벡터를 활용하여 Self-Attention을 계산하는데, Q 벡터와 K 벡터와 내적을 통해 Attention Score를 계산하고, 이 Score는 $\sqrt{d_k}$ (K 벡터 차원)에 대해 스케일 후, Softmax로 Attention Distribution을 생성합니다.
      
      $$Attention(Q,K,V) = Softmax\left(\frac{QK^T}{\sqrt{d_k}}\right)V$$
 
-  3. Multi-head Attention
+3. Multi-head Attention
      ViT는 여러 개의 Attention Head를 병렬로 사용하는 Multi-head Attention을 사용합니다. 기존 Self-Attention 연산을 여러 개를 한 번에 처리해서 패치 간의 어텐션 연산을 병렬 처리로 수행하게끔 합니다. 각 헤드는 서로 다른 부분들을 집중할 수 있어 다양한 관계를 학습할 수 있습니다.
   </details>
    
@@ -140,11 +140,11 @@ ViT의 핵심부분인 Transformer Encoder 입니다. Transformer Encoder는 여
 - MLP : Self-Attention 계산 후에 비선형 변환을 수행하는 층으로, 모델의 표현력을 높입니다.
     <details>
       <summary>MLP</summary>
-  1. MLP
+1. MLP
      
      MLP는 Transformer 내에서 Self-Attention으로 얻은 패치들 간의 관계 정보를 비선형적으로 변환하는 역할을 합니다. MLP가 포함된 Block은 정보 간의 관계를 확장 및 더 정교한 표현을 학습하는데 도움을 줍니다.
 
-  2. MLP 수식
+2. MLP 수식
      
      MLP는 두 개의 선형 계층을 포함하며, 각 계층 후에 활성화함수(GELU)가 적용됩니다.
 
@@ -154,7 +154,7 @@ ViT의 핵심부분인 Transformer Encoder 입니다. Transformer Encoder는 여
 
   $$z_3 = W_2z_2 + b_2$
   
-  3. MLP의 장점
+3. MLP의 장점
   
      - 비선형성: 활성화 함수를 통해 비선형 변환을 추가함으로써 모델의 표현 능력을 향상시킵니다.
      - 연산 효율성: 선형 변환과 활성화 함수만을 사용하여 효율적인 계산을 할 수 있습니다.
