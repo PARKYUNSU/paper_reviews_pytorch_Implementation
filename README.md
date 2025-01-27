@@ -117,6 +117,11 @@ ViT에서는 **2D Positional Embedding** 대신 **1D Positional Embedding**을 �
 
 **Positional Embedding**은 **[CLS] token**과 결합되어 최종적으로 입력 시퀀스를 형성하고, 이를 Transformer에 입력하여 이미지를 처리합니다. 이를 통해 모델은 각 패치의 상대적인 위치를 학습할 수 있게 되어 Img Classification 작업에 도움을 줍니다.
 
+
+## 3.2.3. Process
+<img src="https://github.com/user-attachments/assets/3879a73e-a89d-49c3-b569-353e19e071ff" width=1100>
+
+
 # 3.3. Transformer Encoder
 ViT의 핵심부분인 Transformer Encoder 입니다. Transformer Encoder는 여러 개의 Self-Attentino 및 MLP (FFNN) Blcok이 번갈아 쌓인 구조로 이루어져 있습니다.
 
@@ -204,5 +209,42 @@ $$y_k = \gamma \hat{h}_k + \beta$$
 $\gamma$와 $\beta$는 초기값으로 각각 1과 0을 설정하며 학습을 통해 최적화합니다.
 </details>
 
-  
 <img src="https://github.com/user-attachments/assets/c5c532c5-d5a8-4606-8af9-1fe51bb5080b" width=300>
+
+## 3.3.1 수식
+
+1. Patch Embedding & [CLS]token
+
+$$z_0 = [x_{\text{class}}; x_1^{pE}; x_2^{pE}; \cdots; x_n^{pE}] + E_{\text{pos}}, \quad E \in \mathbb{R}^{(P^2 \cdot C) \times D}, \quad E_{\text{pos}} \in \mathbb{R}^{(N+1) \times D}$$
+
+$Where$
+- $x_{\text{class}}$ : [CLS]token
+- $x_1^{pE}; x_2^{pE}; \cdots; x_n^{pE}$ : 각 img Patch Embedding
+- $E_{\text{pos}}$ : Position Embedding
+- $D$ : Transformer hidden dim
+- $P^2 \cdot C$ : 각 Patch의 크기 ($P \times P$)와 채널 수($C$)를 곱한 값
+- $N$ : Patch 수
+  
+2. Self-Attention (MSA)
+
+$$z_{0}^{\prime} = \text{MSA}(LN(z_{l-1})) + z_{l-1}, \quad l=1 \cdots L$$
+
+$Where$
+- $\text{MSA}$ : Multi-Head Self-Attention
+- $\text{LN}$ : Layer Normalization
+- $z_{l-1}$ : 이전 레이어의 출력
+- $L$ : Transformer의 총 레이어 수
+
+3. MLP
+
+$$z_l = \text{MLP}(LN(z_{l}^{\prime})) + z_{l}^{\prime}, \quad l=1 \cdots L$$
+
+$Where$
+- $\text{MLP}$ : Mulilayer Perception (Feedforward Neural Netwokr)로 비선형을 적용해서 모델의 표현 능력을 높임
+- $\text{LN}$ : Layer Normalization
+
+4. 최종 출력
+
+$$y=LN(z_{0}^L)$$
+
+Transformer 최종 출력
