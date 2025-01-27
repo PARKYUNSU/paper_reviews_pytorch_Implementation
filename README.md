@@ -229,6 +229,10 @@ $Where$
 
 $$z_{0}^{\prime} = \text{MSA}(LN(z_{l-1})) + z_{l-1}, \quad l=1 \cdots L$$
 
+$$[q,k,v]=zU_{qkv} \quad U_{qkv} ∈ R^{D \times 3D_{h}} $$
+$$A = softmax(qK^T/ \sqrt{D_h}) \cdots A ∈ R^{N \times N}
+$$SA(z) = Av$$
+
 $Where$
 - $\text{MSA}$ : Multi-Head Self-Attention
 - $\text{LN}$ : Layer Normalization
