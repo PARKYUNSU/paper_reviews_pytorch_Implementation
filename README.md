@@ -245,6 +245,6 @@ $Where$
 
 4. 최종 출력
 
-$$y=LN(z_{0}^L)$$
-
 Transformer 최종 출력
+
+$$y=LN(z_{0}^L)$$
