@@ -253,7 +253,6 @@ Transformer 최종 출력
 
 $$y=LN(z_{0}^L)$$
 
-
 ## 3.3.2 Process
 ![image](https://github.com/user-attachments/assets/3a860057-2fef-425e-8959-56ccc23a1bfc)
 
@@ -264,5 +263,29 @@ ViT의 마지막 단계로 Classification Head 입니다. 이 단계는 [CLS]tok
 ![image](https://github.com/user-attachments/assets/3f6181ff-bc6d-450a-8414-14abc48ede1b)
 
 # 4. Hybrid Architecture
+## 4.1 Idea of Hybrid Architecture
+ViT에는 Img Patch Embedding 대신에, CNN feature map을 Input sequence로 사용할 수 있습니다.
+
+## 4.2 Method
+CNN
+- CNN (ResNet50)을 사용하여 이미지의 Feature map을 추출
+- Feature Map을 Transformer Input Sequence 로 변환
+   Patch 공간 크기가 1X1 인 경우, Feature Map 공간의 차원을 단순하게 Flatten 해서 Trnasformer 차원으로 투영
+
+Projection Matrix ($E$)
+- CNN Feature map에서 추출한 각 Patch에 대해, 학습 가능한 선형 투영을 적용하여 Transformer의 숨겨진 상태 크기 ($D$)로 매핑
+
+Positional Embedding & [CLS]token
+- 기존 Posiional Embedding과 [CLS]token을 적용
+
+## 4.3 Advatage of Hybrid Architecture
+
+- 국소적 특징 추출: CNN을 사용하여 이미지의 국소적인 특징을 먼저 추출함으로써, ViT가 전역적인 관계를 학습하기 전에 유용한 특성을 얻을 수 있습니다.
+  
+- 효율성: CNN을 통해 패치 임베딩을 수행하면, 이미지의 공간적 정보를 더 효율적으로 활용할 수 있습니다.
+
+
+![image](https://github.com/user-attachments/assets/35aa46c6-cbf2-4a9e-bf5f-c53c904bddbe)
+
 
 # 5. Inductive bias
