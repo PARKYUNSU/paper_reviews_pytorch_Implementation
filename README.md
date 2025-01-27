@@ -285,7 +285,7 @@ Positional Embedding & [CLS]token
 - 효율성: CNN을 통해 패치 임베딩을 수행하면, 이미지의 공간적 정보를 더 효율적으로 활용할 수 있습니다.
 
 
-![image](https://github.com/user-attachments/assets/35aa46c6-cbf2-4a9e-bf5f-c53c904bddbe)
+<img src="https://github.com/user-attachments/assets/35aa46c6-cbf2-4a9e-bf5f-c53c904bddbe" width=400>
 
 
 # 5. Inductive bias
