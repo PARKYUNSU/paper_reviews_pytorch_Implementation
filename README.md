@@ -220,7 +220,7 @@ $$z_0 = [x_{\text{class}}; x_1^{pE}; x_2^{pE}; \cdots; x_n^{pE}] + E_{\text{pos}
 $Where$
 - $x_{\text{class}}$ : [CLS]token
 - $x_1^{pE}; x_2^{pE}; \cdots; x_n^{pE}$ : 각 img Patch Embedding
-- $E_{\text{pos}}$ : Position Embedding
+- $E_{\text{pos}}$ : Positional Embedding
 - $D$ : Transformer hidden dim
 - $P^2 \cdot C$ : 각 Patch의 크기 ($P \times P$)와 채널 수($C$)를 곱한 값
 - $N$ : Patch 수
