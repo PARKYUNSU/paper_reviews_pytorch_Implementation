@@ -229,15 +229,15 @@ $Where$
 
 $$z_{0}^{\prime} = \text{MSA}(LN(z_{l-1})) + z_{l-1}, \quad l=1 \cdots L$$
 
-$$[q,k,v]=zU_{qkv} \quad U_{qkv} ∈ R^{D \times 3D_{h}} $$
-$$A = softmax(qK^T/ \sqrt{D_h}) \cdots A ∈ R^{N \times N}
-$$SA(z) = Av$$
-
 $Where$
 - $\text{MSA}$ : Multi-Head Self-Attention
 - $\text{LN}$ : Layer Normalization
 - $z_{l-1}$ : 이전 레이어의 출력
 - $L$ : Transformer의 총 레이어 수
+
+$$[q,k,v]=zU_{qkv} \quad U_{qkv} ∈ R^{D \times 3D_{h}} $$
+$$A = softmax(qK^T/ \sqrt{D_h}) \quad A ∈ R^{N \times N}$$
+$$SA(z) = Av$$
 
 3. MLP
 
@@ -252,3 +252,17 @@ $Where$
 Transformer 최종 출력
 
 $$y=LN(z_{0}^L)$$
+
+
+## 3.3.2 Process
+![image](https://github.com/user-attachments/assets/3a860057-2fef-425e-8959-56ccc23a1bfc)
+
+## 3.4 MLP Head (Classification Head)
+
+ViT의 마지막 단계로 Classification Head 입니다. 이 단계는 [CLS]token을 기반으로 최종 이미지를 분류하는 역할을 합니다. Classification Head는 Linear 계층으로 구성되어 있으며, 이 계층은 Transformer 출력에서 [CLS]token에 해당하는 값을 사용하여 최종 Class 확률을 예측합니다.
+
+![image](https://github.com/user-attachments/assets/3f6181ff-bc6d-450a-8414-14abc48ede1b)
+
+# 4. Hybrid Architecture
+
+# 5. Inductive bias
