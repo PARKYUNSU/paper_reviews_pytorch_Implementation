@@ -374,4 +374,4 @@ ViT는 이미지 데이터를 작은 Patch들로 나눠 각 Patch를 1D 시퀀�
 
 그러나 ViT는 pre-training 및 fine-tuning 방식을 활용할 수 있습니다.
 
-예를 들어, ViT는 ImageNet-21k와 같은 대규모 데이터셋에서 사전 훈련을 수행한 후, 작은 데이터셋으로 미세 조정을 할 수 있습니다. 이 때, ViT는 자신의 inductive bias를 사용하여 작은 데이터셋에 대해 잘 일반화할 수 있습니다.
+ViT는 ImageNet-21k와 같은 대규모 데이터셋에서 사전 훈련을 수행한 후, 작은 데이터셋으로 미세 조정을 할 수 있습니다. 이 때, ViT는 자신의 inductive bias를 사용하여 작은 데이터셋에 대해 잘 일반화할 수 있습니다.
