@@ -1,8 +1,5 @@
 # SSD
  
-
-
-
 **“Single Shot MultiBox Detector” -2016**
 
 Wei Liu, Dragomir Anguelov, Dumitru Erhan, Christian Szegedy, Scott Reed, Cheng-Yang Fu, Alexander C. Berg
@@ -11,7 +8,12 @@ UNC Chapel Hill, Zoox Inc, Google Inc, University of Michigan
 
 Link to Paper: https://arxiv.org/pdf/1512.02325
 
-----
+---
+## 논문 리뷰 영상
+
+[![YouTube Video](https://img.youtube.com/vi/IEJHO0TjDXA/0.jpg)](https://www.youtube.com/watch?v=IEJHO0TjDXA)
+
+---
 Table of Contents
 
 1. Introduction
