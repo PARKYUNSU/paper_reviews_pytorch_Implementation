@@ -1,7 +1,7 @@
 # SE-Net
 ILSVRC 2017 ImageNet 분류 대회에서 1위
 
-SNet(Squeeze and Excitation Networks)
+SE-Net(Squeeze and Excitation Networks)
 
 — Jie Hu, Li Shen, Samuel Albanie, Gang Sun, Enhua Wu
 
