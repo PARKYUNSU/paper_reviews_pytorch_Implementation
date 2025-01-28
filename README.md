@@ -12,6 +12,10 @@
 
 [![YouTube Video](https://img.youtube.com/vi/Dc4XDTNcqHg/0.jpg)](https://www.youtube.com/watch?v=Dc4XDTNcqHg)
 
+### 추가 보충 영상
+
+[![YouTube Video](https://img.youtube.com/vi/_je0W6esIWE/0.jpg)](https://www.youtube.com/watch?v=_je0W6esIWE)
+
 ---
 
 ## 1. Introduction
