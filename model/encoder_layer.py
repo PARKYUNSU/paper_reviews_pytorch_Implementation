@@ -11,8 +11,8 @@ class Encoder_Layer(nn.Module):
         self.self_attention = Multi_Head_Attention(d_model, num_heads)
         # Position-wise Feed Foward Network
         self.ffnn = PositionwiseFF(d_model, d_ff, dropout)
-        self.norm1 = nn.LayerNorm(d_model) # layer Normalization
-        self.norm2 = nn.LayerNorm(d_model) # layer Normalization
+        self.norm1 = nn.LayerNorm(d_model, eps=1e-6) # layer Normalization
+        self.norm2 = nn.LayerNorm(d_model, eps=1e-6) # layer Normalization
         self.dropout1 = nn.Dropout(dropout)
         self.dropout2 = nn.Dropout(dropout)
 
