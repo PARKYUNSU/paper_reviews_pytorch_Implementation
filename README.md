@@ -1,17 +1,18 @@
-# Resnet
+# ResNet
 
-Link to Paper:
-
-**“Deep Residual Learning for Image Recognition”** - 2015
-
-— Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun
-
-Microsoft Research
-
-https://arxiv.org/pdf/1512.03385v1
+## Link to Paper:
+**"Deep Residual Learning for Image Recognition"** - 2015  
+— Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun  
+Microsoft Research  
+[Read the Paper](https://arxiv.org/pdf/1512.03385v1)
 
 
---------
+## 논문 리뷰 영상
+
+[![YouTube Video](https://img.youtube.com/vi/879IWeJWFF4/0.jpg)](https://www.youtube.com/watch?v=879IWeJWFF4)
+
+---
+
 Table of Contents
 
 1. Introduction
@@ -24,8 +25,6 @@ Table of Contents
 ---
 
 ## **1. Introduction**
-
-
 
 <img src="https://github.com/user-attachments/assets/2573acc9-8722-46db-86fb-88a49c5c09aa" width="700" height="400">
 
