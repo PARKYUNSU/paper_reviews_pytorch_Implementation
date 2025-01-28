@@ -21,9 +21,9 @@ Self-Attention 기반 아키텍처를 활용한 Transformer는 NLP 분야에서 
 Vision Transformer(ViT)는 규모가 큰 데이터셋(ex, JFT-300M, ImageNet-21k)으로 학습하면 ResNet 보다 더 뛰어난 성능을 발휘할 수 있습니다. 이 말은 위에서 언급한 ViT가 CNN과 다르게 모델의 규모가 커지고 데이터셋 크기가 증가해도 성능 포화 되지 않고 지속적으로 향상되는 특징을 가지기 때문입니다.
 
 
-# Related Work
+# 2. Related Work
 
-## 2.1. 기존 Transformer의 이미지 처리 접근법
+### 2.1. 기존 Transformer의 이미지 처리 접근법
 
 이전에는 이미지 처리에 Transformer를 적용하는 다양한 방법들이 시도되었습니다.
 
@@ -38,7 +38,7 @@ Vision Transformer(ViT)는 규모가 큰 데이터셋(ex, JFT-300M, ImageNet-21k
 
 이런 방식은 하드웨어 가속기에서 연산을 효율적으로 수행하기에는 다소 번거로운 작업이며, 더 나은 성능을 위해 여러가지 최적화가 필요했습니다.
 
-## 2.2. ViT 유사 접근법
+### 2.2. ViT 유사 접근법
 
 1. 이미지를 2X2의 패치로 쪼개서 Self-Attention을 적용
    - 이 방식은 작은 패치 크기를 사용하여 해상도가 작은 이미지에만 적용 가능
@@ -46,7 +46,7 @@ Vision Transformer(ViT)는 규모가 큰 데이터셋(ex, JFT-300M, ImageNet-21k
 2. 이미지 해상도 및 새강고오간 축소후 픽셀단위로 Transformer 적용
    - iGPT(Image GPT) 모델로 비지도 학습 방식으로 훈련되며, ImageNet에서 최대 72%의 정확도를 달성
 
-## 2.3. Vision Transformer
+### 2.3. Vision Transformer
 
 ViT는 기존의 Transformer 모델들이 가진 한계를 극복하기 위해, 이미지 데이터를 16X16, 32X32와 같은 상대적으로 큰 패치 크기로 분할하여 Self-Attention을 적용합니다. 그로인해 이미지의 각 부분에 대한 정보를 보다 효과적으로 캡쳐할 수 있도록 도와주며, 높은 해상도의 이미지 처리를 가능하게 해줍니다.
 
@@ -56,7 +56,7 @@ ViT는 기존의 Transformer 모델들이 가진 한계를 극복하기 위해, 
 
 <img src="https://github.com/user-attachments/assets/1db9cbe3-324c-4dfd-ade8-4011bee04c7e" width=800>
 
-## 3.1. Patch Embedding
+### 3.1. Patch Embedding
 Transformer는 1D 시퀀스를 입력으로 받기 때문에, ViT에서는 이미지를 $$2D$$ 형태에서 $$1D$$ 시퀀스로 변환해야합니다. 이미지는 원래 $$x \in \mathbb{R}^{H \times W \times C}$$ 형태에서, $$P \times P$$ 크기의 작은 패치들로 나눕니다.
 
 
@@ -93,8 +93,8 @@ Input Img 224를 크기가 16인 패치로 나누면 가로 세로 14개로 196�
 
 $16 \times 16 \times 3 \times 14 \times 14 = 150,528$
 
-## 3.2. [CLS]token & Position Embeddings
-## 3.2.1. [CLS]token
+### 3.2. [CLS]token & Position Embeddings
+### 3.2.1. [CLS]token
 ViT 모델은 Image Classification을 위해 [CLS] = Classification 토큰을 추가합니다. 이 토큰은 앞서 만든 Patch Embedding 앞에 위치하며, Transformer에서 출력할때 최종 이미지를 결정하는 정보를 추출합니다.
 
 <img src="https://github.com/user-attachments/assets/2cca2a31-ec89-4e78-ab7a-b4e8cad93604" width=500>
@@ -104,7 +104,7 @@ ViT 모델은 Image Classification을 위해 [CLS] = Classification 토큰을 �
 
 이 [CLS]token은 Patch Embedding 맨 앞에 추가되며, 그림처럼 패치 수가 196개라면, Transformer 입력 시퀀스의 크기는 $197 \times 768$ (196개의 패치 + 1개 class token)
 
-## 3.2.2. Positinoal Embedding
+### 3.2.2. Positinoal Embedding
 Transformer 모델은 기본적으로 입력 시퀀스의 순서에 대한 정보를 스스로 처리할 수 없습니다. 그래서 **Positional Embedding**을 사용하여 입력 시퀀스에 각 위치 정보를 부여합니다. 이 정보는 모델이 시퀀스 내의 요소들 간의 상대적인 위치 관계를 학습하는 데 도움을 줍니다.
 
 <img src="https://github.com/user-attachments/assets/270d4bd2-a55c-45fd-88e9-6c4d19339f55" width=700>
@@ -118,11 +118,11 @@ ViT에서는 **2D Positional Embedding** 대신 **1D Positional Embedding**을 �
 **Positional Embedding**은 **[CLS] token**과 결합되어 최종적으로 입력 시퀀스를 형성하고, 이를 Transformer에 입력하여 이미지를 처리합니다. 이를 통해 모델은 각 패치의 상대적인 위치를 학습할 수 있게 되어 Img Classification 작업에 도움을 줍니다.
 
 
-## 3.2.3. Process
+### 3.2.3. Process
 <img src="https://github.com/user-attachments/assets/3879a73e-a89d-49c3-b569-353e19e071ff" width=1100>
 
 
-# 3.3. Transformer Encoder
+### 3.3. Transformer Encoder
 ViT의 핵심부분인 Transformer Encoder 입니다. Transformer Encoder는 여러 개의 Self-Attentino 및 MLP (FFNN) Blcok이 번갈아 쌓인 구조로 이루어져 있습니다.
 
 - Self-Attention : 각 Patch가 다른 Patch들과 어떻게 관련이 있는지를 계산하는 메커니즘
@@ -211,7 +211,7 @@ $\gamma$와 $\beta$는 초기값으로 각각 1과 0을 설정하며 학습을 �
 
 <img src="https://github.com/user-attachments/assets/c5c532c5-d5a8-4606-8af9-1fe51bb5080b" width=300>
 
-## 3.3.1 수식
+### 3.3.1 수식
 
 1. Patch Embedding & [CLS]token
 
@@ -253,10 +253,10 @@ Transformer 최종 출력
 
 $$y=LN(z_{0}^L)$$
 
-## 3.3.2 Process
+### 3.3.2 Process
 <img src="https://github.com/user-attachments/assets/3a860057-2fef-425e-8959-56ccc23a1bfc" width=700>
 
-## 3.4 MLP Head (Classification Head)
+### 3.4 MLP Head (Classification Head)
 
 ViT의 마지막 단계로 Classification Head 입니다. 이 단계는 [CLS]token을 기반으로 최종 이미지를 분류하는 역할을 합니다. Classification Head는 Linear 계층으로 구성되어 있으며, 이 계층은 Transformer 출력에서 [CLS]token에 해당하는 값을 사용하여 최종 Class 확률을 예측합니다.
 
@@ -264,11 +264,11 @@ ViT의 마지막 단계로 Classification Head 입니다. 이 단계는 [CLS]tok
 
 # 4. Hybrid Architecture
 
-## 4.1 Idea of Hybrid Architecture
+### 4.1 Idea of Hybrid Architecture
 
 ViT에는 Img Patch Embedding 대신에, CNN feature map을 Input sequence로 사용할 수 있습니다.
 
-## 4.2 Method
+### 4.2 Method
 
 CNN
 - CNN (ResNet50)을 사용하여 이미지의 Feature map을 추출
@@ -281,19 +281,17 @@ Projection Matrix ($E$)
 Positional Embedding & [CLS]token
 - 기존 Posiional Embedding과 [CLS]token을 적용
 
-## 4.3 Advatage of Hybrid Architecture
+### 4.3 Advatage of Hybrid Architecture
 
 - 국소적 특징 추출: CNN을 사용하여 이미지의 국소적인 특징을 먼저 추출함으로써, ViT가 전역적인 관계를 학습하기 전에 유용한 특성을 얻을 수 있습니다.
   
 - 효율성: CNN을 통해 패치 임베딩을 수행하면, 이미지의 공간적 정보를 더 효율적으로 활용할 수 있습니다.
 
-
 <img src="https://github.com/user-attachments/assets/35aa46c6-cbf2-4a9e-bf5f-c53c904bddbe" width=300>
-
 
 # 5. Inductive bias
 
-## 5.1. Inductive bias in Machine Learning
+### 5.1. Inductive bias in Machine Learning
 <details>
   <summary>Inductive Bias in Machine Learning</summary>
 
@@ -357,8 +355,7 @@ Inductive Bias는 머신러닝에서 일반화를 위한 중요한 요소입니�
 즉, Inductive Bias는 모델이 데이터에 잘 맞추면서도 새로운 데이터에 대해서도 적절히 예측할 수 있도록 도와줍니다.
 </details>
 
-
-## 5.2. Inductive bias in ViT
+### 5.2. Inductive bias in ViT
 기존에 이미지 관련 문제를 풀어야 할때 CNN 모델을 사용했었습니다. CNN은 이미지의 국소적인 부분을 동시에 바라보게 만들어 Inductive Bais를 삽입해서 사용했습니다.
 
 - Locality
