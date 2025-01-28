@@ -7,7 +7,13 @@ Link to Paper:
 
 — Mark Sandler, Andrew Howard, Menglong Zhu, Andrey Zhmoginov, Liang-Chieh Chen - Google Inc.
 
-https://arxiv.org/pdf/1801.04381
+[Read the Paper](https://arxiv.org/pdf/1801.04381)
+
+
+---
+## 논문 리뷰 영상
+
+[![YouTube Video](https://img.youtube.com/vi/R1rK-8bfeLk/0.jpg)](https://www.youtube.com/watch?v=R1rK-8bfeLk)
 
 ---
 
