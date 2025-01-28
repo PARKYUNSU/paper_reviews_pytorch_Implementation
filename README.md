@@ -7,7 +7,12 @@ Link to Paper:
 
 — Liang-Chieh Chen, George Papandreou, Iasonas Kokkinos, Kevin Murphy, Alan L. Yuille
 
-https://arxiv.org/pdf/1412.7062
+[Read the Paper](https://arxiv.org/pdf/1412.7062)
+
+---
+## 논문 리뷰 영상
+
+[![YouTube Video](https://img.youtube.com/vi/_Gw71MB4rj0/0.jpg)](https://www.youtube.com/watch?v=_Gw71MB4rj0)
 
 ---
 Table of Contents
