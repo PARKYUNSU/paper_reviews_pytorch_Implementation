@@ -4,7 +4,13 @@
 
 -Xinlei Chen, Kaiming He (Facebook AI Research)
 
-https://arxiv.org/pdf/2011.10566
+[Read the Paper](https://arxiv.org/pdf/2011.10566)
+
+---
+
+## 논문 리뷰 영상
+
+[![YouTube Video](https://img.youtube.com/vi/Dc4XDTNcqHg/0.jpg)](https://www.youtube.com/watch?v=Dc4XDTNcqHg)
 
 ---
 
