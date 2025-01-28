@@ -4,7 +4,12 @@
 
 -Sepp Hochreiter, Jürgen Schmidhuber
 
-https://www.bioinf.jku.at/publications/older/2604.pdf
+[Read the Paper](https://www.bioinf.jku.at/publications/older/2604.pdf)
+
+---
+## 논문 리뷰 영상
+
+[![YouTube Video](https://img.youtube.com/vi/pBPE-_HSRpA/0.jpg)](https://www.youtube.com/watch?v=pBPE-_HSRpA)
 
 ---
 
