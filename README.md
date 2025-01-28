@@ -7,7 +7,12 @@
 -Liang-Chieh Chen, Yukun Zhu, George Papandreou, Florian Schroff, and
 Hartwig Adam
 
-https://arxiv.org/pdf/1802.02611
+[Read the Paper](https://arxiv.org/pdf/1802.02611)
+
+---
+## 논문 리뷰 영상
+
+[![YouTube Video](https://img.youtube.com/vi/zSiKMSNBJu0/0.jpg)](https://www.youtube.com/watch?v=zSiKMSNBJu0)
 
 ---
 
