@@ -1,14 +1,17 @@
 # Wide Resnet
 
----
-
 Link to Paper:
 
 **“Wide Residual Networks”** - 2016
 
 — Sergey Zagoruyko, Nikos Komodakis
 
-https://arxiv.org/pdf/1605.07146
+[Read the Paper](https://arxiv.org/pdf/1605.07146)
+
+---
+## 논문 리뷰 영상
+
+[![YouTube Video](https://img.youtube.com/vi/wbe7Bekijr8/0.jpg)](https://www.youtube.com/watch?v=wbe7Bekijr8)
 
 ---
 
