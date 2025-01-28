@@ -4,8 +4,13 @@
 
 -Kai Han, Yunhe Wang, Qi Tian, Jianyuan Guo, Chunjing Xu, Chang Xu
 
-https://arxiv.org/pdf/1911.11907
+[Read the Paper](https://arxiv.org/pdf/1911.11907)
 ___
+## 논문 리뷰 영상
+
+[![YouTube Video](https://img.youtube.com/vi/zjJfWxQ06Lg/0.jpg)](https://www.youtube.com/watch?v=zjJfWxQ06Lg)
+
+---
 
 ## 1. Introduction
 
