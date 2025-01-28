@@ -6,6 +6,11 @@
 Link : https://drive.google.com/file/d/1j2TDMbTNzmsutQ0idPDGSN9ld1R0v_sN/view?usp=sharing
 
 ---
+## 논문 리뷰 영상
+
+[![YouTube Video](https://img.youtube.com/vi/9SSoXR-P-98/0.jpg)](https://www.youtube.com/watch?v=9SSoXR-P-98)
+
+---
 
 
 ## 1. MobilnetV2 Backbone
