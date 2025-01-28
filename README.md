@@ -254,19 +254,22 @@ Transformer 최종 출력
 $$y=LN(z_{0}^L)$$
 
 ## 3.3.2 Process
-![image](https://github.com/user-attachments/assets/3a860057-2fef-425e-8959-56ccc23a1bfc)
+<img src="https://github.com/user-attachments/assets/3a860057-2fef-425e-8959-56ccc23a1bfc" width=700>
 
 ## 3.4 MLP Head (Classification Head)
 
 ViT의 마지막 단계로 Classification Head 입니다. 이 단계는 [CLS]token을 기반으로 최종 이미지를 분류하는 역할을 합니다. Classification Head는 Linear 계층으로 구성되어 있으며, 이 계층은 Transformer 출력에서 [CLS]token에 해당하는 값을 사용하여 최종 Class 확률을 예측합니다.
 
-![image](https://github.com/user-attachments/assets/3f6181ff-bc6d-450a-8414-14abc48ede1b)
+<img src="https://github.com/user-attachments/assets/3f6181ff-bc6d-450a-8414-14abc48ede1b" width=900>
 
 # 4. Hybrid Architecture
+
 ## 4.1 Idea of Hybrid Architecture
+
 ViT에는 Img Patch Embedding 대신에, CNN feature map을 Input sequence로 사용할 수 있습니다.
 
 ## 4.2 Method
+
 CNN
 - CNN (ResNet50)을 사용하여 이미지의 Feature map을 추출
 - Feature Map을 Transformer Input Sequence 로 변환
@@ -285,7 +288,93 @@ Positional Embedding & [CLS]token
 - 효율성: CNN을 통해 패치 임베딩을 수행하면, 이미지의 공간적 정보를 더 효율적으로 활용할 수 있습니다.
 
 
-<img src="https://github.com/user-attachments/assets/35aa46c6-cbf2-4a9e-bf5f-c53c904bddbe" width=400>
+<img src="https://github.com/user-attachments/assets/35aa46c6-cbf2-4a9e-bf5f-c53c904bddbe" width=300>
 
 
 # 5. Inductive bias
+
+## 5.1. Inductive bias in Machine Learning
+<details>
+  <summary>Inductive Bias in Machine Learning</summary>
+
+ ### 1. Inductive Bias
+
+Inductive Bias는 머신러닝 모델이 훈련 데이터에 기반해 새로운 데이터를 예측할 때 사용하는 가정이나 선호를 의미합니다. 이는 모델이 훈련 데이터를 기반으로 일반화(generalization) 할 수 있도록 돕는 중요한 개념입니다.
+ 
+**일반화**란, 모델이 훈련 데이터 외에 새로운 데이터에 대해서도 정확히 예측을 할 수 있도록 만드는 과정입니다.
+
+### 2. Idea of Inductive Bias
+
+Inductive Bias는 모델이 훈련 데이터를 넘어서 예측할 수 있도록 유도하는 가정입니다.
+
+예를들어, 훈련 데이터를 기반으로 선형관계가 있을 것이라고 가정하고 이 가정에 맞춰 예측을 수행하는 것이 Inductive Bias 입니다.
+
+만약 Inductive Bias가 없다면, 모델은 훈련 데이터만을 완벽하게 학습하고 일반화할 수 없게 됩니다. 이렇게 되면 모델은 훈련 데이터에서만 잘 작동하고, 실제 예측 작업에서는 성능이 떨어지게 됩니다.
+
+### 3. Types of Inductive Bias
+
+### 3.1. Inductive Bias
+
+각각의 알고리즘은 특정한 inductive bias를 가지고 있으며, 이 bias는 모델의 예측 성능에 중요한 영향을 미칩니다.
+
+- Language Bias
+
+  선형 회귀 모델은 데이터가 선형 관계를 따른다고 가정하여 그에 맞는 가설만을 고려합니다.
+
+- Search Bias
+
+  가능한 가설 중에서 어떤 가설을 선택할지에 대한 선호입니다. 예를 들어, Occam's Razor 원칙에 따라 단순한 모델을 선호하는 경향이 있습니다.
+
+- Algorithm-Specific Biases
+
+  Linear Models: 데이터가 선형 관계를 따른다고 가정합니다.
+
+  k-Nearest Neighbors (k-NN): 유사한 데이터 포인트들이 서로 가까이에 위치한다고 가정합니다.
+
+  Decision Trees: 데이터가 분할 가능한 특성에 따라 나뉜다고 가정합니다.
+
+### 3.2. Inductive Bias & Machine Learning
+
+다양한 머신러닝 모델은 각기 다른 inductive bias를 가지고 있습니다.
+
+- Bayesian Models
+
+  사전 지식을 이용하여 예측할 때 사용하는 inductive bias를 가지고 있습니다. 모델은 새 데이터를 받을 때마다 이 사전 지식을 업데이트하여 예측합니다.
+  
+- k-Nearest Neighbors (k-NN)
+
+  유사한 데이터 포인트들이 가까이에 존재한다고 가정합니다. 예를 들어, 이미지 분류에서 비슷한 이미지는 서로 가까운 거리 내에 있다고 보고, k-NN이 이를 찾아 예측합니다.
+
+- Linear Regression
+
+  입력 변수와 출력 간의 선형 관계를 가정합니다. 이 inductive bias는 데이터가 선형적일 때 효과적이지만, 비선형 관계를 포착하는 데에는 한계가 있을 수 있습니다.
+
+### 4. Inductive Bias의 중요성
+Inductive Bias는 머신러닝에서 일반화를 위한 중요한 요소입니다.
+
+모델이 훈련 데이터에서만 잘 수행되면 **과적합(overfitting)** 이 발생하고, 반대로 너무 일반화된 모델은 **과소적합(underfitting)** 이 발생할 수 있습니다.
+
+즉, Inductive Bias는 모델이 데이터에 잘 맞추면서도 새로운 데이터에 대해서도 적절히 예측할 수 있도록 도와줍니다.
+</details>
+
+
+## 5.2. Inductive bias in ViT
+기존에 이미지 관련 문제를 풀어야 할때 CNN 모델을 사용했었습니다. CNN은 이미지의 국소적인 부분을 동시에 바라보게 만들어 Inductive Bais를 삽입해서 사용했습니다.
+
+- Locality
+- Two-Dimensional Neighborhood Structure (2차원적으로 이웃하는 구조) 
+- Translation Equivariance
+
+CNN과 다르게 ViT는 이러한 Inductive bias가 부족한 특징을 가지고 있습니다.
+
+### 5.2.1. Self-Attention의 Inductive bias
+
+ViT는 이미지 데이터를 작은 Patch들로 나눠ㅓ 각 Patch를 1D 시퀀스로 변환하고, 이를 Trnasformer 모델 입력으로 사용합니다. 이 과정에서 Self-Attention은 각 Patch간의 관계를 학습합니다.
+
+이 과정을 통해서 Global 관계를 모델링하는데 집중하며, 이미지의 Spatial Structure에 대한 Local 적인 관계를 모델링하는 데는 강하지 않습니다.
+
+이는 ViT에 **locality**와 **Translation Equivariance**을 자연스럽게 내장하지 않으므로, 더 많은 데이터와 더 큰 모델을 사용해야 성능이 향상됩니다. 대규모 데이터셋에서 ViT는 더 나은 성능을 발휘하지만, 상대적으로 작은 데이터셋에서는 그 성능이 CNN보다 떨어질 수 있습니다.
+
+그러나 ViT는 pre-training 및 fine-tuning 방식을 활용할 수 있습니다.
+
+예를 들어, ViT는 ImageNet-21k와 같은 대규모 데이터셋에서 사전 훈련을 수행한 후, 작은 데이터셋으로 미세 조정을 할 수 있습니다. 이 때, ViT는 자신의 inductive bias를 사용하여 작은 데이터셋에 대해 잘 일반화할 수 있습니다.
