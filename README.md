@@ -8,7 +8,12 @@
 
 Department of Computer Science and Engineering, POSTECH, Korea
 
-https://arxiv.org/pdf/1505.04366
+[Read the Paper](https://arxiv.org/pdf/1505.04366)
+
+---
+## 논문 리뷰 영상
+
+[![YouTube Video](https://img.youtube.com/vi/aLmfdkBh7Iw/0.jpg)](https://www.youtube.com/watch?v=aLmfdkBh7Iw)
 
 ---
 
