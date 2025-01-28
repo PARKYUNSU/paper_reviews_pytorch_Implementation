@@ -4,7 +4,12 @@
 
 -Jonathan Long, Evan Shelhamer, Trevor Darrell
 
-https://arxiv.org/pdf/1411.4038
+[Read the Paper](https://arxiv.org/pdf/1411.4038)
+
+---
+## 논문 리뷰 영상
+
+[![YouTube Video](https://img.youtube.com/vi/cjIsihsCii8/0.jpg)](https://www.youtube.com/watch?v=cjIsihsCii8)
 
 ---
 ## Introduction
