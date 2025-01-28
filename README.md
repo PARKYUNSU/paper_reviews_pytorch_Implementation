@@ -369,7 +369,7 @@ CNN과 다르게 ViT는 이러한 Inductive bias가 부족한 특징을 가지�
 
 ### 5.2.1. Self-Attention의 Inductive bias
 
-ViT는 이미지 데이터를 작은 Patch들로 나눠ㅓ 각 Patch를 1D 시퀀스로 변환하고, 이를 Trnasformer 모델 입력으로 사용합니다. 이 과정에서 Self-Attention은 각 Patch간의 관계를 학습합니다.
+ViT는 이미지 데이터를 작은 Patch들로 나눠 각 Patch를 1D 시퀀스로 변환하고, 이를 Trnasformer 모델 입력으로 사용합니다. 이 과정에서 Self-Attention은 각 Patch간의 관계를 학습합니다.
 
 이 과정을 통해서 Global 관계를 모델링하는데 집중하며, 이미지의 Spatial Structure에 대한 Local 적인 관계를 모델링하는 데는 강하지 않습니다.
 
