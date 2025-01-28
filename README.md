@@ -3,8 +3,16 @@ ILSVRC 2017 ImageNet 분류 대회에서 1위
 
 SNet(Squeeze and Excitation Networks)
 
-저자 : Jie Hu, Li Shen, Samuel Albanie, Gang Sun, Enhua Wu
+— Jie Hu, Li Shen, Samuel Albanie, Gang Sun, Enhua Wu
 
+[Read the Paper](https://arxiv.org/pdf/1709.01507)
+
+---
+## 논문 리뷰 영상
+
+[![YouTube Video](https://img.youtube.com/vi/qc8CYdWlLxU/0.jpg)](https://www.youtube.com/watch?v=qc8CYdWlLxU)
+
+--
 
 ## Squeeze and Excitation Networks
 
