@@ -4,7 +4,14 @@
 
 -Ashish Vaswani, Noam Shazeer
 
-https://arxiv.org/pdf/1706.03762
+[Read the Paper](https://arxiv.org/pdf/1706.03762)
+
+---
+## 논문 리뷰 영상
+
+[![YouTube Video](https://img.youtube.com/vi/Tj5xxUjR_bQ/0.jpg)](https://www.youtube.com/watch?v=Tj5xxUjR_bQ)
+
+---
  
 # 1. Introduction
 
