@@ -17,4 +17,9 @@ def swish(x):
     return x * torch.sigmoid(x)
 
 # GeLU, ReLU, Swish function dictionary
-ACT2FN = {"gelu": F.gelu, "relu": F.relu, "swish": swish}
+ACT2FN = {
+    'relu': F.relu,
+    'gelu': F.gelu,
+    'tanh': F.tanh,
+    'sigmoid': F.sigmoid,
+}

@@ -2,6 +2,7 @@ import torch
 from model.vit import Vision_Transformer
 from model.config import get_b16_config
 from data import cifar_10
+from model.utils import ACT2FN
 
 def evaluate(pretrained_path, batch_size):
     config = get_b16_config()
