@@ -19,7 +19,9 @@ def train(model, train_loader, test_loader, epochs, learning_rate, device):
     for epoch in range(epochs):
         model.train()
         running_loss = 0.0
-        for inputs, labels in train_loader:
+        
+        # tqdm을 사용하여 학습 진행 상황을 시각화
+        for inputs, labels in tqdm(train_loader, desc=f"Training Epoch {epoch+1}", ncols=100):
             inputs, labels = inputs.to(device), labels.to(device)  # 데이터도 CUDA로 이동
             
             optimizer.zero_grad()
@@ -34,7 +36,6 @@ def train(model, train_loader, test_loader, epochs, learning_rate, device):
         evaluate(model, test_loader, device)
         
     print('Training finished.')
-
 
 # 평가 함수
 def evaluate(model, test_loader, device):
