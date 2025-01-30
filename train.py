@@ -42,9 +42,7 @@ def evaluate(model, test_loader):
 
 def main(pretrained_path, epochs, batch_size, learning_rate):
     model = Vision_Transformer(img_size=224, num_classes=10, in_channels=3, pretrained=True, pretrained_path=pretrained_path)
-    
     train_loader, test_loader = cifar_10(batch_size)
-    
     train(model, train_loader, test_loader, epochs, learning_rate)
 
 if __name__ == "__main__":

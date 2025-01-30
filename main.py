@@ -1,14 +1,28 @@
-import torch
-from model.vit import Vision_Transformer
-from model.config import get_b16_config
+import argparse
+import train
+import eval
+
+def parse_args():
+    parser = argparse.ArgumentParser(description='Main script to either train or evaluate the model.')
+    parser.add_argument('--mode', type=str, choices=['train', 'eval'], required=True, 
+                        help="Mode of operation: 'train' for training and 'eval' for evaluation")
+    parser.add_argument('--pretrained_path', type=str, help='Path to the pretrained model weights')
+    parser.add_argument('--epochs', type=int, default=10, help='Number of epochs for training')
+    parser.add_argument('--batch_size', type=int, default=64, help='Batch size for training or evaluation')
+    parser.add_argument('--learning_rate', type=float, default=1e-4, help='Learning rate for training')
+    
+    return parser.parse_args()
 
 if __name__ == "__main__":
-    config = get_b16_config()
-    pretrained_path = "path_to_pretrained_weights.pth"
+    args = parse_args()
 
-    model = Vision_Transformer(config, img_size=224, num_classes=1000, in_channels=3, pretrained=True, pretrained_path=pretrained_path)
+    if args.mode == 'train':
+        print("Starting training...")
+        train.main(pretrained_path=args.pretrained_path, 
+                   epochs=args.epochs, 
+                   batch_size=args.batch_size, 
+                   learning_rate=args.learning_rate)
     
-    # 임의의 입력 이미지 배치
-    x = torch.randn(8, 3, 224, 224)
-    logits = model(x)
-    print("Logits shape:", logits.shape)  # Expected: (8, 1000)
+    elif args.mode == 'eval':
+        print("Starting evaluation...")
+        eval.main(pretrained_path=args.pretrained_path, batch_size=args.batch_size)
