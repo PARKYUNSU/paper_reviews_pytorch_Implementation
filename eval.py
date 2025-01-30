@@ -1,13 +1,15 @@
 import torch
-import torch.optim as optim
-
 from model.vit import Vision_Transformer
 from model.config import get_b16_config
 from data import cifar_10
-from utils import save_model
+from transformers import AutoModelForImageClassification
 
 def evaluate(pretrained_path, batch_size):
-    model = Vision_Transformer(img_size=224, num_classes=10, in_channels=3, pretrained=False)
+    # config = get_b16_config()
+    # model = Vision_Transformer(config, img_size=224, num_classes=10, in_channels=3, pretrained=False)
+    model = AutoModelForImageClassification.from_pretrained("google/vit-base-patch16-224-in21k")
+
+    
     model.load_state_dict(torch.load(pretrained_path))
     
     _, test_loader = cifar_10(batch_size)

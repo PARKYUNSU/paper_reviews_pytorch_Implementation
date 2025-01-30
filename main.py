@@ -1,6 +1,7 @@
 import argparse
 import train
 import eval
+from model.config import get_b16_config
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Main script to either train or evaluate the model.')
@@ -18,11 +19,12 @@ if __name__ == "__main__":
 
     if args.mode == 'train':
         print("Starting training...")
-        train.main(pretrained_path=args.pretrained_path, 
-                   epochs=args.epochs, 
-                   batch_size=args.batch_size, 
-                   learning_rate=args.learning_rate)
+        train.train(model=None,
+                    train_loader=None,
+                    test_loader=None,
+                    epochs=args.epochs,
+                    learning_rate=args.learning_rate)
     
     elif args.mode == 'eval':
         print("Starting evaluation...")
-        eval.main(pretrained_path=args.pretrained_path, batch_size=args.batch_size)
+        eval.evaluate(pretrained_path=args.pretrained_path, batch_size=args.batch_size)
