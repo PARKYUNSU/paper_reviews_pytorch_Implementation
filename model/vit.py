@@ -8,7 +8,7 @@ from .pathc_embedding import Patch_Embedding
 from .utils import np2th
 
 class Vision_Transformer(nn.Module):
-    def __init__(self, config, img_size=224, num_classes=1000, in_channels=3,  pretrained=False, pretrained_path=None):
+    def __init__(self, config, img_size=224, num_classes=1000, in_channels=3, pretrained=False, pretrained_path=None):
         super(Vision_Transformer, self).__init__()
         self.num_classes = num_classes
 
@@ -31,7 +31,7 @@ class Vision_Transformer(nn.Module):
 
         if pretrained and pretrained_path is not None:
             self.load_from(torch.load(pretrained_path, map_location="cpu"))
-            
+    
     def _init_weights(self):
         nn.init.trunc_normal_(self.pos_embed, std=0.02)
         nn.init.trunc_normal_(self.cls_token, std=0.02)
@@ -49,11 +49,11 @@ class Vision_Transformer(nn.Module):
 
     def forward(self, x):
         B = x.shape[0]
-        x = self.patch_embed(x) # (B, num_patches, hidden_size)
+        x = self.patch_embed(x)  # (B, num_patches, hidden_size)
 
         # Cls
         cls_tokens = self.cls_token.expand(B, -1, -1)
-        x = torch.cat((cls_tokens, x), dim=1) # (B, num_patches+1, hidden_size)
+        x = torch.cat((cls_tokens, x), dim=1)  # (B, num_patches+1, hidden_size)
         x = x + self.pos_embed
         x = self.pos_drop(x)
 
@@ -65,40 +65,40 @@ class Vision_Transformer(nn.Module):
         logits = self.head(cls_out)
         return logits
     
-def load_from(self, weights):
-    # Classification head load (CIFAR-10에 맞게 초기화)
-    if "head/kernel" in weights:
-        self.head.weight.data.copy_(np2th(weights["head/kernel"]).t())
-    else:
-        print("Warning: 'head/kernel' not found, skipping head weights load.")
-    
-    if "head/bias" in weights:
-        self.head.bias.data.copy_(np2th(weights["head/bias"]).t())
-    
-    # Patch embedding weights load (conv인 경우)
-    if "embedding/kernel" in weights:
-        self.patch_embed.proj.weight.data.copy_(np2th(weights["embedding/kernel"], conv=True))
-    if "embedding/bias" in weights:
-        self.patch_embed.proj.bias.data.copy_(np2th(weights["embedding/bias"]))
-    
-    # Cls load
-    if "cls" in weights:
-        self.cls_token.data.copy_(np2th(weights["cls"]))
-    
-    # Positional embedding load
-    if "Transformer/posembed_input/pos_embedding" in weights:
-        posemb = np2th(weights["Transformer/posembed_input/pos_embedding"])
-        if posemb.size() == self.pos_embed.size():
-            self.pos_embed.data.copy_(posemb)
+    def load_from(self, weights):
+        # Classification head load (CIFAR-10에 맞게 초기화)
+        if "head/kernel" in weights:
+            self.head.weight.data.copy_(np2th(weights["head/kernel"]).t())
         else:
-            # 크기가 다르면 2D 보간(ndimage.zoom) 사용
-            ntok_new = self.pos_embed.size(1)
-            posemb_tok, posemb_grid = posemb[:, :1], posemb[0, 1:]
-            gs_old = int(np.sqrt(len(posemb_grid)))
-            gs_new = int(np.sqrt(ntok_new - 1))
-            posemb_grid = posemb_grid.reshape(gs_old, gs_old, -1)
-            zoom = (gs_new / gs_old, gs_new / gs_old, 1)
-            posemb_grid = ndimage.zoom(posemb_grid, zoom, order=1)
-            posemb_grid = posemb_grid.reshape(1, gs_new * gs_new, -1)
-            new_posemb = np.concatenate([posemb_tok, posemb_grid], axis=1)
-            self.pos_embed.data.copy_(np2th(new_posemb))
+            print("Warning: 'head/kernel' not found, skipping head weights load.")
+        
+        if "head/bias" in weights:
+            self.head.bias.data.copy_(np2th(weights["head/bias"]).t())
+        
+        # Patch embedding weights load (conv인 경우)
+        if "embedding/kernel" in weights:
+            self.patch_embed.proj.weight.data.copy_(np2th(weights["embedding/kernel"], conv=True))
+        if "embedding/bias" in weights:
+            self.patch_embed.proj.bias.data.copy_(np2th(weights["embedding/bias"]))
+        
+        # Cls load
+        if "cls" in weights:
+            self.cls_token.data.copy_(np2th(weights["cls"]))
+        
+        # Positional embedding load
+        if "Transformer/posembed_input/pos_embedding" in weights:
+            posemb = np2th(weights["Transformer/posembed_input/pos_embedding"])
+            if posemb.size() == self.pos_embed.size():
+                self.pos_embed.data.copy_(posemb)
+            else:
+                # 크기가 다르면 2D 보간(ndimage.zoom) 사용
+                ntok_new = self.pos_embed.size(1)
+                posemb_tok, posemb_grid = posemb[:, :1], posemb[0, 1:]
+                gs_old = int(np.sqrt(len(posemb_grid)))
+                gs_new = int(np.sqrt(ntok_new - 1))
+                posemb_grid = posemb_grid.reshape(gs_old, gs_old, -1)
+                zoom = (gs_new / gs_old, gs_new / gs_old, 1)
+                posemb_grid = ndimage.zoom(posemb_grid, zoom, order=1)
+                posemb_grid = posemb_grid.reshape(1, gs_new * gs_new, -1)
+                new_posemb = np.concatenate([posemb_tok, posemb_grid], axis=1)
+                self.pos_embed.data.copy_(np2th(new_posemb))
