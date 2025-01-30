@@ -58,12 +58,16 @@ class Vision_Transformer(nn.Module):
         x = self.pos_drop(x)
 
         # Transformer Encoder
-        x = self.encoder(x)
+        attentions = []  # 어텐션 맵을 저장할 리스트
+        for layer in self.encoder.layers:
+            x, attn = layer(x)  # 각 레이어의 출력과 어텐션 맵을 받아옴
+            attentions.append(attn)  # 어텐션 맵을 리스트에 저장
 
         # Classification
         cls_out = x[:, 0]
         logits = self.head(cls_out)
-        return logits
+
+        return logits, attentions  # 어텐션 맵도 함께 반환
     
     def load_from(self, weights):
         # Classification head load (CIFAR-10에 맞게 초기화)
