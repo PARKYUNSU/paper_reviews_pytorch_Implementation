@@ -3,7 +3,6 @@ import torch.optim as optim
 from model.vit import Vision_Transformer
 from data import cifar_10
 from model.config import get_b16_config
-from utils import save_model
 
 # 학습 함수
 def train(model, train_loader, test_loader, epochs, learning_rate, device):

@@ -7,10 +7,8 @@ from data import cifar_10
 from model.vit import Vision_Transformer
 
 def parse_args():
-    parser = argparse.ArgumentParser(description='Main script to either train or evaluate the model.')
-    parser.add_argument('--mode', type=str, choices=['train', 'eval'], required=True, 
-                        help="Mode of operation: 'train' for training and 'eval' for evaluation")
-    parser.add_argument('--pretrained_path', type=str, help='Path to the pretrained model weights')
+    parser = argparse.ArgumentParser(description='Main script to train and evaluate the Vision Transformer model.')
+    parser.add_argument('--pretrained_path', type=str, required=True, help='Path to the pretrained model weights')
     parser.add_argument('--epochs', type=int, default=10, help='Number of epochs for training')
     parser.add_argument('--batch_size', type=int, default=64, help='Batch size for training or evaluation')
     parser.add_argument('--learning_rate', type=float, default=1e-4, help='Learning rate for training')
