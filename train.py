@@ -3,7 +3,6 @@ import torch.optim as optim
 from model.vit import Vision_Transformer
 from model.config import get_b16_config
 from data import cifar_10
-from model.utils import ACT2FN
 
 def train(model, train_loader, test_loader, epochs, learning_rate):
     criterion = torch.nn.CrossEntropyLoss()
