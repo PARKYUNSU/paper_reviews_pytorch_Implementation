@@ -1,8 +1,10 @@
 import torch
 import torch.optim as optim
+from torch.utils.data import DataLoader
 from model.vit import Vision_Transformer
 from data import cifar_10
 from utils import save_model
+from tqdm import tqdm  # tqdm 임포트
 
 def train(model, train_loader, test_loader, epochs, learning_rate, device):
     criterion = torch.nn.CrossEntropyLoss()
@@ -14,20 +16,26 @@ def train(model, train_loader, test_loader, epochs, learning_rate, device):
     for epoch in range(epochs):
         model.train()
         running_loss = 0.0
-        for inputs, labels in train_loader:
-            inputs, labels = inputs.to(device), labels.to(device)  # 데이터도 CUDA로 이동
-            
-            optimizer.zero_grad()
-            outputs = model(inputs)
-            loss = criterion(outputs, labels)
-            loss.backward()
-            optimizer.step()
 
-            running_loss += loss.item()
+        # tqdm을 사용하여 진행 바 추가
+        with tqdm(train_loader, desc=f"Epoch {epoch+1}/{epochs}", unit="batch") as pbar:
+            for inputs, labels in pbar:
+                inputs, labels = inputs.to(device), labels.to(device)  # 데이터도 CUDA로 이동
+
+                optimizer.zero_grad()
+                outputs = model(inputs)
+                loss = criterion(outputs, labels)
+                loss.backward()
+                optimizer.step()
+
+                running_loss += loss.item()
+
+                # 진행 상황에 맞게 loss를 업데이트
+                pbar.set_postfix(loss=running_loss/len(train_loader))
 
         print(f'Epoch [{epoch+1}/{epochs}], Loss: {running_loss/len(train_loader):.4f}')
-        evaluate(model, test_loader, device)  # device 전달
-        
+        evaluate(model, test_loader, device)
+
     print('Training finished.')
 
 def evaluate(model, test_loader, device):

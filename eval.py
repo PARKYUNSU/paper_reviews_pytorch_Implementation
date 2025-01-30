@@ -2,6 +2,7 @@ import torch
 from model.vit import Vision_Transformer
 from model.config import get_b16_config
 from data import cifar_10
+from tqdm import tqdm  # tqdm 임포트
 
 def evaluate(pretrained_path, batch_size, device):
     config = get_b16_config()
@@ -17,13 +18,19 @@ def evaluate(pretrained_path, batch_size, device):
     model.eval()
     correct = 0
     total = 0
+    
+    # tqdm을 사용하여 테스트 루프에 진행 바 추가
     with torch.no_grad():
-        for inputs, labels in test_loader:
-            inputs, labels = inputs.to(device), labels.to(device)  # 데이터도 CUDA로 이동
-            outputs = model(inputs)
-            _, predicted = torch.max(outputs.data, 1)
-            total += labels.size(0)
-            correct += (predicted == labels).sum().item()
+        with tqdm(test_loader, desc="Evaluating", unit="batch") as pbar:
+            for inputs, labels in pbar:
+                inputs, labels = inputs.to(device), labels.to(device)  # 데이터도 CUDA로 이동
+                outputs = model(inputs)
+                _, predicted = torch.max(outputs.data, 1)
+                total += labels.size(0)
+                correct += (predicted == labels).sum().item()
+                
+                # 진행 상황에 맞게 정확도 업데이트
+                pbar.set_postfix(accuracy=100 * correct / total)
     
     print(f'Accuracy: {100 * correct / total:.2f}%')
 
