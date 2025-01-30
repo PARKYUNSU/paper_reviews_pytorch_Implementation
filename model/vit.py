@@ -1,7 +1,7 @@
 import numpy as np
 import torch
 import torch.nn as nn
-import ndimage
+import scipy.ndimage as ndimage
 
 from .encoder import Encoder
 from .pathc_embedding import Patch_Embedding
