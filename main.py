@@ -1,7 +1,6 @@
 import torch
 import argparse
 import train
-import eval
 from model.config import get_b16_config
 from data import cifar_10
 from model.vit import Vision_Transformer
