@@ -41,4 +41,6 @@ if __name__ == "__main__":
     
     elif args.mode == 'eval':
         print("Starting evaluation...")
-        eval.evaluate(pretrained_path=args.pretrained_path, batch_size=args.batch_size, device=device)  # device 전달
+        eval.evaluate(pretrained_path=args.pretrained_path, 
+                      batch_size=args.batch_size, 
+                      device=device)  # device 전달
