@@ -1,8 +1,8 @@
 import torch
 import torch.optim as optim
 from model.vit import Vision_Transformer
-from model.config import get_b16_config
-from data import cifar_10
+from data import cifar_10  # cifar_10 데이터셋을 불러옴
+from utils import save_model
 
 def train(model, train_loader, test_loader, epochs, learning_rate):
     criterion = torch.nn.CrossEntropyLoss()
@@ -42,11 +42,12 @@ def evaluate(model, test_loader):
     print(f'Accuracy: {100 * correct / total:.2f}%')
 
 def main(pretrained_path, epochs, batch_size, learning_rate):
-    config = get_b16_config()
-    model = Vision_Transformer(config, img_size=224, num_classes=10, in_channels=3, pretrained=True, pretrained_path=pretrained_path)
-
+    model = Vision_Transformer(img_size=224, num_classes=10, in_channels=3, pretrained=True, pretrained_path=pretrained_path)
+    
+    # cifar_10 데이터셋 로드
     train_loader, test_loader = cifar_10(batch_size)
     
+    # 학습 시작
     train(model, train_loader, test_loader, epochs, learning_rate)
 
 if __name__ == "__main__":
