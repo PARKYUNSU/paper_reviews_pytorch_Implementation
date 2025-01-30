@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from utils import ACT2FN
+from .utils import ACT2FN
 
 class MLP(nn.Module):
     def __init__(self, config):
