@@ -3,6 +3,7 @@ import train
 import eval
 from model.config import get_b16_config
 from data import cifar_10
+from model.vit import Vision_Transformer
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Main script to either train or evaluate the model.')
@@ -20,10 +21,14 @@ if __name__ == "__main__":
 
     # CIFAR-10 데이터로더 준비
     train_loader, test_loader = cifar_10(batch_size=args.batch_size)
+
+    # Vision Transformer 모델 준비
+    config = get_b16_config()  # ViT-B/16 config
+    model = Vision_Transformer(config, img_size=224, num_classes=10, in_channels=3, pretrained=True, pretrained_path=args.pretrained_path)
     
     if args.mode == 'train':
         print("Starting training...")
-        train.train(model=None,
+        train.train(model=model,
                     train_loader=train_loader,
                     test_loader=test_loader,
                     epochs=args.epochs,
