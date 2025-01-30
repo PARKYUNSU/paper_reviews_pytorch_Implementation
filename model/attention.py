@@ -17,9 +17,9 @@ class Attention(nn.Module):
         self.key_dense = nn.Linear(self.hidden_size, self.all_head_dim)
         self.value_dense = nn.Linear(self.hidden_size, self.all_head_dim)
         
-        self.attn_dropout = nn.Dropout(config.transformer["attention_dropout_rate"])  # Correct Dropout
+        self.attn_dropout = nn.Dropout(config.transformer["attention_dropout_rate"])
         self.output_dense = nn.Linear(self.hidden_size, self.hidden_size)
-        self.proj_dropout = nn.Dropout(config.transformer["attention_dropout_rate"])  # Correct Dropout
+        self.proj_dropout = nn.Dropout(config.transformer["attention_dropout_rate"])  # Corrected Dropout layer
         self.softmax = nn.Softmax(dim=-1)
     
     def transpose_for_score(self, x):
@@ -39,10 +39,8 @@ class Attention(nn.Module):
         key = self.transpose_for_score(key)
         value = self.transpose_for_score(value)
 
-        # Attention scores calculation
         attention_scores = torch.matmul(query, key.transpose(-1, -2)) / math.sqrt(self.head_dim)
         attention_probs = self.softmax(attention_scores)
-        weights = attention_probs if self.vis else None
         attention_probs = self.attn_dropout(attention_probs)
 
         # Context (Attention Value)
@@ -51,4 +49,4 @@ class Attention(nn.Module):
         output = self.output_dense(context)
         output = self.proj_dropout(output)
 
-        return output, weights
+        return output  # Only return the output, not the weights
