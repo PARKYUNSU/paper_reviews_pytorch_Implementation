@@ -13,6 +13,7 @@ def parse_args():
     parser.add_argument('--epochs', type=int, default=10, help='Number of epochs for training')
     parser.add_argument('--batch_size', type=int, default=64, help='Batch size for training or evaluation')
     parser.add_argument('--learning_rate', type=float, default=1e-4, help='Learning rate for training')
+    parser.add_argument('--save_fig', action='store_true', help='Save the loss and accuracy plot as a PNG file')
     
     return parser.parse_args()
 
@@ -36,7 +37,8 @@ if __name__ == "__main__":
                     test_loader=test_loader,
                     epochs=args.epochs,
                     learning_rate=args.learning_rate,
-                    device=device)  # device 전달
+                    device=device,
+                    save_fig=args.save_fig)  # save_fig 전달
     
     elif args.mode == 'eval':
         print("Starting evaluation...")
