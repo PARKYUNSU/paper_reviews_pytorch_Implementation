@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
-from attention import Attention
-from mlp import MLP
+from .attention import Attention
+from .mlp import MLP
 
 class Transformer_Encoder_Block(nn.Module):
     def __init__(self, config):

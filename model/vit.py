@@ -3,9 +3,9 @@ import torch
 import torch.nn as nn
 import ndimage
 
-from encoder import Encoder
-from pathc_embedding import Patch_Embedding
-from utils import np2th
+from .encoder import Encoder
+from .pathc_embedding import Patch_Embedding
+from .utils import np2th
 
 class Vision_Transformer(nn.Module):
     def __init__(self, config, img_size=224, num_classes=1000, in_channels=3,  pretrained=False, pretrained_path=None):
