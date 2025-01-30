@@ -14,18 +14,16 @@ def train(model, train_loader, test_loader, epochs, learning_rate, device):
     criterion = torch.nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.parameters(), lr=learning_rate)
 
-    # 모델을 CUDA로 이동
     model = model.to(device)
 
     for epoch in range(epochs):
         model.train()
         running_loss = 0.0
-        # tqdm을 사용하여 학습 진행 상황을 시각화
-        for inputs, labels in tqdm(train_loader, desc=f"Epoch {epoch+1}/{epochs}", ncols=100):
+        for inputs, labels in train_loader:
             inputs, labels = inputs.to(device), labels.to(device)  # 데이터도 CUDA로 이동
             
             optimizer.zero_grad()
-            outputs = model(inputs)
+            outputs, attentions = model(inputs)  # 어텐션 맵도 함께 받음
             loss = criterion(outputs, labels)
             loss.backward()
             optimizer.step()
