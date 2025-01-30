@@ -26,7 +26,7 @@ def train(model, train_loader, test_loader, epochs, learning_rate, device):
             running_loss += loss.item()
 
         print(f'Epoch [{epoch+1}/{epochs}], Loss: {running_loss/len(train_loader):.4f}')
-        evaluate(model, test_loader, device)
+        evaluate(model, test_loader, device)  # device 전달
         
     print('Training finished.')
 
