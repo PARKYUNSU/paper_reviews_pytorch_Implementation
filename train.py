@@ -3,8 +3,6 @@ import torch.optim as optim
 from model.vit import Vision_Transformer
 from model.config import get_b16_config
 from data import cifar_10
-from transformers import AutoModelForImageClassification, AutoFeatureExtractor
-
 
 def train(model, train_loader, test_loader, epochs, learning_rate):
     criterion = torch.nn.CrossEntropyLoss()
@@ -44,10 +42,8 @@ def evaluate(model, test_loader):
     print(f'Accuracy: {100 * correct / total:.2f}%')
 
 def main(pretrained_path, epochs, batch_size, learning_rate):
-    # config = get_b16_config()
-    # model = Vision_Transformer(config, img_size=224, num_classes=10, in_channels=3, pretrained=True, pretrained_path=pretrained_path)
-    model = AutoModelForImageClassification.from_pretrained("google/vit-base-patch16-224-in21k")
-
+    config = get_b16_config()
+    model = Vision_Transformer(config, img_size=224, num_classes=10, in_channels=3, pretrained=True, pretrained_path=pretrained_path)
 
     train_loader, test_loader = cifar_10(batch_size)
     
