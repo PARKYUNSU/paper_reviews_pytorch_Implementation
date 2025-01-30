@@ -4,10 +4,9 @@ import torch.nn.functional as F
 import math
 
 class Attention(nn.Module):
-    def __init__(self, config, vis):
+    def __init__(self, config, vis=False):
         super(Attention, self).__init__()
         assert config.hidden_size % config.transformer["num_heads"] == 0, "hiddend_size must be divisible by num_heads"
-        
         self.vis = vis
         self.num_heads = config.transformer["num_heads"]
         self.hidden_size = config.hidden_size
