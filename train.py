@@ -10,7 +10,6 @@ from tqdm import tqdm
 import matplotlib.pyplot as plt
 
 
-# 학습 함수
 def train(model, train_loader, test_loader, epochs, learning_rate, device, save_fig=False):
     criterion = torch.nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.parameters(), lr=learning_rate)

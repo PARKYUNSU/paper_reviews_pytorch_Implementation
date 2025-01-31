@@ -1,6 +1,7 @@
 import torch
 import argparse
 import train
+import eval
 from model.config import get_b16_config
 from data import cifar_10
 from model.vit import Vision_Transformer
@@ -43,5 +44,5 @@ if __name__ == "__main__":
     elif args.mode == 'eval':
         print("Starting evaluation...")
         eval.evaluate(pretrained_path=args.pretrained_path, 
-                      batch_size=args.batch_size, 
-                      device=device)  # device 전달
+                          batch_size=args.batch_size, 
+                          device=device)
