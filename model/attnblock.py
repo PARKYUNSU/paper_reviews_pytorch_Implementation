@@ -1,6 +1,6 @@
 import torch
 import torch.nn as nn
-from utils import LayerNorm, QuickGELU
+from .utils import LayerNorm, QuickGELU
 from collections import OrderedDict
 
 class AttentionBlock(nn.Module):
