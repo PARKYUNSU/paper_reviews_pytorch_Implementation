@@ -330,4 +330,70 @@ Pair-wise Segmentation을 적용하면 다음과 같은 학습 효과를 얻을 
 
 이렇게 토큰을 적용하면 모델이 음성과 텍스트 간의 관계를 명확하게 학습할 수 있습니다.
 
-이러한 방식으로 **USDM**이 계단식(Cascaded) ****방식이 아니라**, End-to-End 모델**로 동작할 수 있도록 설계되었습니다.
+이러한 방식으로 **USDM**이 계단식(Cascaded) 방식이 아니라, **End-to-End 모델** 로 동작할 수 있도록 설계되었습니다.
+
+# 4. Overview of Spoken Dialog Modeling Approach
+
+![image.png](attachment:5056f388-0bb0-4a01-9965-bb2d6912e2c5:image.png)
+
+그림은 USDM (Unified Spoken Dialog Model)의 전체적인 구조를 시각적으로 보여주고 있습니다.
+
+이 모델이 **음성(Speech)과 텍스트(Text)**를 어떻게 함께 학습하는지, 그리고 음성을 직접 처리하는 과정을 설명해 줄 수 있는 중요한 구성 요소들이 포함되어 있습니다.
+
+### **Pretraining 단계: Unified Speech-Text Pretraining**
+
+1. **LLM (Large Language Model)**
+    
+    Mistral-7B와 같은 사전 학습된 LLM을 활용하여 음성-텍스트 모델을 구축합니다.
+    
+    기존 LLM의 어휘(Vocabulary)에 10,000개의 Acoustic Unit 토큰 + 2개의 Special Token ****(<|correspond|>, <|continue|>) 을 추가하여 음성과 텍스트를 동시에 학습하도록 확장합니다.
+    
+2. **Pretrained Speech-Text Model**
+    
+    LLM을 기반으로 음성과 텍스트 데이터를 혼합하여 사전 학습된 모델을 만든다.
+    
+    여기서 <|correspond|>, <|continue|> 토큰을 활용하여 음성-텍스트 간의 자연스러운 관계를 학습합니다.
+    
+
+---
+
+### **Input Speech 처리 과정**
+
+1. Prosody-Infusing Encoder
+    
+    입력된 음성(Speech)을 음향 단위(Acoustic Units) 로 변환합니다.
+    
+    이 과정에서 억양(Prosody) 정보까지 포함하여 변환되며, 이를 통해 텍스트 변환 과정에서도 감정 및 억양 정보가 유지될 수 있습니다.
+    
+    결과적으로 Input Speech Tokens (이산 음성 토큰)을 생성하게 된다.
+    
+2. USDM (Unified Spoken Dialog Model)
+    
+    입력 음성 토큰을 기반으로 대화를 모델링 과정이 진행됩니다.
+    
+    입력 음성이 먼저 Transcript 된 후, 이를 기반으로 응답 텍스트 Response Text를 생성합니다.
+    
+    기존 방식처럼 단순히 ASR(음성 → 텍스트 변환) 후 LLM이 동작하는 것이 아니라, 음성과 텍스트를 통합하여 학습하는 구조를 적용합니다.
+    
+
+---
+
+### Output Speech 생성 과정
+
+1. Output Speech Tokens 생성
+    
+    USDM이 생성한 Response Text (응답 텍스트)를 다시 Speech Tokens으로 변환합니다.
+    
+    이 단계에서 이전 과정에서 학습한 Acoustic Units과 부가언어적(Paralinguistic) 정보가 유지되도록 합니다.
+    
+2. Speech Decoder
+    
+    최종적으로 음성 합성(Speech Synthesis) 과정이 수행됩니다.
+    
+    기존 TTS(Text-to-Speech) 방식과 다르게, USDM은 중간 텍스트 단계를 활용하지만 단순한 Cascaded 방식이 아닌 End-to-End 방식을 적용하여 최종 음성을 생성한다.
+    
+3. Output Speech 생성
+    
+    최종적으로 생성된 음성 출력(Generated Speech) 이 사용자에게 전달됩니다.
+    
+    이 과정에서 전사 오류(ASR Error)로 인한 정보 손실을 줄이고, 자연스러운 대화를 생성하는 것이 목표입니다.
