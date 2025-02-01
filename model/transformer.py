@@ -13,8 +13,3 @@ class Transformer(nn.Module):
         enc_output = self.encoder(src)
         output = self.decoder(tgt, enc_output, tgt_mask=tgt_mask, memory_mask=memory_mask)
         return output
-    
-    def get_tgt_mask(self, size):
-        mask = torch.triu(torch.ones(size, size), diagonal=1)  # 상삼각 행렬
-        mask = mask.masked_fill(mask == 1, float('-inf')).masked_fill(mask == 0, float(0.0))
-        return mask
