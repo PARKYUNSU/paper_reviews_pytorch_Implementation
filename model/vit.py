@@ -4,7 +4,7 @@ import torch.nn as nn
 import scipy.ndimage as ndimage
 
 from .encoder import Encoder
-from .pathc_embedding import Patch_Embedding
+from .patch_embedding import Patch_Embedding
 from .utils import np2th
 
 class Vision_Transformer(nn.Module):
@@ -66,26 +66,37 @@ class Vision_Transformer(nn.Module):
         return logits
     
     def load_from(self, weights):
-        # Classification head load (CIFAR-10에 맞게 초기화)
+    # Head weights: shape 확인 후 맞지 않으면 로드하지 않음
         if "head/kernel" in weights:
-            self.head.weight.data.copy_(np2th(weights["head/kernel"]).t())
+            pretrained_head_weight = np2th(weights["head/kernel"]).t()
+            if pretrained_head_weight.shape == self.head.weight.shape:
+                self.head.weight.data.copy_(pretrained_head_weight)
+            else:
+                print("Pretrained head weight shape mismatch. Skipping head weight load and reinitializing head.")
+                # 재초기화 (예: xavier_uniform)
+                nn.init.xavier_uniform_(self.head.weight)
         else:
             print("Warning: 'head/kernel' not found, skipping head weights load.")
         
         if "head/bias" in weights:
-            self.head.bias.data.copy_(np2th(weights["head/bias"]).t())
-        
-        # Patch embedding weights load (conv인 경우)
+            pretrained_head_bias = np2th(weights["head/bias"]).t()
+            if pretrained_head_bias.shape == self.head.bias.shape:
+                self.head.bias.data.copy_(pretrained_head_bias)
+            else:
+                print("Pretrained head bias shape mismatch. Skipping head bias load and reinitializing head.")
+                nn.init.zeros_(self.head.bias)
+        else:
+            print("Warning: 'head/bias' not found, skipping head bias load.")
+
+        # 나머지 파라미터는 기존 방식대로 로드합니다.
         if "embedding/kernel" in weights:
             self.patch_embed.proj.weight.data.copy_(np2th(weights["embedding/kernel"], conv=True))
         if "embedding/bias" in weights:
             self.patch_embed.proj.bias.data.copy_(np2th(weights["embedding/bias"]))
         
-        # Cls load
         if "cls" in weights:
             self.cls_token.data.copy_(np2th(weights["cls"]))
         
-        # Positional embedding load
         if "Transformer/posembed_input/pos_embedding" in weights:
             posemb = np2th(weights["Transformer/posembed_input/pos_embedding"])
             if posemb.size() == self.pos_embed.size():

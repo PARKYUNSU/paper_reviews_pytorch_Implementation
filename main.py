@@ -20,14 +20,9 @@ def parse_args():
 
 if __name__ == "__main__":
     args = parse_args()
-
-    # CIFAR-10 데이터로더 준비
     train_loader, test_loader = cifar_10(batch_size=args.batch_size)
-
-    # device 설정 (cuda 사용 가능하면 cuda, 아니면 cpu)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-    # Vision Transformer 모델 준비
     config = get_b16_config()  # ViT-B/16 config
     model = Vision_Transformer(config, img_size=224, num_classes=10, in_channels=3, pretrained=True, pretrained_path=args.pretrained_path)
 
@@ -39,7 +34,7 @@ if __name__ == "__main__":
                     epochs=args.epochs,
                     learning_rate=args.learning_rate,
                     device=device,
-                    save_fig=args.save_fig)  # save_fig 전달
+                    save_fig=args.save_fig)
     
     elif args.mode == 'eval':
         print("Starting evaluation...")

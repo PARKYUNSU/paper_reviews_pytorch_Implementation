@@ -19,7 +19,7 @@ class Attention(nn.Module):
         
         self.attn_dropout = nn.Dropout(config.transformer["attention_dropout_rate"])
         self.output_dense = nn.Linear(self.hidden_size, self.hidden_size)
-        self.proj_dropout = nn.Dropout(config.transformer["attention_dropout_rate"])  # Corrected Dropout layer
+        self.proj_dropout = nn.Dropout(config.transformer["attention_dropout_rate"])
         self.softmax = nn.Softmax(dim=-1)
     
     def transpose_for_score(self, x):
@@ -49,4 +49,7 @@ class Attention(nn.Module):
         output = self.output_dense(context)
         output = self.proj_dropout(output)
 
-        return output  # Only return the output, not the weights
+        if self.vis:
+            return output, attention_probs
+        else:
+            return output

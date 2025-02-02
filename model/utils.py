@@ -1,6 +1,6 @@
 import torch
+import torch.nn as nn
 import numpy as np
-import torch.nn.functional as F
 
 def np2th(weights, conv=False):
     """
@@ -18,8 +18,8 @@ def swish(x):
 
 # GeLU, ReLU, Swish function dictionary
 ACT2FN = {
-    'relu': F.relu,
-    'gelu': F.gelu,
-    'tanh': F.tanh,
-    'sigmoid': F.sigmoid,
+    'relu': nn.ReLU(),
+    'gelu': nn.GELU(),
+    'tanh': nn.Tanh(),
+    'sigmoid': nn.Sigmoid(),
 }
