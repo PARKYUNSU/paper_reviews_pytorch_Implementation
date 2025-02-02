@@ -17,7 +17,9 @@ def train(model, train_loader, test_loader, epochs, learning_rate, device, save_
     model = model.to(device)
     
     train_losses = []
-    test_accuracies = []
+    train_accuracies = []
+    eval_losses = []
+    eval_accuracies = []
 
     for epoch in range(epochs):
         model.train()
@@ -27,6 +29,7 @@ def train(model, train_loader, test_loader, epochs, learning_rate, device, save_
 
         for inputs, labels in tqdm(train_loader, desc=f"Training Epoch {epoch+1}", ncols=100):
             inputs, labels = inputs.to(device), labels.to(device)
+            
             optimizer.zero_grad()
             outputs = model(inputs)
             loss = criterion(outputs, labels)
@@ -34,6 +37,7 @@ def train(model, train_loader, test_loader, epochs, learning_rate, device, save_
             optimizer.step()
 
             running_loss += loss.item()
+            
             _, predicted = torch.max(outputs.data, 1)
             total += labels.size(0)
             correct += (predicted == labels).sum().item()
@@ -41,48 +45,63 @@ def train(model, train_loader, test_loader, epochs, learning_rate, device, save_
         epoch_loss = running_loss / len(train_loader)
         epoch_accuracy = 100 * correct / total
         train_losses.append(epoch_loss)
+        train_accuracies.append(epoch_accuracy)
         
-        test_accuracy = evaluate(model, test_loader, device)
-        test_accuracies.append(test_accuracy)
+        # 평가 함수 호출 및 결과 저장
+        eval_acc, eval_loss = evaluate(model, test_loader, device)
+        eval_accuracies.append(eval_acc)
+        eval_losses.append(eval_loss)
         
-        print(f'Epoch [{epoch+1}/{epochs}], Loss: {epoch_loss:.4f}')
+        print(f'Epoch [{epoch+1}/{epochs}], Loss: {epoch_loss:.4f}, Train Acc: {epoch_accuracy:.2f}%')
         
     print('Training finished.')
-    plot_metrics(train_losses, test_accuracies, save_fig)
+
+    # 평가 결과도 함께 그리도록 plot_metrics 함수를 호출하거나 별도로 구현합니다.
+    plot_metrics(train_losses, train_accuracies, eval_losses, eval_accuracies, save_fig)
+
 
 def evaluate(model, test_loader, device):
     model.eval()
     correct = 0
     total = 0
+    running_loss = 0.0
+    criterion = torch.nn.CrossEntropyLoss()
     
     with torch.no_grad():
         for inputs, labels in tqdm(test_loader, desc="Evaluating", ncols=100):
             inputs, labels = inputs.to(device), labels.to(device)
             outputs = model(inputs)
+            loss = criterion(outputs, labels)
+            running_loss += loss.item()
             _, predicted = torch.max(outputs.data, 1)
             total += labels.size(0)
             correct += (predicted == labels).sum().item()
     
+    avg_loss = running_loss / len(test_loader)
     accuracy = 100 * correct / total
-    print(f'Accuracy: {accuracy:.2f}%')
-    return accuracy
+    print(f'Accuracy: {accuracy:.2f}% | Loss: {avg_loss:.4f}')
+    return accuracy, avg_loss
 
-def plot_metrics(train_losses, test_accuracies, save_fig=False):
+
+def plot_metrics(train_losses, train_accuracies, eval_losses, eval_accuracies, save_fig=False):
+    plt.figure(figsize=(12,5))
+
     # Plot Loss
-    plt.figure(figsize=(10,5))
     plt.subplot(1, 2, 1)
-    plt.plot(train_losses, label="Training Loss")
+    plt.plot(train_losses, label="Train Loss")
+    plt.plot(eval_losses, label="Eval Loss", linestyle='--')
     plt.xlabel('Epochs')
     plt.ylabel('Loss')
-    plt.title('Training Loss')
+    plt.title('Loss')
     plt.legend()
 
     # Plot Accuracy
     plt.subplot(1, 2, 2)
-    plt.plot(test_accuracies, label="Test Accuracy", color='g')
+    plt.plot(train_accuracies, label="Train Accuracy")
+    plt.plot(eval_accuracies, label="Eval Accuracy", linestyle='--')
     plt.xlabel('Epochs')
     plt.ylabel('Accuracy (%)')
-    plt.title('Test Accuracy')
+    plt.title('Accuracy')
     plt.legend()
 
     if save_fig:
