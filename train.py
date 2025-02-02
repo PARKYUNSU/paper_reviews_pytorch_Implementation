@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 
 def train(model, train_loader, test_loader, epochs, learning_rate, device, save_fig=False):
     criterion = torch.nn.CrossEntropyLoss()
-    optimizer = optim.Adam(model.parameters(), lr=learning_rate)
+    optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
 
     model = model.to(device)
     
@@ -27,6 +27,7 @@ def train(model, train_loader, test_loader, epochs, learning_rate, device, save_
         correct = 0
         total = 0
 
+        # Training loop
         for inputs, labels in tqdm(train_loader, desc=f"Training Epoch {epoch+1}", ncols=100):
             inputs, labels = inputs.to(device), labels.to(device)
             
@@ -37,7 +38,6 @@ def train(model, train_loader, test_loader, epochs, learning_rate, device, save_
             optimizer.step()
 
             running_loss += loss.item()
-            
             _, predicted = torch.max(outputs.data, 1)
             total += labels.size(0)
             correct += (predicted == labels).sum().item()
@@ -47,16 +47,17 @@ def train(model, train_loader, test_loader, epochs, learning_rate, device, save_
         train_losses.append(epoch_loss)
         train_accuracies.append(epoch_accuracy)
         
-        # 평가 함수 호출 및 결과 저장
+        # 평가(Evaluation) 호출 및 결과 저장
         eval_acc, eval_loss = evaluate(model, test_loader, device)
         eval_accuracies.append(eval_acc)
         eval_losses.append(eval_loss)
         
-        print(f'Epoch [{epoch+1}/{epochs}], Loss: {epoch_loss:.4f}, Train Acc: {epoch_accuracy:.2f}%')
+        # 학습과 평가 결과를 한 줄에 통합 출력
+        print(f"Epoch [{epoch+1}/{epochs}] | "
+              f"Train Loss: {epoch_loss:.4f}, Train Acc: {epoch_accuracy:.2f}% | "
+              f"Eval Loss: {eval_loss:.4f}, Eval Acc: {eval_acc:.2f}%")
         
     print('Training finished.')
-
-    # 평가 결과도 함께 그리도록 plot_metrics 함수를 호출하거나 별도로 구현합니다.
     plot_metrics(train_losses, train_accuracies, eval_losses, eval_accuracies, save_fig)
 
 
@@ -79,9 +80,8 @@ def evaluate(model, test_loader, device):
     
     avg_loss = running_loss / len(test_loader)
     accuracy = 100 * correct / total
-    print(f'Accuracy: {accuracy:.2f}% | Loss: {avg_loss:.4f}')
+    print(f"Eval -> Accuracy: {accuracy:.2f}% | Loss: {avg_loss:.4f}")
     return accuracy, avg_loss
-
 
 def plot_metrics(train_losses, train_accuracies, eval_losses, eval_accuracies, save_fig=False):
     plt.figure(figsize=(12,5))
