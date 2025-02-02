@@ -66,39 +66,42 @@ class Vision_Transformer(nn.Module):
         return logits
     
     def load_from(self, weights):
-    # Head weights: shape 확인 후 맞지 않으면 로드하지 않음
-        if "head/kernel" in weights:
-            pretrained_head_weight = np2th(weights["head/kernel"]).t()
+        """
+        Hugging Face pretrained weights (state_dict)를 변환하여 모델에 로드합니다.
+        - convert_state_dict() 함수를 사용해 키 이름을 변환합니다.
+        - head weight/bias는 CIFAR-10용으로 shape 불일치 시 재초기화합니다.
+        - pos_embed(위치 임베딩)는 크기가 다르면 2D 보간을 통해 재조정합니다.
+        - 나머지 파라미터는 strict=False로 로드합니다.
+        """
+        # 1. pretrained state_dict의 키를 변환합니다.
+        converted_weights = convert_state_dict(weights)
+
+        # 2. Head weight 처리
+        if "head/kernel" in converted_weights:
+            pretrained_head_weight = np2th(converted_weights["head/kernel"]).t()
             if pretrained_head_weight.shape == self.head.weight.shape:
                 self.head.weight.data.copy_(pretrained_head_weight)
             else:
                 print("Pretrained head weight shape mismatch. Skipping head weight load and reinitializing head.")
-                # 재초기화 (예: xavier_uniform)
                 nn.init.xavier_uniform_(self.head.weight)
+            converted_weights.pop("head/kernel")
         else:
             print("Warning: 'head/kernel' not found, skipping head weights load.")
-        
-        if "head/bias" in weights:
-            pretrained_head_bias = np2th(weights["head/bias"]).t()
+
+        if "head/bias" in converted_weights:
+            pretrained_head_bias = np2th(converted_weights["head/bias"]).t()
             if pretrained_head_bias.shape == self.head.bias.shape:
                 self.head.bias.data.copy_(pretrained_head_bias)
             else:
                 print("Pretrained head bias shape mismatch. Skipping head bias load and reinitializing head.")
                 nn.init.zeros_(self.head.bias)
+            converted_weights.pop("head/bias")
         else:
             print("Warning: 'head/bias' not found, skipping head bias load.")
 
-        # 나머지 파라미터는 기존 방식대로 로드합니다.
-        if "embedding/kernel" in weights:
-            self.patch_embed.proj.weight.data.copy_(np2th(weights["embedding/kernel"], conv=True))
-        if "embedding/bias" in weights:
-            self.patch_embed.proj.bias.data.copy_(np2th(weights["embedding/bias"]))
-        
-        if "cls" in weights:
-            self.cls_token.data.copy_(np2th(weights["cls"]))
-        
-        if "Transformer/posembed_input/pos_embedding" in weights:
-            posemb = np2th(weights["Transformer/posembed_input/pos_embedding"])
+        # 3. Positional embedding 처리 (pos_embed)
+        if "pos_embed" in converted_weights:
+            posemb = np2th(converted_weights["pos_embed"])
             if posemb.size() == self.pos_embed.size():
                 self.pos_embed.data.copy_(posemb)
             else:
@@ -113,3 +116,46 @@ class Vision_Transformer(nn.Module):
                 posemb_grid = posemb_grid.reshape(1, gs_new * gs_new, -1)
                 new_posemb = np.concatenate([posemb_tok, posemb_grid], axis=1)
                 self.pos_embed.data.copy_(np2th(new_posemb))
+            converted_weights.pop("pos_embed")
+
+        # 4. 나머지 파라미터를 로드 (strict=False)
+        msg = self.load_state_dict(converted_weights, strict=False)
+        print("Loaded weights with message:", msg)
+
+def convert_state_dict(state_dict):
+    """ 
+    Hugging Face pretrained state_dict의 키들을 우리 모델의 키로 변환합니다.
+    """
+    new_state_dict = {}
+    for k, v in state_dict.items():
+        new_k = k
+        # 1. embeddings 관련 키 변환
+        if k.startswith("embeddings.patch_embeddings.projection"):
+            new_k = k.replace("embeddings.patch_embeddings.projection", "patch_embed.proj")
+        elif k.startswith("embeddings.cls_token"):
+            new_k = k.replace("embeddings.cls_token", "cls_token")
+        elif k.startswith("embeddings.position_embeddings"):
+            new_k = k.replace("embeddings.position_embeddings", "pos_embed")
+        # 2. encoder layer 관련 키 변환
+        elif k.startswith("encoder.layer."):
+            # 예: "encoder.layer.0.attention.attention.query.weight"
+            parts = k.split(".")
+            # parts[2]는 layer index
+            layer_idx = parts[2]
+            # 나머지 부분 변환:
+            new_key_suffix = ".".join(parts[3:])
+            new_key_suffix = new_key_suffix.replace("attention.attention.query", "attn.query_dense")
+            new_key_suffix = new_key_suffix.replace("attention.attention.key", "attn.key_dense")
+            new_key_suffix = new_key_suffix.replace("attention.attention.value", "attn.value_dense")
+            new_key_suffix = new_key_suffix.replace("attention.output.dense", "attn.output_dense")
+            new_key_suffix = new_key_suffix.replace("intermediate.dense", "mlp.fc1")
+            new_key_suffix = new_key_suffix.replace("output.dense", "mlp.fc2")
+            new_key_suffix = new_key_suffix.replace("layernorm_before", "norm1")
+            new_key_suffix = new_key_suffix.replace("layernorm_after", "norm2")
+            new_k = "encoder.layers." + layer_idx + "." + new_key_suffix
+        # 3. pooler 관련 키는 사용하지 않으므로 건너뛰기
+        elif k.startswith("pooler"):
+            continue
+
+        new_state_dict[new_k] = v
+    return new_state_dict    
