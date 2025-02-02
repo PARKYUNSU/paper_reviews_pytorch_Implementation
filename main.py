@@ -15,7 +15,7 @@ def parse_args():
         description='Main script to train, evaluate, and visualize the Vision Transformer model.'
     )
     parser.add_argument('--mode', type=str, choices=['train', 'visualize'], required=True, 
-                        help="Mode of operation: 'train' for training, 'eval' for evaluation, and 'visualize' for attention map visualization")
+                        help="Mode of operation: 'train' for training, 'visualize' for attention map visualization")
     parser.add_argument('--pretrained_path', type=str, required=True, 
                         help='Path to the pretrained model weights')
     parser.add_argument('--epochs', type=int, default=10, 
@@ -34,7 +34,8 @@ def parse_args():
 
 def visualize_attention(image_path, model, device):
     """
-    주어진 이미지에 대해 모델의 첫 번째 encoder block의 attention map (첫 번째 head)을 시각화합니다.
+    주어진 이미지에 대해 모델의 첫 번째 encoder block의 attention map (첫 번째 head)을 시각화하고,
+    현재 figure 객체를 반환합니다.
     """
     model.eval()
 
@@ -58,7 +59,7 @@ def visualize_attention(image_path, model, device):
     tokens = torch.cat((cls_tokens, tokens), dim=1)   # (B, num_tokens, hidden_size)
     tokens = tokens + model.pos_embed
 
-    # 첫 번째 encoder 블록의 attention 모듈에서 시각화를 위해 vis 옵션 활성화
+    # 첫 번째 encoder block의 attention 모듈에서 시각화를 위해 vis 옵션 활성화
     attn_module = model.encoder.layers[0].attn
     attn_module.vis = True
 
@@ -68,14 +69,15 @@ def visualize_attention(image_path, model, device):
     # 첫 번째 이미지(B=0), 첫 번째 head(=0)의 attention map 선택
     attn = attn_probs[0, 0].detach().cpu().numpy()  # shape: (num_tokens, num_tokens)
 
-    # 시각화: heatmap
+    # 시각화: heatmap 생성
     plt.figure(figsize=(8, 8))
     plt.imshow(attn, cmap='viridis')
     plt.colorbar()
     plt.title("Attention Map - First Head of First Encoder Block")
     plt.xlabel("Key Tokens")
     plt.ylabel("Query Tokens")
-    plt.show()
+    # plt.show() 대신 현재 figure 객체 반환
+    return plt.gcf()
 
 
 if __name__ == "__main__":
@@ -84,7 +86,6 @@ if __name__ == "__main__":
     # device 설정 (cuda 사용 가능하면 cuda, 아니면 cpu)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-    # mode에 따라 분기 처리
     if args.mode == 'train':
         # CIFAR-10 데이터로더 준비
         train_loader, test_loader = cifar_10(batch_size=args.batch_size)
@@ -122,5 +123,8 @@ if __name__ == "__main__":
         # 시각화 모드에서 첫 번째 encoder block의 attention 모듈의 vis 옵션 활성화
         model.encoder.layers[0].attn.vis = True
         
-        # 시각화 함수 호출
-        visualize_attention(args.image_path, model, device)
+        # 시각화 함수 호출 후 figure 객체 반환
+        fig = visualize_attention(args.image_path, model, device)
+        # 그림 파일로 저장
+        fig.savefig("attention_map.png")
+        print("Figure saved as attention_map.png")
