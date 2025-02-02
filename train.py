@@ -27,7 +27,6 @@ def train(model, train_loader, test_loader, epochs, learning_rate, device, save_
 
         for inputs, labels in tqdm(train_loader, desc=f"Training Epoch {epoch+1}", ncols=100):
             inputs, labels = inputs.to(device), labels.to(device)
-            
             optimizer.zero_grad()
             outputs = model(inputs)
             loss = criterion(outputs, labels)
@@ -35,7 +34,6 @@ def train(model, train_loader, test_loader, epochs, learning_rate, device, save_
             optimizer.step()
 
             running_loss += loss.item()
-            
             _, predicted = torch.max(outputs.data, 1)
             total += labels.size(0)
             correct += (predicted == labels).sum().item()
@@ -43,33 +41,32 @@ def train(model, train_loader, test_loader, epochs, learning_rate, device, save_
         epoch_loss = running_loss / len(train_loader)
         epoch_accuracy = 100 * correct / total
         train_losses.append(epoch_loss)
-        test_accuracies.append(epoch_accuracy)            
-
-        print(f'Epoch [{epoch+1}/{epochs}], Loss: {running_loss/len(train_loader):.4f}')
-        evaluate(model, test_loader, device)
+        
+        test_accuracy = evaluate(model, test_loader, device)
+        test_accuracies.append(test_accuracy)
+        
+        print(f'Epoch [{epoch+1}/{epochs}], Loss: {epoch_loss:.4f}')
         
     print('Training finished.')
-
     plot_metrics(train_losses, test_accuracies, save_fig)
 
-# 평가 함수
 def evaluate(model, test_loader, device):
     model.eval()
     correct = 0
     total = 0
     
-    # tqdm을 사용하여 평가 진행 상황을 시각화
     with torch.no_grad():
         for inputs, labels in tqdm(test_loader, desc="Evaluating", ncols=100):
-            inputs, labels = inputs.to(device), labels.to(device)  # 데이터도 CUDA로 이동
-            outputs = model(inputs)  # 어텐션 맵은 받지 않음
+            inputs, labels = inputs.to(device), labels.to(device)
+            outputs = model(inputs)
             _, predicted = torch.max(outputs.data, 1)
             total += labels.size(0)
             correct += (predicted == labels).sum().item()
     
-    print(f'Accuracy: {100 * correct / total:.2f}%')
+    accuracy = 100 * correct / total
+    print(f'Accuracy: {accuracy:.2f}%')
+    return accuracy
 
-# loss와 accuracy 그래프를 그리는 함수
 def plot_metrics(train_losses, test_accuracies, save_fig=False):
     # Plot Loss
     plt.figure(figsize=(10,5))
@@ -88,7 +85,6 @@ def plot_metrics(train_losses, test_accuracies, save_fig=False):
     plt.title('Test Accuracy')
     plt.legend()
 
-    # 그래프를 PNG 파일로 저장
     if save_fig:
         os.makedirs('./plots', exist_ok=True)
         plt.savefig('./plots/loss_accuracy_plot.png')

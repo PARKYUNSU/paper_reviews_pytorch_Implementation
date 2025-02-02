@@ -6,10 +6,12 @@ from tqdm import tqdm
 
 def evaluate(pretrained_path, batch_size, device):
     config = get_b16_config()
-    model = Vision_Transformer(config, img_size=224, num_classes=10, in_channels=3, pretrained=True, pretrained_path=pretrained_path)
-    
+    model = Vision_Transformer(config, img_size=224, num_classes=10, in_channels=3, pretrained=False)
+    model.load_state_dict(torch.load("fine_tuned_model.pth", map_location=device))
     model = model.to(device)
-    model.load_state_dict(torch.load(pretrained_path, map_location=device))
+    
+    pretrained_weights = torch.load(pretrained_path, map_location=device)
+    model.load_from(pretrained_weights)
     
     _, test_loader = cifar_10(batch_size)
     

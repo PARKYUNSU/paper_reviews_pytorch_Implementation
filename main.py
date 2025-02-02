@@ -1,12 +1,11 @@
 import torch
 import argparse
 import train
-import eval
 from model.config import get_b16_config
 from data import cifar_10
 from model.vit import Vision_Transformer
+from utils import save_model
 
-# 시각화에 필요한 추가 라이브러리
 import matplotlib.pyplot as plt
 from PIL import Image
 from torchvision import transforms
@@ -15,7 +14,7 @@ def parse_args():
     parser = argparse.ArgumentParser(
         description='Main script to train, evaluate, and visualize the Vision Transformer model.'
     )
-    parser.add_argument('--mode', type=str, choices=['train', 'eval', 'visualize'], required=True, 
+    parser.add_argument('--mode', type=str, choices=['train', 'visualize'], required=True, 
                         help="Mode of operation: 'train' for training, 'eval' for evaluation, and 'visualize' for attention map visualization")
     parser.add_argument('--pretrained_path', type=str, required=True, 
                         help='Path to the pretrained model weights')
@@ -27,7 +26,6 @@ def parse_args():
                         help='Learning rate for training')
     parser.add_argument('--save_fig', action='store_true', 
                         help='Save the loss and accuracy plot as a PNG file')
-    # 이미지 시각화 모드에 필요한 인자
     parser.add_argument('--image_path', type=str, default=None,
                         help='Path to the image for visualization (required in visualize mode)')
     
@@ -107,12 +105,7 @@ if __name__ == "__main__":
                     learning_rate=args.learning_rate,
                     device=device,
                     save_fig=args.save_fig)
-
-    elif args.mode == 'eval':
-        print("Starting evaluation...")
-        eval.evaluate(pretrained_path=args.pretrained_path, 
-                      batch_size=args.batch_size, 
-                      device=device)
+        save_model(model, "fine_tuned_model.pth")
 
     elif args.mode == 'visualize':
         # 시각화를 위해 이미지 경로가 필요합니다.
