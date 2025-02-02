@@ -80,7 +80,6 @@ def evaluate(model, test_loader, device):
     
     avg_loss = running_loss / len(test_loader)
     accuracy = 100 * correct / total
-    print(f"Eval -> Accuracy: {accuracy:.2f}% | Loss: {avg_loss:.4f}")
     return accuracy, avg_loss
 
 def plot_metrics(train_losses, train_accuracies, eval_losses, eval_accuracies, save_fig=False):
