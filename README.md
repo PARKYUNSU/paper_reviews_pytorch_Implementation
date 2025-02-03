@@ -375,3 +375,64 @@ ViT는 이미지 데이터를 작은 Patch들로 나눠 각 Patch를 1D 시퀀�
 그러나 ViT는 pre-training 및 fine-tuning 방식을 활용할 수 있습니다.
 
 ViT는 ImageNet-21k와 같은 대규모 데이터셋에서 사전 훈련을 수행한 후, 작은 데이터셋으로 미세 조정을 할 수 있습니다. 이 때, ViT는 자신의 inductive bias를 사용하여 작은 데이터셋에 대해 잘 일반화할 수 있습니다.
+
+# 6. Experiment
+
+## **📌 Experiment Setup**
+### **Dataset & Augmentation**
+- **Dataset**: CIFAR-10
+- **Train Size**: 50,000
+- **Test Size**: 10,000
+- **Augmentations**
+  - **Resize**: (224, 224)
+  - **Random Horizontal Flip**: p=0.5
+  - **Random Rotation**: 15°
+  - **Color Jitter**: Brightness, Contrast, Saturation, Hue 변형
+- **Normalization**
+  - Mean = [0.485, 0.456, 0.406]  
+  - Std = [0.229, 0.224, 0.225]
+
+## **📌 Model Configuration**
+- **Model**: ViT-B/16 (Vision Transformer)
+- **Pretrained**: ImageNet-21K
+- **Input Size**: 224x224
+- **Patch Size**: 16x16
+- **Hidden Size**: 768
+- **MLP Dim**: 3072
+- **Num Heads**: 12
+- **Num Layers**: 12
+- **Dropout Rate**: 0.1
+- **Attention Dropout**: 0.1
+- **Classifier**: Token-based
+
+## **Training Setup**
+| Parameter         | Value |
+|------------------|-------|
+| **Optimizer**    | AdamW |
+| **Loss Function**| CrossEntropyLoss |
+| **Batch Size**   | 64 |
+| **Learning Rate**| 1e-4 |
+| **Epochs**       | 10 |
+| **Scheduler**    | None (AdamW Default) |
+
+## **💻 Hardware & Runtime**
+| Resource  | Details |
+|-----------|---------|
+| **GPU**   | NVIDIA A100 (Colab) |
+| **VRAM**  | 40GB |
+| **Training Time** | ~6 min per epoch |
+| **Evaluation Time** | ~23 sec per epoch |
+
+## **Observations & Insights**
+- **빠른 수렴**: 초반부터 Train Accuracy 94.52%, Eval Accuracy 97.53%로 빠르게 높은 성능
+- **과적합 가능성**
+  - Epoch 6~7 이후 Validation Loss 증가 → **Early Stopping 필요**
+  - Train Acc가 99% 넘어서면서 Eval Acc는 오히려 약간 감소
+- **추가 개선 방향**
+  - Data Augmentation 강화 (MixUp, CutMix 추가 고려)
+  - Regularization 추가 (Dropout, Weight Decay 증가)
+  - Learning Rate Scheduler 적용 (Cosine Annealing 등)
+ 
+# Result
+![image](https://github.com/user-attachments/assets/e42a7e50-9ba6-4baa-a1b0-c86283e5069f)
+
