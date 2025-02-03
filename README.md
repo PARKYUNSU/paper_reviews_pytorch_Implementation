@@ -293,7 +293,7 @@ Positional Embedding & [CLS]token
 
 ### 5.1. Inductive bias in Machine Learning
 <details>
-  <summary>Inductive Bias in Machine Learning</summary>
+  <summary>💡Inductive Bias in Machine Learning 톺아보기⁉️</summary>
 
  ### 1. Inductive Bias
 
