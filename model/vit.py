@@ -66,13 +66,6 @@ class Vision_Transformer(nn.Module):
         return logits
     
     def load_from(self, weights):
-        """
-        Hugging Face pretrained weights (state_dict)를 변환하여 모델에 로드합니다.
-        - convert_state_dict() 함수를 사용해 키 이름을 변환합니다.
-        - head weight/bias는 CIFAR-10용으로 shape 불일치 시 재초기화합니다.
-        - pos_embed(위치 임베딩)는 크기가 다르면 2D 보간을 통해 재조정합니다.
-        - 나머지 파라미터는 strict=False로 로드합니다.
-        """
         # 1. pretrained state_dict의 키를 변환합니다.
         converted_weights = convert_state_dict(weights)
 

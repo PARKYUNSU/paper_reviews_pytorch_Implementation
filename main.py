@@ -33,10 +33,6 @@ def parse_args():
 
 
 def visualize_attention(image_path, model, device):
-    """
-    주어진 이미지에 대해 모델의 첫 번째 encoder block의 attention map (첫 번째 head)을 시각화하고,
-    현재 figure 객체를 반환합니다.
-    """
     model.eval()
 
     # 이미지 전처리: 224x224 사이즈, normalize 처리 (ViT 기준)
