@@ -27,7 +27,7 @@ Vision Transformer(ViT)는 규모가 큰 데이터셋(ex, JFT-300M, ImageNet-21k
 
 이전에는 이미지 처리에 Transformer를 적용하는 다양한 방법들이 시도되었습니다.
 
-1. Self-Attentino을 이미지에 적용
+1. Self-Attention을 이미지에 적용
    -  모든 픽셀 간의 상호작용을 고려해야 하며, **$$O(N^2)$$** 의 시간 복잡도를 가짐
  
 2. 각 쿼리 픽셀에 Local 영역 내에서 Self-Attention을 적용
@@ -123,7 +123,7 @@ ViT에서는 **2D Positional Embedding** 대신 **1D Positional Embedding**을 �
 
 
 ### 3.3. Transformer Encoder
-ViT의 핵심부분인 Transformer Encoder 입니다. Transformer Encoder는 여러 개의 Self-Attentino 및 MLP (FFNN) Blcok이 번갈아 쌓인 구조로 이루어져 있습니다.
+ViT의 핵심부분인 Transformer Encoder 입니다. Transformer Encoder는 여러 개의 Self-Attention 및 MLP (FFNN) Blcok이 번갈아 쌓인 구조로 이루어져 있습니다.
 
 - Self-Attention : 각 Patch가 다른 Patch들과 어떻게 관련이 있는지를 계산하는 메커니즘
 <details>
