@@ -47,12 +47,10 @@ def train(model, train_loader, test_loader, epochs, learning_rate, device, save_
         train_losses.append(epoch_loss)
         train_accuracies.append(epoch_accuracy)
         
-        # 평가(Evaluation) 호출 및 결과 저장
         eval_acc, eval_loss = evaluate(model, test_loader, device)
         eval_accuracies.append(eval_acc)
         eval_losses.append(eval_loss)
         
-        # 학습과 평가 결과를 한 줄에 통합 출력
         print(f"Epoch [{epoch+1}/{epochs}] | "
               f"Train Loss: {epoch_loss:.4f}, Train Acc: {epoch_accuracy:.2f}% | "
               f"Eval Loss: {eval_loss:.4f}, Eval Acc: {eval_acc:.2f}%")

@@ -66,10 +66,7 @@ class Vision_Transformer(nn.Module):
         return logits
     
     def load_from(self, weights):
-        # 1. pretrained state_dict의 키를 변환합니다.
         converted_weights = convert_state_dict(weights)
-
-        # 2. Head weight 처리
         if "head/kernel" in converted_weights:
             pretrained_head_weight = np2th(converted_weights["head/kernel"]).t()
             if pretrained_head_weight.shape == self.head.weight.shape:
@@ -91,14 +88,12 @@ class Vision_Transformer(nn.Module):
             converted_weights.pop("head/bias")
         else:
             print("Warning: 'head/bias' not found, skipping head bias load.")
-
-        # 3. Positional embedding 처리 (pos_embed)
+            
         if "pos_embed" in converted_weights:
             posemb = np2th(converted_weights["pos_embed"])
             if posemb.size() == self.pos_embed.size():
                 self.pos_embed.data.copy_(posemb)
             else:
-                # 크기가 다르면 2D 보간(ndimage.zoom) 사용
                 ntok_new = self.pos_embed.size(1)
                 posemb_tok, posemb_grid = posemb[:, :1], posemb[0, 1:]
                 gs_old = int(np.sqrt(len(posemb_grid)))
@@ -111,7 +106,6 @@ class Vision_Transformer(nn.Module):
                 self.pos_embed.data.copy_(np2th(new_posemb))
             converted_weights.pop("pos_embed")
 
-        # 4. 나머지 파라미터를 로드 (strict=False)
         msg = self.load_state_dict(converted_weights, strict=False)
         print("Loaded weights with message:", msg)
 
@@ -122,20 +116,15 @@ def convert_state_dict(state_dict):
     new_state_dict = {}
     for k, v in state_dict.items():
         new_k = k
-        # 1. embeddings 관련 키 변환
         if k.startswith("embeddings.patch_embeddings.projection"):
             new_k = k.replace("embeddings.patch_embeddings.projection", "patch_embed.proj")
         elif k.startswith("embeddings.cls_token"):
             new_k = k.replace("embeddings.cls_token", "cls_token")
         elif k.startswith("embeddings.position_embeddings"):
             new_k = k.replace("embeddings.position_embeddings", "pos_embed")
-        # 2. encoder layer 관련 키 변환
         elif k.startswith("encoder.layer."):
-            # 예: "encoder.layer.0.attention.attention.query.weight"
             parts = k.split(".")
-            # parts[2]는 layer index
             layer_idx = parts[2]
-            # 나머지 부분 변환:
             new_key_suffix = ".".join(parts[3:])
             new_key_suffix = new_key_suffix.replace("attention.attention.query", "attn.query_dense")
             new_key_suffix = new_key_suffix.replace("attention.attention.key", "attn.key_dense")
@@ -146,7 +135,6 @@ def convert_state_dict(state_dict):
             new_key_suffix = new_key_suffix.replace("layernorm_before", "norm1")
             new_key_suffix = new_key_suffix.replace("layernorm_after", "norm2")
             new_k = "encoder.layers." + layer_idx + "." + new_key_suffix
-        # 3. pooler 관련 키는 사용하지 않으므로 건너뛰기
         elif k.startswith("pooler"):
             continue
 
