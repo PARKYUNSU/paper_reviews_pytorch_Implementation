@@ -424,7 +424,7 @@ ViT는 ImageNet-21k와 같은 대규모 데이터셋에서 사전 훈련을 수�
 | **Evaluation Time** | ~23 sec per epoch |
 
 ## **Observations & Insights**
-- **빠른 수렴**: 초반부터 Train Accuracy 94.52%, Eval Accuracy 97.53%로 빠르게 높은 성능
+- **빠른 수렴**: 초반부터 Train Accuracy 94.52%, Eval Accuracy 97.53%로 높은 성능
 - **과적합 가능성**
   - Epoch 6~7 이후 Validation Loss 증가 → **Early Stopping 필요**
   - Train Acc가 99% 넘어서면서 Eval Acc는 오히려 약간 감소
