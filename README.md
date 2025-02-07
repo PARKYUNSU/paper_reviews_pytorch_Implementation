@@ -12,7 +12,6 @@ SE-Net(Squeeze and Excitation Networks)
 
 [![YouTube Video](https://img.youtube.com/vi/qc8CYdWlLxU/0.jpg)](https://www.youtube.com/watch?v=qc8CYdWlLxU)
 
---
 
 ## Squeeze and Excitation Networks
 
