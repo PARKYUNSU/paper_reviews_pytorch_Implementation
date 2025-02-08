@@ -10,6 +10,8 @@ import matplotlib.pyplot as plt
 from PIL import Image
 from torchvision import transforms
 
+from transformers import ViTConfig
+
 def parse_args():
     parser = argparse.ArgumentParser(
         description='Main script to train, evaluate, and visualize the Vision Transformer model.'
@@ -71,7 +73,12 @@ if __name__ == "__main__":
 
     if args.mode == 'train':
         train_loader, test_loader = cifar_10(batch_size=args.batch_size)
+
         config = get_b16_config()
+        print(config)
+        hf_config = ViTConfig.from_pretrained("google/vit-base-patch16-224-in21k")
+        print(hf_config)
+
         model = Vision_Transformer(config, img_size=224, num_classes=10, in_channels=3, pretrained=False)
         model = model.to(device)
         pretrained_weights = torch.load(args.pretrained_path, map_location=device, weights_only=True)
