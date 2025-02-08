@@ -1,7 +1,6 @@
 import torch
 import argparse
 import train
-import os
 from model.config import get_b16_config
 from data import cifar_10
 from model.vit import Vision_Transformer
@@ -10,62 +9,26 @@ from utils import save_model
 import matplotlib.pyplot as plt
 from PIL import Image
 from torchvision import transforms
-from transformers import ViTConfig, ViTForImageClassification
-from collections import OrderedDict
-
-PRETRAINED_MODEL_PATH = "vit_base_patch16.pth"
-
-if not os.path.exists(PRETRAINED_MODEL_PATH):
-    print("Downloading pretrained ViT model")
-    pretrained_model = ViTForImageClassification.from_pretrained("google/vit-base-patch16-224-in21k", ignore_mismatched_sizes=True)
-    torch.save(pretrained_model.state_dict(), PRETRAINED_MODEL_PATH)
-    print(f"Downloaded pretrained ViT model: {PRETRAINED_MODEL_PATH}")
-else:
-    print(f"Model name: {PRETRAINED_MODEL_PATH}")
-
-def convert_state_dict(state_dict):
-    """ 
-    HuggingFace ViT 모델의 state_dict 키를 Vision_Transformer 모델의 키와 맞게 변환하는 함수
-    """
-    new_state_dict = OrderedDict()
-    for k, v in state_dict.items():
-        new_k = k
-        if k.startswith("embeddings.patch_embeddings.projection"):
-            new_k = k.replace("embeddings.patch_embeddings.projection", "patch_embed.proj")
-        elif k.startswith("embeddings.cls_token"):
-            new_k = k.replace("embeddings.cls_token", "cls_token")
-        elif k.startswith("embeddings.position_embeddings"):
-            new_k = k.replace("embeddings.position_embeddings", "pos_embed")
-        elif k.startswith("encoder.layer."):
-            parts = k.split(".")
-            layer_idx = parts[2]
-            new_key_suffix = ".".join(parts[3:])
-            new_key_suffix = new_key_suffix.replace("attention.attention.query", "attn.query_dense")
-            new_key_suffix = new_key_suffix.replace("attention.attention.key", "attn.key_dense")
-            new_key_suffix = new_key_suffix.replace("attention.attention.value", "attn.value_dense")
-            new_key_suffix = new_key_suffix.replace("attention.output.dense", "attn.output_dense")
-            new_key_suffix = new_key_suffix.replace("intermediate.dense", "mlp.fc1")
-            new_key_suffix = new_key_suffix.replace("output.dense", "mlp.fc2")
-            new_key_suffix = new_key_suffix.replace("layernorm_before", "norm1")
-            new_key_suffix = new_key_suffix.replace("layernorm_after", "norm2")
-            new_k = f"encoder.layers.{layer_idx}.{new_key_suffix}"
-        
-        new_state_dict[new_k] = v
-    
-    return new_state_dict
 
 def parse_args():
     parser = argparse.ArgumentParser(
         description='Main script to train, evaluate, and visualize the Vision Transformer model.'
     )
-    parser.add_argument('--mode', type=str, choices=['train', 'visualize'], required=True, help="Mode of operation: 'train' for training, 'visualize' for attention map visualization")
-    # parser.add_argument('--pretrained_path', type=str, required=True, help='Path to the pretrained model weights')
-    parser.add_argument('--epochs', type=int, default=10, help='Number of epochs for training')
-    parser.add_argument('--batch_size', type=int, default=64, help='Batch size for training or evaluation')
-    parser.add_argument('--learning_rate', type=float, default=1e-4, help='Learning rate for training')
-    parser.add_argument('--save_fig', action='store_true', help='Save the loss and accuracy plot as a PNG file')
-    parser.add_argument('--image_path', type=str, default=None,help='Path to the image for visualization (required in visualize mode)')
-
+    parser.add_argument('--mode', type=str, choices=['train', 'visualize'], required=True, 
+                        help="Mode of operation: 'train' for training, 'visualize' for attention map visualization")
+    parser.add_argument('--pretrained_path', type=str, required=True, 
+                        help='Path to the pretrained model weights')
+    parser.add_argument('--epochs', type=int, default=10, 
+                        help='Number of epochs for training')
+    parser.add_argument('--batch_size', type=int, default=64, 
+                        help='Batch size for training or evaluation')
+    parser.add_argument('--learning_rate', type=float, default=1e-4, 
+                        help='Learning rate for training')
+    parser.add_argument('--save_fig', action='store_true', 
+                        help='Save the loss and accuracy plot as a PNG file')
+    parser.add_argument('--image_path', type=str, default=None,
+                        help='Path to the image for visualization (required in visualize mode)')
+    
     return parser.parse_args()
 
 
@@ -111,11 +74,8 @@ if __name__ == "__main__":
         config = get_b16_config()
         model = Vision_Transformer(config, img_size=224, num_classes=10, in_channels=3, pretrained=False)
         model = model.to(device)
-
-        # pretrained_weights = torch.load(args.pretrained_path, map_location=device)
-        # converted_weights = convert_state_dict(pretrained_weights)
-        # model.load_state_dict(converted_weights, strict=False)
-        # print("check pre-trained model")
+        pretrained_weights = torch.load(args.pretrained_path, map_location=device)
+        model.load_from(pretrained_weights)
 
         print("Starting training...")
         train.train(model=model,
@@ -132,10 +92,10 @@ if __name__ == "__main__":
             raise ValueError("Visualization mode requires --image_path argument.")
         
         print("Starting visualization...")
+
         config = get_b16_config()
-        # pretrained_weights = torch.load(args.pretrained_path, map_location=device, weights_only=True)
-        model = Vision_Transformer(config, img_size=224, num_classes=10, in_channels=3, pretrained=False)
-        # model.load_state_dict(pretrained_weights, strict=False)
+        model = Vision_Transformer(config, img_size=224, num_classes=10, in_channels=3,
+                                   pretrained=True, pretrained_path=args.pretrained_path)
         model = model.to(device)
         model.encoder.layers[0].attn.vis = True
         fig = visualize_attention(args.image_path, model, device)

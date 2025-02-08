@@ -110,3 +110,34 @@ class Vision_Transformer(nn.Module):
 
         msg = self.load_state_dict(converted_weights, strict=False)
         print("Loaded weights with message:", msg)
+
+def convert_state_dict(state_dict):
+    """ 
+    HuggingFace ViT 모델의 state_dict 키를 Vision_Transformer 모델의 키와 맞게 변환하는 함수
+    """
+    new_state_dict = OrderedDict()
+    for k, v in state_dict.items():
+        new_k = k
+        if k.startswith("embeddings.patch_embeddings.projection"):
+            new_k = k.replace("embeddings.patch_embeddings.projection", "patch_embed.proj")
+        elif k.startswith("embeddings.cls_token"):
+            new_k = k.replace("embeddings.cls_token", "cls_token")
+        elif k.startswith("embeddings.position_embeddings"):
+            new_k = k.replace("embeddings.position_embeddings", "pos_embed")
+        elif k.startswith("encoder.layer."):
+            parts = k.split(".")
+            layer_idx = parts[2]
+            new_key_suffix = ".".join(parts[3:])
+            new_key_suffix = new_key_suffix.replace("attention.attention.query", "attn.query_dense")
+            new_key_suffix = new_key_suffix.replace("attention.attention.key", "attn.key_dense")
+            new_key_suffix = new_key_suffix.replace("attention.attention.value", "attn.value_dense")
+            new_key_suffix = new_key_suffix.replace("attention.output.dense", "attn.output_dense")
+            new_key_suffix = new_key_suffix.replace("intermediate.dense", "mlp.fc1")
+            new_key_suffix = new_key_suffix.replace("output.dense", "mlp.fc2")
+            new_key_suffix = new_key_suffix.replace("layernorm_before", "norm1")
+            new_key_suffix = new_key_suffix.replace("layernorm_after", "norm2")
+            new_k = f"encoder.layers.{layer_idx}.{new_key_suffix}"
+        
+        new_state_dict[new_k] = v
+    
+    return new_state_dict
