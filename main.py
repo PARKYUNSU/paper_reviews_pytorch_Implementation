@@ -24,6 +24,10 @@ def parse_args():
                         help='Batch size for training or evaluation')
     parser.add_argument('--learning_rate', type=float, default=1e-4, 
                         help='Learning rate for training')
+    parser.add_argument('--weight_decay', type=float, default=1e-4,
+                        help='Weight decay (L2 regularization) factor')
+    parser.add_argument('--label_smoothing', type=float, default=0.0,
+                        help='Label smoothing parameter for cross-entropy loss')
     parser.add_argument('--save_fig', action='store_true', 
                         help='Save the loss and accuracy plot as a PNG file')
     parser.add_argument('--image_path', type=str, default=None,
@@ -77,12 +81,20 @@ if __name__ == "__main__":
         pretrained_weights = torch.load(args.pretrained_path, map_location=device)
         model.load_from(pretrained_weights)
 
+
+
         print("Starting training...")
+        optimizer = torch.optim.AdamW(model.parameters(),
+                                      lr=args.learning_rate,
+                                      weight_decay=args.weight_decay)
+        
+        criterion = torch.nn.CrossEntropyLoss(label_smoothing=args.label_smoothing).to(device)
         train.train(model=model,
                     train_loader=train_loader,
                     test_loader=test_loader,
                     epochs=args.epochs,
-                    learning_rate=args.learning_rate,
+                    optimizer=optimizer,
+                    criterion=criterion,
                     device=device,
                     save_fig=args.save_fig)
         save_model(model, "fine_tuned_model.pth")
