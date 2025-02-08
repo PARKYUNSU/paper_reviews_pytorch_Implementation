@@ -163,13 +163,9 @@ RAG 모델은 디코딩을 RAG-Token과 RAG-Sequence 두 가지 방식을 선택
     
    질문에 대한 단일 정보 소스로 부터, 그 문서를 기준으로 답변을 생성하므로, 문백을 잘 반영할 수 있습니다. 그러나 하나의 문서만을 사용하는 방식이어서 다양한 문서를 고려할 수 없는 단 점이 있습니다.
     
-    $$
-    pRAG-Sequence(y∣x)≈∑_{z∈top-k}p_η(z∣x)p_θ(y∣x,z)
-    $$
+$$pRAG-Sequence(y∣x)≈∑_{z∈top-k}p_η(z∣x)p_θ(y∣x,z)$$
     
-    $$
-    = ∑_{z∈top-k}p_η(z∣x)∏_i^Np_θ(y_i∣x,z,y_{1:i-1})
-    $$
+$$= ∑_{z∈top-k}p_η(z∣x)∏_i^Np_θ(y_i∣x,z,y_{1:i-1})$$
     
 3. **RAG-Token Model**
     
@@ -181,9 +177,7 @@ RAG 모델은 디코딩을 RAG-Token과 RAG-Sequence 두 가지 방식을 선택
 
    여러 개의 문서를 동적으로 활용할 수 있기에, 다양한 정보 소스를 바탕으로 답변을 생성할 수 있습니다. 그러나 여러 문서를 처리하기 때문에 복잡하고 계산량이 커질 수 있습니다.
     
-    $$
-    pRAG-Token(y∣x)≈∏_{i=1}^N∑_{z∈top-k}p_η(z∣x)p_θ(y_i∣x,z,y_{1:i−1})
-    $$
+$$pRAG-Token(y∣x)≈∏_{i=1}^N∑_{z∈top-k}p_η(z∣x)p_θ(y_i∣x,z,y_{1:i−1})$$
 
 <img src="https://github.com/user-attachments/assets/8c381788-0b70-421c-8a66-0ed084148951" width=500>
 
