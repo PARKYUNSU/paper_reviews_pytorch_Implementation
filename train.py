@@ -11,8 +11,12 @@ import matplotlib.pyplot as plt
 
 
 def train(model, train_loader, test_loader, epochs, learning_rate, device, save_fig=False):
+    for name, param in model.named_parameters():
+        if "head" not in name:
+            param.requires_grad = False
+
     criterion = torch.nn.CrossEntropyLoss()
-    optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
+    optimizer = torch.optim.Adam(model.head.parameters(), lr=learning_rate)
 
     model = model.to(device)
     
