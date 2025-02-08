@@ -12,7 +12,9 @@ import matplotlib.pyplot as plt
 
 def train(model, train_loader, test_loader, epochs, learning_rate, device, save_fig=False):
     for name, param in model.named_parameters():
-        if "head" not in name:
+        if "encoder.layers.10" in name or "encoder.layers.11" in name or "head" in name:
+            param.requires_grad = True
+        else:
             param.requires_grad = False
 
     criterion = torch.nn.CrossEntropyLoss()
