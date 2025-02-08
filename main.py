@@ -17,7 +17,7 @@ PRETRAINED_MODEL_PATH = "vit_base_patch16.pth"
 
 if not os.path.exists(PRETRAINED_MODEL_PATH):
     print("Downloading pretrained ViT model")
-    pretrained_model = ViTForImageClassification.from_pretrained("google/vit-base-patch16-224-in21k")
+    pretrained_model = ViTForImageClassification.from_pretrained("google/vit-base-patch16-224-in21k", ignore_mismatched_sizes=True)
     torch.save(pretrained_model.state_dict(), PRETRAINED_MODEL_PATH)
     print(f"Downloaded pretrained ViT model: {PRETRAINED_MODEL_PATH}")
 else:
