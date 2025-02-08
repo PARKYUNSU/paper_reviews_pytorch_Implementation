@@ -1,11 +1,12 @@
 # RAG
  
-Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks
+Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks - 2021
 
 ㅡ Patrick Lewis, Ethan Perez
 
 [Paper to Read](https://arxiv.org/pdf/2005.11401)
 
+---
 
 # 1. Introduction
 
@@ -15,7 +16,7 @@ Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks
 
 RAG 모델은 Retrieval과 Generator 부분으로 이루어져 있습니다. Retreiver는 BERT와 같은 강력한 언어 모델을 사용해서 문서(Document)와 질문(Query)를 벡터 공간에 임베딩하고, 이를 통해 질문과 관련된 정보를 검색합니다.
 
-그런 다음, 검색된 정보는 Vector Concatenation을 통해 하나의 벡터로 결합되어, Generator의 입력으로 사용됩니다. Generator는 이 정보를 바탕으로 최종적인 답을 생성합니다. 이 과정은 Supervised Loss를 통해 학습되며, RAG는 문서 Index를 명시적으로 제공하지 않아도 효과적으로 학습할 수 있습니다.
+그런 다음, 검색된 정보는 Vector Concatenation을 통해 하나의 벡터로 결합되어, Generator의 입력으로 사용됩니다. Generator는 이 정보를 바탕으로 최종적인 답을 생성합니다. 이 과정은 Supervised Loss를 통해 학습되며, $BERT_q(Query)$ 와 Genrator만 학습해도 문서를 어떻게 잘 검색할지 자동으로 최적화 됩니다. RAG는 문서 Index가 존재하긴 하지만, 그 인덱스를 어떻게 활용해야하는지까지 통합적으로 학습되기 때문에 효과적으로 학습할 수 있습니다.
 
 # 2. Method
 
@@ -23,7 +24,8 @@ RAG 모델은 Retrieval과 Generator 부분으로 이루어져 있습니다. Ret
 
 그래서 논문의 저자는 Retrieval(검색)을 활용해서 이 문제점을 해결하고자 합니다.
 
-![image.png](attachment:683575b6-8a92-47b5-a159-820d6c60c2ff:image.png)
+
+<img src="https://github.com/user-attachments/assets/ec2ed1ae-1771-422b-9fd9-26384e488cf1" width=500>
 
 ## 2.1. Retriever
 
@@ -63,44 +65,40 @@ $$
 
 벡터화가 된 질문 벡터($q(x)$)와 문서 벡터($d(x)$)는 MIPS(Maximum Inner Product Search)를 사용해서 유사도를 계산합니다.
 
-- **Cosine Similarity vs MIPS**
+**Cosine Similarity vs MIPS**
     
-    ### Cosine Similarity
+### Cosine Similarity
     
-    Cosine Similarity는 두 벡터의 내적을 벡터의 크기로 나누어, 벡터 방향에 대한 유사도를 평가합니다. 따라서 벡터의 크기가 유사도 계산의 영향을 미칩니다.
+Cosine Similarity는 두 벡터의 내적을 벡터의 크기로 나누어, 벡터 방향에 대한 유사도를 평가합니다. 따라서 벡터의 크기가 유사도 계산의 영향을 미칩니다.
     
-    $$
-    Cosine Similarity = \frac{q \cdot d}{|q||d|}
-    $$
+$$Cosine Similarity = \frac{q \cdot d}{|q||d|}$$
     
-    $Where$
+$Where$
     
-    - $q$ : Query Vector
-    - $d$ : Document Vector
-    - $\cdot$ : 내적
-    - $|q|, |d|$ : Query의 크기, Document의 크기\
+- $q$ : Query Vector
+- $d$ : Document Vector
+- $\cdot$ : 내적
+- $|q|, |d|$ : Query의 크기, Document의 크기\
     
-    ### MIPS (Maximum Inner Product Search)
+### MIPS (Maximum Inner Product Search)
     
-    MIPS는 내적만 계산하고, 벡터의 크기에 대해서는 고려하지 않습니다. 벡터의 크기를 고려하지 않기 때문에, 정규화된 벡터가 필요하지 않습니다. 대신에 최대 내적값을 계산해서 가장 유사한 문서를 선택합니다. 즉, Cosine Similarity 보다 연산량이 작습니다.
+MIPS는 내적만 계산하고, 벡터의 크기에 대해서는 고려하지 않습니다. 벡터의 크기를 고려하지 않기 때문에, 정규화된 벡터가 필요하지 않습니다. 대신에 최대 내적값을 계산해서 가장 유사한 문서를 선택합니다. 즉, Cosine Similarity 보다 연산량이 작습니다.
     
-    이로 인해, 대규모 문서 집합에서 가장 관련성이 높은 문서를 빠르게 찾는 데 유리해집니다. 
+이로 인해, 대규모 문서 집합에서 가장 관련성이 높은 문서를 빠르게 찾는 데 유리해집니다. 
     
-    $$
-    MIPS = \underset{i \in S}{arg\, max} \ \langle x_i, q \rangle
-    $$
+$$MIPS = \underset{i \in S}{arg\, max} \ \langle x_i, q \rangle$$
     
-    $Where$
+$Where$
     
-    - $S$ : 데이터가 저장된 벡터 공간 집합
-    - $x_i$ : $i$번째 Data Vector
-    - $q$ : Query Vector
-    - $\langle x_i, q \rangle$ : Data Vector $x_i$와 Query Vector 내적
-    - $\underset{i \in S}{arg\, max}$ : $i$값을 찾는 연산자로, Data 집합 $S$에 속한 벡터 $x_i$ 중에서 $q$(Query Vector) 와 내적이 가장 큰 Vector 값을 찾는 연산자.
+- $S$ : 데이터가 저장된 벡터 공간 집합
+- $x_i$ : $i$번째 Data Vector
+- $q$ : Query Vector
+- $\langle x_i, q \rangle$ : Data Vector $x_i$와 Query Vector 내적
+- $\underset{i \in S}{arg\, max}$ : $i$값을 찾는 연산자로, Data 집합 $S$에 속한 벡터 $x_i$ 중에서 $q$(Query Vector) 와 내적이 가장 큰 Vector 값을 찾는 연산자.
 
 계산된 MIPS 값을 기준으로 가장 유사한 상위 k개의 문서를 선택합니다. 이 상위 k개의 문서는 질문에 가장 관련이 높은 문서들입니다.
 
-![image.png](attachment:966f58e5-99ed-42c3-b541-128ec8a04a8c:image.png)
+<img src="https://github.com/user-attachments/assets/882eef25-b205-4673-bcbb-14c5286ea5ec" width=500>
 
 ## 2.2. Vector Concatenation
 
@@ -117,7 +115,11 @@ $Where$
 - $q$ : Query Vector
 - $x_i$ : $i$번째 Document Vector
 
-이 k개의 벡터 덩어리 중에서 하나의 벡터만을 선택해서 최종적으로 Generator에 입력되어 질문에 대한 답변을 생성하는데 사용됩니다. 하나의 벡터를 선택하는 기준은 Loss 계산으로 가장 적은 Loss를 가지는 벡터 덩어리를 선택합니다.
+다만 실제 구현에서는 문자열 형태의 질의와 문서를 그대로 이어붙여 하나의 텍스트 시퀀스를 만들고, 이를 BART(Generator)의 인코더에 입력합니다. 
+
+이렇게 생성된 k개의 시퀀스 각각에 대해 BART 디코더가 답변 후보를 생성하며, 학습 과정에서는 Negative Log-Likelihood(Loss)를 계산하여 가장 적합한 문서-질문 쌍(또는 토큰 시점별 문서)을 선택하거나 확률을 마진얼(marginalize)하는 식으로 최종 답변을 결정합니다.
+
+학습 시에는 여러 문서 중에서 실제로 Loss가 가장 낮아지는(즉, 타깃 답변과 가장 잘 맞아떨어지는) 문서를 선택하여 답을 생성하는 방식으로 최적화됩니다.
 
 ## 2.3. Generator
 
@@ -151,7 +153,7 @@ BART의 Decoder는 Self-attention을 사용하여 각 단어가 문맥에 맞는
 
 ### 2.3.1.4. Decoding
 
-RAG 모델은 디코딩을 RAG-Token과 RAG-Sequence 두 가지 방식을 사용합니다. 두 모델은 **디코딩 방식**에 차이가 있으며, 학습과 출력 과정에서의 차이로 인해 성능 차이를 보일 수 있습니다.
+RAG 모델은 디코딩을 RAG-Token과 RAG-Sequence 두 가지 방식을 선택적으로 사용합니다. 두 모델은 **디코딩 방식**에 차이가 있으며, 학습과 출력 과정에서의 차이로 인해 성능 차이를 보일 수 있습니다.
 
 1. **RAG-Sequence Model**
     
@@ -159,7 +161,7 @@ RAG 모델은 디코딩을 RAG-Token과 RAG-Sequence 두 가지 방식을 사용
     
     Generator는 전체 시퀀스를 하나의 문서에 기반하여 생성하며, 문서 하나에 대해 전체 시퀀스를 생성하는 방식입니다.
     
-    하나의 문서를 사용하여 전체 문맥을 고려하여 답변을 생성합니다.
+   질문에 대한 단일 정보 소스로 부터, 그 문서를 기준으로 답변을 생성하므로, 문백을 잘 반영할 수 있습니다. 그러나 하나의 문서만을 사용하는 방식이어서 다양한 문서를 고려할 수 없는 단 점이 있습니다.
     
     $$
     pRAG-Sequence(y∣x)≈∑_{z∈top-k}p_η(z∣x)p_θ(y∣x,z)
@@ -169,20 +171,21 @@ RAG 모델은 디코딩을 RAG-Token과 RAG-Sequence 두 가지 방식을 사용
     = ∑_{z∈top-k}p_η(z∣x)∏_i^Np_θ(y_i∣x,z,y_{1:i-1})
     $$
     
-2. **RAG-Token Model**
+3. **RAG-Token Model**
     
     RAG-Token 모델은 각 토큰에 대해 다른 문서를 선택하여 답변을 생성합니다.
     
     Generator는 각 토큰마다 다른 문서를 사용하여 답변을 생성합니다. 이는 각 출력 토큰을 생성할 때마다 관련 문서를 동적으로 선택하는 방식입니다.
     
     이 모델은 다양한 문서들에서 각 토큰을 생성하며, 마진화된 결과로 최종적으로 답변을 완성합니다.
+
+   여러 개의 문서를 동적으로 활용할 수 있기에, 다양한 정보 소스를 바탕으로 답변을 생성할 수 있습니다. 그러나 여러 문서를 처리하기 때문에 복잡하고 계산량이 커질 수 있습니다.
     
     $$
     pRAG-Token(y∣x)≈∏_{i=1}^N∑_{z∈top-k}p_η(z∣x)p_θ(y_i∣x,z,y_{1:i−1})
     $$
-    
 
-![image.png](attachment:814c7620-e297-4c50-85c2-2fb76152b17b:image.png)
+<img src="https://github.com/user-attachments/assets/8c381788-0b70-421c-8a66-0ed084148951" width=500>
 
 ## 2.4 Training
 
@@ -190,7 +193,7 @@ RAG 모델의 학습과정은 Retriever과 Generator를 동시에 학습시키�
 
 중요한 점은 **어떤 문서를 검색해야 할지에 대한 직접적인 지도(supervision)가 없다는 것**입니다. 즉, **문서 검색**과 **응답 생성**이 함께 최적화됩니다. 
 
-### 2.4.1. 학습과정
+### 2.4.1. Training
 
 입력/출력 쌍 $(x_j, y_j)$가 주어집니다. 여기서 $x_j$는 입력 Query이고, $y_j$는 출력 답변입니다.
 
@@ -206,6 +209,6 @@ $p(y_j|x_j)$는 입력 쿼리 $x_j$에 대해 정확한 답변 $y_j$를 생성�
 
 Retriever는 쿼리 $x_j$에 대해 가장 관련성이 높은 문서를 검색합니다. 하지만, 어떤 문서를 검색해야 하는지에 대한 지도학습이 없습니다. 대신  Document Encoder인 $BERT_d$를 동결하고, Query Encoder $BERT_q$와 Generator인 $BART$만 fine-tuning 합니다.
 
-### 2.4.3. Document Encoder 업데이트
+### 2.4.3. Document Encoder Frozen
 
-Document Encoder $BERT_d$는 학습 중에 업데이트하지 않습니다. 그 이유는 문서 인데스를 주기적으로 업데이트 하기 때문입니다. REALM 모델처럼 문서 인코더를 업데이트하는 과정은 시간이 많이 걸리고 계산 비용이 크기 때문에, RAG 모델에서는 문서 인코더를 동결시키고 쿼리 인코더와 BART만 학습시킵니다.
+Document Encoder $BERT_d$는 학습 중에 업데이트하지 않습니다. 그 이유는 문서 인데스를 주기적으로 업데이트 하기 때문입니다. 이전 연구인 "REALM" 모델처럼 문서 인코더를 매번 갱신하며 학습을 진행했는데, 그 비용이 매우 큰 단점이 있었습니다. RAG 모델에서는 문서 인코더 $BERT_d$를 동결시키고 쿼리 인코더와 BART만 학습시켜 문제를 크게 완화했습니다.
