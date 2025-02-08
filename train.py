@@ -11,14 +11,9 @@ import matplotlib.pyplot as plt
 
 
 def train(model, train_loader, test_loader, epochs, learning_rate, device, save_fig=False):
-    for name, param in model.named_parameters():
-        if "encoder.layers.10" in name or "encoder.layers.11" in name or "head" in name:
-            param.requires_grad = True
-        else:
-            param.requires_grad = False
-
+    trainable_params = [param for name, param in model.named_parameters() if param.requires_grad]
     criterion = torch.nn.CrossEntropyLoss()
-    optimizer = torch.optim.Adam(model.head.parameters(), lr=learning_rate)
+    optimizer = torch.optim.Adam(trainable_params, lr=learning_rate)
 
     model = model.to(device)
     
