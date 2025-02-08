@@ -75,7 +75,9 @@ if __name__ == "__main__":
         model = Vision_Transformer(config, img_size=224, num_classes=10, in_channels=3, pretrained=False)
         model = model.to(device)
         pretrained_weights = torch.load(args.pretrained_path, map_location=device, weights_only=True)
-        model.load_state_dict(pretrained_weights, strict=False)
+        missing_keys, unexpected_keys = model.load_state_dict(pretrained_weights, strict=False)
+        print(f"Missing Keys: {missing_keys}")
+        print(f"Unexpected Keys: {unexpected_keys}")
 
         print("Starting training...")
         train.train(model=model,
