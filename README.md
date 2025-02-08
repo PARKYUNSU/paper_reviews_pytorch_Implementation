@@ -24,7 +24,7 @@ RAG 모델은 Retrieval과 Generator 부분으로 이루어져 있습니다. Ret
 
 그래서 논문의 저자는 Retrieval(검색)을 활용해서 이 문제점을 해결하고자 합니다.
 
-<img src="https://github.com/user-attachments/assets/6160effe-056a-4e2a-9f42-66dafff8ce54" width=500>
+<img src="https://github.com/user-attachments/assets/6160effe-056a-4e2a-9f42-66dafff8ce54" width=700>
 
 ## 2.1. Retriever
 
@@ -178,7 +178,7 @@ $$= ∑_{z∈top-k}p_η(z∣x)∏_i^Np_θ(y_i∣x,z,y_{1:i-1})$$
     
 $$pRAG-Token(y∣x)≈∏_{i=1}^N∑_{z∈top-k}p_η(z∣x)p_θ(y_i∣x,z,y_{1:i−1})$$
 
-<img src="https://github.com/user-attachments/assets/8c381788-0b70-421c-8a66-0ed084148951" width=500>
+<img src="https://github.com/user-attachments/assets/8c381788-0b70-421c-8a66-0ed084148951" width=700>
 
 ## 2.4 Training
 
