@@ -74,8 +74,8 @@ if __name__ == "__main__":
         config = get_b16_config()
         model = Vision_Transformer(config, img_size=224, num_classes=10, in_channels=3, pretrained=False)
         model = model.to(device)
-        pretrained_weights = torch.load(args.pretrained_path, map_location=device)
-        model.load_from(pretrained_weights)
+        pretrained_weights = torch.load(args.pretrained_path, map_location=device, weights_only=True)
+        model.load_state_dict(pretrained_weights, strict=False)
 
         print("Starting training...")
         train.train(model=model,
@@ -94,8 +94,9 @@ if __name__ == "__main__":
         print("Starting visualization...")
 
         config = get_b16_config()
-        model = Vision_Transformer(config, img_size=224, num_classes=10, in_channels=3,
-                                   pretrained=True, pretrained_path=args.pretrained_path)
+        pretrained_weights = torch.load(args.pretrained_path, map_location=device, weights_only=True)
+        model = Vision_Transformer(config, img_size=224, num_classes=10, in_channels=3, pretrained=False)
+        model.load_state_dict(pretrained_weights, strict=False)
         model = model.to(device)
         model.encoder.layers[0].attn.vis = True
         fig = visualize_attention(args.image_path, model, device)
