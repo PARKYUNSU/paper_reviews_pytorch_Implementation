@@ -52,7 +52,7 @@ RAG에서는 DPR이라는 방식으로 Retriever를 진행합니다. 질문과 �
 
 **BI-Encoder**
 
-DPR은 BI-Encoder를 사용합니다, 즉, 질문(Query)와 문서(Document)는 질문 인코더($BERT_{q}$), 문서 인코더($BERT_{d}$)로 나뉘게 되며 각각의 인코더를 통해서 벡터화($q(x), d(x)$) 됩니다. 각 인코더는 BERT와 같은 Transformer 모델을 기반으로 합니다.
+DPR은 BI-Encoder를 사용합니다, 즉, 질문(Query)와 문서(Document)는 질문 인코더($BERT_{q}$), 문서 인코더($BERT_{d}$)로 나뉘게 되며 각각의 인코더를 통해서 벡터화($q(x)$, $d(x)$) 됩니다. 각 인코더는 BERT와 같은 Transformer 모델을 기반으로 합니다.
 
 $$
 Query → BERT_{q} → q(x)
