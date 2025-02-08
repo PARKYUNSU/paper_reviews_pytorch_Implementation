@@ -11,8 +11,6 @@ import matplotlib.pyplot as plt
 
 
 def train(model, train_loader, test_loader, epochs, learning_rate, optimizer, criterion, device, save_fig=False):
-    criterion = torch.nn.CrossEntropyLoss()
-    optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
 
     model = model.to(device)
     

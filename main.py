@@ -93,6 +93,7 @@ if __name__ == "__main__":
                     train_loader=train_loader,
                     test_loader=test_loader,
                     epochs=args.epochs,
+                    learning_rate=args.learning_rate,
                     optimizer=optimizer,
                     criterion=criterion,
                     device=device,
