@@ -27,7 +27,7 @@ class Vision_Transformer(nn.Module):
         self.encoder = Encoder(config)
 
         # Classification Head
-        self.head = nn.Sequential(nn.Linear(config.hidden_size, num_classes), nn.Dropout(0.3))
+        self.head = nn.Sequential(nn.Linear(config.hidden_size, num_classes))
 
         self._init_weights()
 
