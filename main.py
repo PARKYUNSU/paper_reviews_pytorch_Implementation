@@ -112,10 +112,10 @@ if __name__ == "__main__":
         model = Vision_Transformer(config, img_size=224, num_classes=10, in_channels=3, pretrained=False)
         model = model.to(device)
 
-        pretrained_weights = torch.load(args.pretrained_path, map_location=device)
-        converted_weights = convert_state_dict(pretrained_weights)
-        model.load_state_dict(converted_weights, strict=False)
-        print("check pre-trained model")
+        # pretrained_weights = torch.load(args.pretrained_path, map_location=device)
+        # converted_weights = convert_state_dict(pretrained_weights)
+        # model.load_state_dict(converted_weights, strict=False)
+        # print("check pre-trained model")
 
         print("Starting training...")
         train.train(model=model,
@@ -132,11 +132,10 @@ if __name__ == "__main__":
             raise ValueError("Visualization mode requires --image_path argument.")
         
         print("Starting visualization...")
-
         config = get_b16_config()
-        pretrained_weights = torch.load(args.pretrained_path, map_location=device, weights_only=True)
+        # pretrained_weights = torch.load(args.pretrained_path, map_location=device, weights_only=True)
         model = Vision_Transformer(config, img_size=224, num_classes=10, in_channels=3, pretrained=False)
-        model.load_state_dict(pretrained_weights, strict=False)
+        # model.load_state_dict(pretrained_weights, strict=False)
         model = model.to(device)
         model.encoder.layers[0].attn.vis = True
         fig = visualize_attention(args.image_path, model, device)
