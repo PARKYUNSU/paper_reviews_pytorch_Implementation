@@ -24,8 +24,7 @@ RAG 모델은 Retrieval과 Generator 부분으로 이루어져 있습니다. Ret
 
 그래서 논문의 저자는 Retrieval(검색)을 활용해서 이 문제점을 해결하고자 합니다.
 
-
-<img src="https://github.com/user-attachments/assets/ec2ed1ae-1771-422b-9fd9-26384e488cf1" width=500>
+<img src="https://github.com/user-attachments/assets/6160effe-056a-4e2a-9f42-66dafff8ce54" width=500>
 
 ## 2.1. Retriever
 
