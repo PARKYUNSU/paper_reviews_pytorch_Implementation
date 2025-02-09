@@ -77,7 +77,7 @@ $Where$
 - $q$ : Query Vector
 - $d$ : Document Vector
 - $\cdot$ : 내적
-- $|q|, |d|$ : Query의 크기, Document의 크기\
+- $|q|, |d|$ : Query의 크기, Document의 크기
     
 ### MIPS (Maximum Inner Product Search)
     
