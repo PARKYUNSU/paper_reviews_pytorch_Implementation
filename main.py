@@ -81,8 +81,6 @@ if __name__ == "__main__":
         pretrained_weights = torch.load(args.pretrained_path, map_location=device)
         model.load_from(pretrained_weights)
 
-
-
         print("Starting training...")
         optimizer = torch.optim.AdamW(model.parameters(),
                                       lr=args.learning_rate,
@@ -105,7 +103,6 @@ if __name__ == "__main__":
             raise ValueError("Visualization mode requires --image_path argument.")
         
         print("Starting visualization...")
-
         config = get_b16_config()
         model = Vision_Transformer(config, img_size=224, num_classes=10, in_channels=3,
                                    pretrained=True, pretrained_path=args.pretrained_path)

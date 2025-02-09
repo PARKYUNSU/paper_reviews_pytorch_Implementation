@@ -1,6 +1,6 @@
 import torch
 import torch.nn as nn
-from torch.nn.modules.utils import _pair # tuple 처리 함수
+from torch.nn.modules.utils import _pair # tuple 처리 함수 # 이미지가 튜블로 되어있는 함수인데 튜플을 사용했어
 
 class Patch_Embedding(nn.Module):
     def __init__(self, config, img_size, in_channels=3):
