@@ -10,7 +10,7 @@ https://arxiv.org/pdf/2010.11929
 ---
 ## 논문 리뷰 영상
 
-[![YouTube Video](https://www.youtube.com/watch?v=BR4h-bpGDKs/0.jpg)](https://www.youtube.com/watch?v=BR4h-bpGDKs)
+[![YouTube Video](https://img.youtube.com/watch?v=BR4h-bpGDKs/0.jpg)](https://www.youtube.com/watch?v=BR4h-bpGDKs)
 
 ---
 # 1. Introduction
