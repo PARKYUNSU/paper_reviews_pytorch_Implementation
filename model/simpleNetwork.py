@@ -3,7 +3,8 @@ import torch.nn as nn
 from torch.nn import functional as F
 from model.resnet import resnet50, resnet101
 import pytorch_lightning as pl
-
+from util import intersecionUnionGpu, batch_intersecionUnionGpu
+from vis import make_episode_visualization
 
 def masked_global_pooling(mask, feature_map):
     # mask size = [N-Way, K-Shot, 1, 56, 56]
@@ -174,5 +175,94 @@ class ClassIoU:
         return self.intersection / (self.union + 1e-5)
     
     def reset(self):
-        self.intersection.zero_(self.num_classes)
-        self.union.zero_(self.num_classes)
+        self.intersection.zero_()
+        self.union.zero_()
+
+    # Lightining Module
+    def training_step(self, batch, batch_idx):
+        qry_img, target, spprt_imgs, spprt_labels, subcls_list, support_image_path_list, image_paths = batch
+
+        y_hat = self((spprt_imgs, spprt_labels, qry_img))
+        target = target.long()
+        loss = self.criterion(y_hat, target)
+        preds = torch.argmax(y_hat, dim=1)
+        area_inter, area_union, area_target = intersecionUnionGpu(preds, target, 2)
+        miou = area_inter.sum().float() / area_union.sum().float()
+
+        self.log('train_loss', loss, on_step=True, on_epoch=True, prog_bar=True, logger=True)
+        self.log('train_miou', miou, on_step=True, on_epoch=True, prog_bar=True, logger=True)
+
+        return loss
+    
+    def validation_step(self, batch, batch_idx, dataset_idx=0):
+        qry_img, target, spprt_imgs, spprt_labels, subcls_list, support_image_path_list, image_paths = batch
+
+        y_hat = self((spprt_imgs, spprt_labels, qry_img))
+        target = target.long()
+        loss = self.criterion(y_hat, target)
+        preds = torch.argmax(y_hat, dim=1)
+        area_inter, area_union, area_target = intersecionUnionGpu(preds, target, 2)
+        miou = area_inter.sum().float() / area_union.sum().float()
+
+        y_hat = y_hat.unsqueeze(1)
+        target = target.unsqueeze(1)
+        inter, union, _ = batch_intersecionUnionGpu(y_hat, target, 2)
+        self.val_class_IoU[dataset_idx].update(inter, union, subcls_list)
+        self.log('val_loss', loss, on_step=True, on_epoch=True, prog_bar=True, logger=True)
+        self.log('val_miou', miou, on_step=True, on_epoch=True, prog_bar=True, logger=True)
+
+    def on_validation_epoch_end(self):
+        if len(self.val_class_IoU) == 1:  # 단일 IoU인 경우
+            val_miou = self.val_class_IoU[0].compute()
+            self.log('val_miou', val_miou, prog_bar=True, logger=True)
+            self.val_class_IoU[0].reset()
+        else:  # 여러 개의 IoU인 경우
+            for i, calculator in enumerate(self.val_class_IoU):
+                val_miou = calculator.compute()
+                calculator.reset()
+                self.log("val_miou_" + str(i), val_miou, prog_bar=True, logger=True)
+
+
+    def test_step(self, batch, batch_idx, dataset_idx=0):
+        qry_img, target, spprt_imgs, spprt_labels, subcls_list, support_image_path_list, image_paths = batch
+
+        target = target.long()
+        y_hat = self((spprt_imgs, spprt_labels, qry_img))
+        loss = self.criterion(y_hat, target)
+        preds = torch.argmax(y_hat, dim=1)
+
+        area_inter, area_union, area_target = intersecionUnionGpu(preds, target, 2)
+        miou = area_inter.sum().float() / area_union.sum().float()
+
+        y_hat = y_hat.unsqueeze(1)
+        target = target.unsqueeze(1)
+        inter, union, _ = batch_intersecionUnionGpu(y_hat, target, 2)
+
+        self.val_class_IoU[dataset_idx].update(inter, union, subcls_list)
+
+        self.log('test_loss', loss, on_step=True, on_epoch=True, prog_bar=True, logger=True)
+        self.log('test_miou', miou, on_step=True, on_epoch=True, prog_bar=True, logger=True)
+
+        # 시각화 옵션이 활성화된 경우
+        if self.args.visualize:
+            for i in range(len(qry_img)):
+                path = f"{image_paths[0][i].split('.')[0].split('/')[-1]}_{dataset_idx}_{batch_idx}_{i}"
+                make_episode_visualization(
+                    spprt_imgs[i].cpu().numpy(),
+                    qry_img[i].cpu().numpy(),
+                    spprt_labels[i].cpu().numpy(),
+                    target[i, 0].cpu().numpy(),
+                    y_hat[i].cpu().numpy(),
+                    path
+                )
+
+    
+    def on_test_epoch_end(self):
+        test_miou = self.val_class_IoU[0].compute()
+        self.log('test_miou', test_miou, prog_bar=True, logger=True)
+        self.val_class_IoU[0].reset()
+
+
+    def configure_optimizers(self):
+        optimizer = torch.optim.Adam(self.parameters(), lr=1e-4, weight_decay=1e-5)
+        return [optimizer]
