@@ -409,34 +409,52 @@ ViT는 ImageNet-21k와 같은 대규모 데이터셋에서 사전 훈련을 수�
 - **Attention Dropout**: 0.1
 - **Classifier**: Token-based
 
-## **Training Setup**
-| Parameter         | Value |
-|------------------|-------|
-| **Optimizer**    | AdamW |
-| **Loss Function**| CrossEntropyLoss |
-| **Batch Size**   | 64 |
-| **Learning Rate**| 1e-4 |
-| **Epochs**       | 10 |
-| **Scheduler**    | None (AdamW Default) |
-
 ## **💻 Hardware & Runtime**
 | Resource  | Details |
 |-----------|---------|
 | **GPU**   | NVIDIA A100 (Colab) |
 | **VRAM**  | 40GB |
-| **Training Time** | ~6 min per epoch |
-| **Evaluation Time** | ~23 sec per epoch |
+
+## **Training Experiments**
+
+| Parameter         | 1st Experiment           | 2nd Experiment           | 3rd Experiment                                |
+|------------------|-------------------------|-------------------------|----------------------------------------------|
+| **Optimizer**    | AdamW                   | AdamW                   | AdamW                                        |
+| **Loss Function**| CrossEntropyLoss        | CrossEntropyLoss        | CrossEntropyLoss                            |
+| **Batch Size**   | 64                      | 64                      | 64                                           |
+| **Learning Rate**| 1e-4                    | 3e-4                    | 3e-4                                         |
+| **Epochs**       | 10                      | 10                      | 50                                           |
+| **Augmentation** | No                      | No                      | Yes                                           |
+| **Weight Decay** | -                       | -                       | 1e-4                                         |
+| **Label Smoothing** | -                   | -                       | 0.1                                          |
 
 ## **Observations & Insights**
-- **빠른 수렴**: 초반부터 Train Accuracy 94.52%, Eval Accuracy 97.53%로 높은 성능
-- **과적합 가능성**
-  - Epoch 6~7 이후 Validation Loss 증가 → **Early Stopping 필요**
-  - Train Acc가 99% 넘어서면서 Eval Acc는 오히려 약간 감소
-- **추가 개선 방향**
-  - Data Augmentation 강화 (MixUp, CutMix 추가 고려)
-  - Regularization 추가 (Dropout, Weight Decay 증가)
-  - Learning Rate Scheduler 적용 (Cosine Annealing 등)
- 
+### 실험 1
+- 초반부터 Train Accuracy 94.52%, Eval Accuracy 97.53%로 높은 성능
+- Epoch 6~7 이후 Validation Loss 증가 → Learning Rate 고려
+
+### 실험 2
+- Train Loss: 초반 급격히 감소한 후 점진적으로 낮아지는 형태
+- Eval Loss: 훈련 손실보다 낮은 수준에서 유지되며, 안정적으로 감소
+- 초반부터 Val Acuuracy 85% 이상에서 시작해서 거의 90%에 근접 → Pre-trained model 때문에 초기 성능이 높고, 학습이 빠르게 진행
+
+### 실험 3
+- Train Loss: 초반에 급격히 감소한 후 점진적으로 하락
+- Eval Loss: 처음엔 낮지만, 이후 큰 변화 없이 0.2~0.3 수준에서 유지됨
+- Pre-trained model 때문에 10 epoch 정도만 해도 Eval 성능이 90~95% 가까이 가서 추가 학습 의미가 없어보임
+
 # Result
-![image](https://github.com/user-attachments/assets/e42a7e50-9ba6-4baa-a1b0-c86283e5069f)
+### 1st Experiment  
+![image](https://github.com/user-attachments/assets/db4aa33e-cb3b-4482-a559-b03c6ed35464)
+
+### 2nd Experiment
+![image](https://github.com/user-attachments/assets/381a6033-2ae7-4c2a-87ab-e9ba0f296513)
+
+### 3rd Experiment
+![image](https://github.com/user-attachments/assets/555e7eb1-17c1-49c8-b75b-e4ff65fddfcd)
+
+
+
+
+
 
