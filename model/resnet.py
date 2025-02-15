@@ -40,7 +40,6 @@ class BasicBlock(nn.Module):
         out = self.relu1(out)
         return out
     
-
 class BottleNeck(nn.Module):
     expansion_factor=4
     def __init__(self, in_channels, out_channels, stride=1):
