@@ -34,15 +34,13 @@ if __name__ == "__main__":
     torch.cuda.manual_seed_all(seed_value)
     seed_everything(seed_value)
 
-    # 체크포인트에서 모델 불러오기
     model = simpleNetwork.load_from_checkpoint(
         checkpoint_path=opt.ckpt_used,
         map_location="cpu",
         visualize=opt.visualize
     ).eval()
 
-    # 테스트 실행
     trainer = Trainer(gpus=opt.gpus, benchmark=True)
 
-    for _ in range(5):  # 5회 반복 테스트
+    for _ in range(5):
         trainer.test(model, dataloaders=[load_test_data(opt)])
