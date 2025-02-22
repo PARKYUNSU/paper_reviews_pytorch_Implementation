@@ -22,7 +22,8 @@ RAG 모델은 Retrieval과 Generator 부분으로 이루어져 있습니다. Ret
 
 앞서 설명드린 것 처럼, LLM 모델들은 많은 데이터를 통해서 학습을 하지만, 외부 데이터 및 개인적인 데이터(Ex, 개인 DB나 문서들)들은 접근을 할 수가 없습니다. 그래서 LLM 모델은 그런 정보에 대해서 알수도 없을 뿐더러, 제대로 답변을 할 수 없습니다.
 
-그래서 논문의 저자는 Retrieval(검색)을 활용해서 이 문제점을 해결하고자 합니다.
+따라서 이 문제를 해결하기 위해 Retrieval-Augmented Generation (RAG) 모델에서는 **"augment"** 라는 개념이 중요한 역할을 합니다. augment는 외부 지식을 모델의 응답 생성에 추가하는 과정을 의미합니다. 이 과정에서 모델은 내부 메모리만으로 답변을 생성하는 것이 아니라, 외부 검색을 통해 실시간으로 정보를 추가하여 더 정확하고 신뢰할 수 있는 답변을 생성합니다.
+
 
 <img src="https://github.com/user-attachments/assets/6160effe-056a-4e2a-9f42-66dafff8ce54" width=700>
 
