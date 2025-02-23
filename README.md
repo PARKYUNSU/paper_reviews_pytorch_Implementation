@@ -68,7 +68,7 @@ $$
 
 벡터화가 된 질문 벡터( $q(x)$ )와 문서 벡터( $d(x)$ )는 MIPS(Maximum Inner Product Search)를 사용해서 유사도를 계산합니다.
 
-**Cosine Similarity vs MIPS**
+## **Cosine Similarity vs MIPS**
     
 ### Cosine Similarity
     
