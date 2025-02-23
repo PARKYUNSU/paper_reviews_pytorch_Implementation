@@ -68,6 +68,8 @@ $$
 
 벡터화가 된 질문 벡터( $q(x)$ )와 문서 벡터( $d(x)$ )는 MIPS(Maximum Inner Product Search)를 사용해서 유사도를 계산합니다.
 
+<img src="https://github.com/user-attachments/assets/882eef25-b205-4673-bcbb-14c5286ea5ec" width=500>
+
 ## **Cosine Similarity vs MIPS**
     
 ### Cosine Similarity
@@ -101,7 +103,6 @@ $Where$
 
 계산된 MIPS 값을 기준으로 가장 유사한 상위 k개의 문서를 선택합니다. 이 상위 k개의 문서는 질문에 가장 관련이 높은 문서들입니다.
 
-<img src="https://github.com/user-attachments/assets/882eef25-b205-4673-bcbb-14c5286ea5ec" width=500>
 
 ## 2.2. Vector Concatenation
 
