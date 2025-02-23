@@ -304,3 +304,44 @@ Wikipedia 2018년 12월 덤프를 사용하였으며 Wikipedia article은 100-wo
 DPR document retriever를 사용하여 각 document에 대한 document embedding을 계산하고 효율적인 검색을 위해 Hierarchical Navigable Small World approximation를 사용하는 FAISS를 통해 single MIPS index를 만든다.
 
 top-k개의 document를 검색하며 상위 k는 {5,10}으로 세팅하여 진행했습니다.
+
+
+[출처 : FAISS Github ](https://github.com/facebookresearch/faiss)
+### IndexFlatIP(MIPS)
+```c
+int faiss_IndexFlatIP_new(FaissIndexFlatIP** p_index) {
+    try {
+        IndexFlatIP* index = new IndexFlatIP(); // IndexFlatIP 생성 (내적 계산용 인덱스)
+        *p_index = reinterpret_cast<FaissIndexFlatIP*>(index);
+        return 0;
+    }
+    CATCH_AND_HANDLE
+}
+
+int faiss_IndexFlatIP_new_with(FaissIndexFlatIP** p_index, idx_t d) {
+    try {
+        IndexFlatIP* index = new IndexFlatIP(d); // 벡터 차원을 지정하여 IndexFlatIP 생성
+        *p_index = reinterpret_cast<FaissIndexFlatIP*>(index);
+        return 0;
+    }
+    CATCH_AND_HANDLE
+}
+```
+
+```c
+int faiss_IndexFlat_compute_distance_subset(
+        FaissIndex* index,          // Faiss 인덱스 객체
+        idx_t n,                    // 쿼리 벡터의 개수
+        const float* x,             // 쿼리 벡터들
+        idx_t k,                    // 검색할 유사한 벡터의 개수
+        float* distances,           // 유사도 결과를 저장할 배열
+        const idx_t* labels) {      // 각 벡터에 대한 레이블/인덱스 배열
+
+    try {
+        // 실제로 거리를 계산하는 함수
+        reinterpret_cast<IndexFlat*>(index)->compute_distance_subset(
+                n, x, k, distances, labels);
+        return 0;
+    } CATCH_AND_HANDLE
+}
+```
