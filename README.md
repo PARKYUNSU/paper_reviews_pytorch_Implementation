@@ -307,7 +307,8 @@ top-k개의 document를 검색하며 상위 k는 {5,10}으로 세팅하여 진�
 
 
 [출처 : FAISS Github ](https://github.com/facebookresearch/faiss)
-### IndexFlatIP(MIPS)
+
+### IndexFlatIP 생성
 ```c
 int faiss_IndexFlatIP_new(FaissIndexFlatIP** p_index) {
     try {
@@ -328,6 +329,7 @@ int faiss_IndexFlatIP_new_with(FaissIndexFlatIP** p_index, idx_t d) {
 }
 ```
 
+### MIPS 검색
 ```c
 int faiss_IndexFlat_compute_distance_subset(
         FaissIndex* index,          // Faiss 인덱스 객체
