@@ -347,3 +347,27 @@ int faiss_IndexFlat_compute_distance_subset(
     } CATCH_AND_HANDLE
 }
 ```
+
+![image](https://github.com/user-attachments/assets/585b9d2c-ebf2-48de-b6c6-1c7932bede76)
+
+Left & Cneter
+- RAG-SEQ의 경우 Retreived Documents의 수가 많을 수록 성능이 개선
+- RAG-TOK의 경우 Retreived Documents의 수가 일정 수 이상이면 성능이 저하
+
+Right
+- Abstractive Answer Generation의 경우 많은 Documents가 필요하지 않음(less than 10)
+(제한된 외부 지식을 효과적으로 활용)
+
+그래서 Top-k를 5개에서 10개 사이로 실험을 진행 했습니다.
+
+## 2.7 Conclusion
+
+1. Retreiver과 Generator를 결합
+   - Retreiever에 대해 End-to-End로 학습을 진행항여 성능을 개선
+   - Generator를 사용 (Diversity, Hallucination 해결)
+     
+2. 외부 지식을 사용
+   - 언어 모델의 Knowledge Base 수정 가능
+   - 언어 모델의 생성 결과에 대한 해석 가능
+
+
