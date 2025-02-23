@@ -10,19 +10,21 @@ Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks - 2021
 
 # 1. Introduction
 
-자연어(NLP) 분야는 끊임없이 발전하고 있으며, 최근 연구들은 모델이 더 많은 외부 지식을 활용해 복잡한 질문에 정확한 답을 할 수 있도록 하는 방법에 초점을 맞추고 있습니다.
+자연어처리(NLP) 분야는 끊임없이 발전하고 있으며, 사전 학습된(Pre-trained) 모델들은 모델의 파라미터 내에 **지식(knowledge)**을 저장하여, 외부 지식에 접근하지 않고도 여러 태스크를 수행할 수 있는 능력을 갖추고 있습니다. 그러나 이 모델들이 저장하는 지식은 업데이트나 확장이 어려운 단점이 있으며, 이로 인해 hallucination(환각) 현상이 발생하기도 합니다.
 
-이런 배경 속에서 “Retrieval-Augmented Generation”논문은 기존 언어 모델의 한계를 해결하고, 외부 지식을 효과적으로 활용하여 답을 생성하는 새로운 방법론을 재시합니다.
+이러한 문제를 해결하기 위해, 최근의 연구들은 모델이 외부 지식을 적극적으로 활용하여, 복잡한 질문에 더 정확한 답을 할 수 있도록 하는 방법에 초점을 맞추고 있습니다.
+
+즉, 기존의 pre-trained 모델이 가지고 있는 parametric knowledge와 외부에서 검색된 non-parametric knowledge를 함께 활용하는 모델들이 연구되었으며, 그 예로 REALM이나 ORQA와 같은 retrieval-augmented language models가 있습니다.
+
+이러한 retrieval-augmented language models는 open-domain extractive question answering (QA) 태스크에서 좋은 성과를 보였으나, BERT와 같은 Encoder-only 모델을 기반으로 하여 특정 조건 하에서만 open-QA 태스크를 수행할 수 있는 한계가 있습니다.
+
+이런 배경 속에서 “Retrieval-Augmented Generation”논문은 기존 언어 모델의 한계를 해결하고, 외부 지식을 효과적으로 활용하고 답을 생성하는 새로운 방법론을 재시합니다.
 
 RAG 모델은 Retrieval과 Generator 부분으로 이루어져 있습니다. Retreiver는 BERT와 같은 강력한 언어 모델을 사용해서 문서(Document)와 질문(Query)를 벡터 공간에 임베딩하고, 이를 통해 질문과 관련된 정보를 검색합니다.
 
 그런 다음, 검색된 정보는 Vector Concatenation을 통해 하나의 벡터로 결합되어, Generator의 입력으로 사용됩니다. Generator는 이 정보를 바탕으로 최종적인 답을 생성합니다. 이 과정은 Supervised Loss를 통해 학습되며, $BERT_q(Query)$ 와 Genrator만 학습해도 문서를 어떻게 잘 검색할지 자동으로 최적화 됩니다. RAG는 문서 Index가 존재하긴 하지만, 그 인덱스를 어떻게 활용해야하는지까지 통합적으로 학습되기 때문에 효과적으로 학습할 수 있습니다.
 
 # 2. Method
-
-앞서 설명드린 것 처럼, LLM 모델들은 많은 데이터를 통해서 학습을 하지만, 외부 데이터 및 개인적인 데이터(Ex, 개인 DB나 문서들)들은 접근을 할 수가 없습니다. 그래서 LLM 모델은 그런 정보에 대해서 알수도 없을 뿐더러, 제대로 답변을 할 수 없습니다.
-
-논문의 저자는 이 문제를 다음과 같이 해결합니다.
 
 <img src="https://github.com/user-attachments/assets/6160effe-056a-4e2a-9f42-66dafff8ce54" width=700>
 
@@ -45,6 +47,8 @@ Document는 질문에 대한 정보를 포함하고 있는 문서입니다. Docu
 ### 2.2.3. Query와 Document의 활용
 
 위의 “프랑스의 수도는 어디야”라는 질문(Query)이 모델에 들어왔을때, 기존 Model은 이러한 정보를 학습한 적이 없다고 가정해보겠습니다. 여기서, Model은 질문(Query)에 대한 답변을 하기 위해 필요한 정보를 얻어야 합니다. 그 정보를 담고 있는 것이 Document 입니다. 그러나 Document에 포함된 수많은 정보 중에서 질문(Query)에 맞는 대답을 하기 위해서는 알 맞는 정보들만 골라야합니다.  그 작업을 검색(Retriever)이라 불리며, 논문에서는 Retriever 부릅니다. 
+
+
 
 ### 2.2.4. DPR(Dense Passage Retriever)
 
@@ -116,9 +120,17 @@ $Where$
 
 다만 실제 구현에서는 문자열 형태의 질의와 문서를 그대로 이어붙여 하나의 텍스트 시퀀스를 만들고, 이를 BART(Generator)의 인코더에 입력합니다. 
 
-이렇게 생성된 k개의 시퀀스 각각에 대해 BART 디코더가 답변 후보를 생성하며, 학습 과정에서는 Negative Log-Likelihood(Loss)를 계산하여 가장 적합한 문서-질문 쌍(또는 토큰 시점별 문서)을 선택하거나 확률을 마진얼(marginalize)하는 식으로 최종 답변을 결정합니다.
+이렇게 생성된 k개의 시퀀스 각각에 대해 BART 디코더가 답변 후보를 생성하며, 학습 과정에서는 Negative Log-Likelihood(Loss)를 계산하여 가장 적합한 문서-질문 쌍(또는 토큰 시점별 문서)을 선택하거나 확률을 marginalize하는 식으로 최종 답변을 결정합니다.
 
 학습 시에는 여러 문서 중에서 실제로 Loss가 가장 낮아지는(즉, 타깃 답변과 가장 잘 맞아떨어지는) 문서를 선택하여 답을 생성하는 방식으로 최적화됩니다.
+
+<img src="https://github.com/user-attachments/assets/4c97680e-e908-4691-974d-dde31e5202d8" width=700>
+
+Query와 가까운 Top-5 Document(Passage)를 이용해서 각 Document와 Query를 Concat하여 BART Input을 생성합니다.
+ (하나의 Query 당 5개의 BART Input이 존재하며, 배치처리를 통해 추론하여 빠른 속도로 처리가 가능합니다.)
+
+각 (Document, Query)에서 Vocab Distribution을 생성하며 Aggregation(Marginalization) 과정을 통해 하나의 문장을 생성합니다.
+
 
 ## 2.3. Generator
 
@@ -150,43 +162,124 @@ Generator의 Decoder는 Encoder에서 나온 벡터를 바탕으로 답변을 �
 
 BART의 Decoder는 Self-attention을 사용하여 각 단어가 문맥에 맞는 가장 적합한 단어로 생성되도록 합니다.
 
+
+
 ### 2.3.1.4. Decoding
 
 RAG 모델은 디코딩을 RAG-Token과 RAG-Sequence 두 가지 방식을 선택적으로 사용합니다. 두 모델은 **디코딩 방식**에 차이가 있으며, 학습과 출력 과정에서의 차이로 인해 성능 차이를 보일 수 있습니다.
 
-1. **RAG-Sequence Model**
+### 3. Beam Search
+<img src="https://github.com/user-attachments/assets/4c64a47b-784d-45f7-a92f-cca905d5e298" width=600>
+
+Beam Search는 Greedy Search와 다르게, 모든 가능한 경우의 수를 탐색하는 대신, 최적의 후보를 선택하여 탐색을 진행하는 방식입니다. 일반적으로 **Beam Width (n)** 를 설정하여, 각 단계에서 n개의 후보를 선택하고, 그 후보들 중에서 최적의 시퀀스를 찾는 방식입니다.
+
+Greedy Search는 각 단계에서 확률값이 가장 높은 토큰을 선택하여 문장을 생성하지만, 이는 항상 최선의 문장을 생성하지는 않는다는 문제가 있습니다.
+
+Beam Search는 이 문제를 해결하기 위해, 각 단계에서 n개의 토큰 후보를 고려하여, 여러 가지 가능한 시퀀스를 생성합니다. 위 그림은 $n=3$을 예시로 한 그림입니다.
+
+Start 토큰을 기점으로 가장 확률값이 높은 3개의 토큰을 선택합니다. 'a', 'I', 'the'가 선택된 토큰이 됩니다.
+
+선택된 각 토큰에서 다음에 올 토큰을 예측합니다. 각 토큰에 대해 다음에 올 수 있는 토큰들을 3개씩 뽑아, 총 9개의 후보를 만듭니다.
+
+그 후, 각 후보 시퀀스의 확률값을 평가하여 가장 높은 확률을 가진 3개의 시퀀스를 선택합니다. 이렇게 선택된 시퀀스는 'a cat', 'I am', 'the dog' 등이 될 수 있습니다.
+
+여러 번의 확장을 거쳐, 최종적으로 가장 높은 확률을 가진 시퀀스를 선택하게 됩니다.
+
+Greedy Search vs Beam Search:
+
+Greedy Search: 매 분기마다 확률이 가장 높은 단일 토큰을 선택합니다. 초기 선택이 최선일 수 있으나, 전체적으로 최선의 결과를 만들지 못할 수 있습니다.
+
+예시 문장: "a cat meowed"
+
+Beam Search: 여러 후보 시퀀스를 고려하여, 그 중 가장 높은 확률을 가진 시퀀스를 선택합니다. 초기 선택이 최선이 아닐지라도, 여러 후보를 고려함으로써 보다 높은 확률을 가진 최종 결과를 얻을 수 있습니다.
+
+예시 문장: "the dog barked suddenly"
+
+Beam Search는 Greedy Search보다 더 다양한 후보를 고려하며, 결과적으로 더 높은 확률의 시퀀스를 생성할 수 있는 방법입니다.
+
+### 2. **RAG-Token Model**
     
-    RAG-Sequence 모델은 전체 시퀀스에 대해 하나의 문서만을 사용하여 답변을 생성합니다.
+   RAG-Token 모델은 각 토큰에 대해 다른 문서를 선택하여 답변을 생성합니다.
     
-    Generator는 전체 시퀀스를 하나의 문서에 기반하여 생성하며, 문서 하나에 대해 전체 시퀀스를 생성하는 방식입니다.
+   Generator는 각 토큰마다 다른 문서를 사용하여 답변을 생성합니다. 이는 각 출력 토큰을 생성할 때마다 관련 문서를 동적으로 선택하는 방식입니다.
     
-   질문에 대한 단일 정보 소스로 부터, 그 문서를 기준으로 답변을 생성하므로, 문백을 잘 반영할 수 있습니다. 그러나 하나의 문서만을 사용하는 방식이어서 다양한 문서를 고려할 수 없는 단 점이 있습니다.
+   이 모델은 다양한 문서들에서 각 토큰을 생성하며, 마진화된 결과로 최종적으로 답변을 완성합니다.
+
+   여러 개의 문서를 동적으로 활용할 수 있기에, 다양한 정보 소스를 바탕으로 답변을 생성할 수 있습니다. 그러나 여러 문서를 처리하기 때문에 복잡하고 계산량이 커질 수 있습니다.
+
+   또한 이 방법은 기존 beam search 방법론에도 그대로 활용이 가능합니다.
+    
+$$pRAG-Token(y∣x)≈∏_{i=1}^N∑_{z∈top-k}p_η(z∣x)p_θ(y_i∣x,z,y_{1:i−1})$$
+
+$Wherer$
+
+- $p_η : Retrieval$
+
+- $p_θ : Generator$
+
+ <img src="https://github.com/user-attachments/assets/8c381788-0b70-421c-8a66-0ed084148951" width=700>
+
+
+### 3. **RAG-Sequence Model**
+    
+   RAG-Sequence 모델은 전체 시퀀스에 대해 하나의 문서만을 사용하여 답변을 생성합니다.
+    
+   Generator는 전체 시퀀스를 하나의 문서에 기반하여 생성하며, 문서 하나에 대해 전체 시퀀스를 생성하는 방식입니다.
+    
+   질문에 대한 단일 정보 소스로 부터, 그 문서를 기준으로 답변을 생성하므로, 문백을 잘 반영할 수 있습니다. 그러나 하나의 문서만을 사용하는 방식이어서 다양한 문서를 고려할 수 없는 단점이 있습니다.
+
     
 $$pRAG-Sequence(y∣x)≈∑_{z∈top-k}p_η(z∣x)p_θ(y∣x,z)$$
     
 $$= ∑_{z∈top-k}p_η(z∣x)∏_i^Np_θ(y_i∣x,z,y_{1:i-1})$$
-    
-3. **RAG-Token Model**
-    
-    RAG-Token 모델은 각 토큰에 대해 다른 문서를 선택하여 답변을 생성합니다.
-    
-    Generator는 각 토큰마다 다른 문서를 사용하여 답변을 생성합니다. 이는 각 출력 토큰을 생성할 때마다 관련 문서를 동적으로 선택하는 방식입니다.
-    
-    이 모델은 다양한 문서들에서 각 토큰을 생성하며, 마진화된 결과로 최종적으로 답변을 완성합니다.
 
-   여러 개의 문서를 동적으로 활용할 수 있기에, 다양한 정보 소스를 바탕으로 답변을 생성할 수 있습니다. 그러나 여러 문서를 처리하기 때문에 복잡하고 계산량이 커질 수 있습니다.
-    
-$$pRAG-Token(y∣x)≈∏_{i=1}^N∑_{z∈top-k}p_η(z∣x)p_θ(y_i∣x,z,y_{1:i−1})$$
+$Wherer$
 
-<img src="https://github.com/user-attachments/assets/8c381788-0b70-421c-8a66-0ed084148951" width=700>
+- $p_η : Retrieval$
 
-## 2.4 Training
+- $p_θ : Generator$
+
+이러한 점에서 기존 Beam Search를 적용하기에 문제가 있어서 논문에서는 document 별로 beam search를 진행합니다.
+
+<img src="https://github.com/user-attachments/assets/e2f8b8e6-bafb-49a3-b95f-b0af02d1ce62" width=700>
+
+입력 $x$에 대해 **top-k문서** 를 검색합니다. 여기서는 $k=3$으로 설정되어 있어, 3개의 문서가 선택됩니다.
+
+선택된 각 문서 $z$에 대해 Beam Search를 진행하여, 해당 문서에서 최적의 sequence를 생성합니다. 이때, 문서별로 $k$ 개의 후보가 선택됩니다. 여기서의 $k$는 **top-k** 와는 별개로, 각 문서에 대해 독립적인 Beam Search가 적용됩니다.
+
+각 문서 $z$에 대해 구해진 logit 순서에 따라 확률이 계산됩니다. $p(y|x, z)$와 같이 문서별로 출력 $y$에 대한 확률이 계산됩니다.
+
+각 문서에서 구해진 확률을 marginalize하여 최종 확률 $p(y|x)$를 구합니다. 즉, 모든 문서에 대한 $p(y|x, z)$ 값을 더해 최종 출력 확률을 계산합니다.
+
+<img src="https://github.com/user-attachments/assets/df95640e-6923-4b10-b061-89dbcd41107b" wdith=700>
+
+그러나, 만약 Beam Search 과정에서 특정 값이 계산되지 않으면, 해당 확률 값을 알 수 없는 문제가 발생합니다. 그림처럼, $y_2$는 문서 $z_2$로부터 계산되지 않았는데, 이를 marginalize 하려면 $p(y_2|x, z_2)$ 값을 알아야 합니다. 하지만 이 값을 알 수 없어서 계산이 불가능한 상황이 발생합니다.
+
+이 문제를 해결하기 위해 추가적인 forward pass를 통해 $p(y_2|x, z_2)$ 값을 계산해야 합니다. 하지만 이 과정은 비효율적이고 시간적, 비용적 부담이 크기 때문에 적합하지 않습니다.
+
+<img src="https://github.com/user-attachments/assets/2fdcec7c-8691-4ec9-abe0-7ce86b2be5d0" width=700>
+
+논문에서는 이를 해결하기 위해, 발견되지 않은 값들에 대해 확률을 0으로 처리하는 방법인 **Fast Decoding**을 제시합니다. 이 방식으로 추가적인 계산을 피하면서 marginalize를 진행할 수 있게 해줍니다.
+
+## 2.4 정리
+<img src="https://github.com/user-attachments/assets/687dd9bf-1013-4f17-804a-925690ffd1c4" width=700>
+
+Input sequence인 $x$를 input으로 받아서, 이를 활용하여 external knowledge corpus(말뭉치)로 관련이 제일 높은 document $z$를 $k$개 retreiver 합니다. 이후 $x$와 $d$를 이용해서 target sequence인 $y$를 생성하면서 두 가지 요소를 다루게 됩니다.
+
+retriever $p_η(z|x)$ with parameter $η$: $x$에 대한 document의 distribution
+
+generator $p_θ(yi|x,z,y1:i−1)$ parametrized by $θ$ : $x$와 $z$를 바탕으로 $y$생성
+
+두 요소들은 훈련과정에서 동시에 학습되며 output 결괴를 위해 검색된 document에 대해 Marginate를 진행하게 됩니다. RAG 논문에서는 RAG-Sequence와 RAG-Token을 제안했습니다.
+
+
+## 2.5 Training
 
 RAG 모델의 학습과정은 Retriever과 Generator를 동시에 학습시키는 End-to-End 방식입니다. 문서 검색과 응답 생성을 함께 최적화하여 Loss를 계산합니다.
 
 중요한 점은 **어떤 문서를 검색해야 할지에 대한 직접적인 지도(supervision)가 없다는 것**입니다. 즉, **문서 검색**과 **응답 생성**이 함께 최적화됩니다. 
 
-### 2.4.1. Training
+### 2.5.1. Training
 
 입력/출력 쌍 $(x_j, y_j)$가 주어집니다. 여기서 $x_j$는 입력 Query이고, $y_j$는 출력 답변입니다.
 
@@ -198,10 +291,16 @@ $$
 
 $p(y_j|x_j)$는 입력 쿼리 $x_j$에 대해 정확한 답변 $y_j$를 생성할 확률로, 이 확률을 최소화 하는 방향으로 학습합니다.
 
-### 2.4.2. Retriever 학습
+### 2.5.2. Retriever 학습
 
 Retriever는 쿼리 $x_j$에 대해 가장 관련성이 높은 문서를 검색합니다. 하지만, 어떤 문서를 검색해야 하는지에 대한 지도학습이 없습니다. 대신  Document Encoder인 $BERT_d$를 동결하고, Query Encoder $BERT_q$와 Generator인 $BART$만 fine-tuning 합니다.
 
-### 2.4.3. Document Encoder Frozen
+### 2.5.3. Document Encoder Frozen
 
 Document Encoder $BERT_d$는 학습 중에 업데이트하지 않습니다. 그 이유는 문서 인데스를 주기적으로 업데이트 하기 때문입니다. 이전 연구인 "REALM" 모델처럼 문서 인코더를 매번 갱신하며 학습을 진행했는데, 그 비용이 매우 큰 단점이 있었습니다. RAG 모델에서는 문서 인코더 $BERT_d$를 동결시키고 쿼리 인코더와 BART만 학습시켜 문제를 크게 완화했습니다.
+
+## 2.6 Experiments
+Wikipedia 2018년 12월 덤프를 사용하였으며 Wikipedia article은 100-word로 분할하여 총 21,015,324개 document가 된다.
+DPR document retriever를 사용하여 각 document에 대한 document embedding을 계산하고 효율적인 검색을 위해 Hierarchical Navigable Small World approximation를 사용하는 FAISS를 통해 single MIPS index를 만든다.
+
+top-k개의 document를 검색하며 상위 k는 {5,10}으로 세팅하여 진행했습니다.
