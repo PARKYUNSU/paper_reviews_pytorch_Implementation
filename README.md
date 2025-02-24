@@ -4,7 +4,7 @@
 논문 리뷰 및 파이토치 코드 구현 저장소
 
 # Content
-## Computer Vision
+# Computer Vision
 ### Classification
 | 논문 제목                                                   | 연도 |
 |-----------------------------------------------------------|-----|
@@ -43,34 +43,30 @@
 | **[MaskSplit (Self-supervised Few-shot Semantic Segmentation) - 작성중](https://github.com/PARKYUNSU/pytorch_imple/tree/main/CV/Self%20Supervised/MaskSplit)**  | 2021 |
 | **[SimSiam (Simple Siamese)](https://github.com/PARKYUNSU/pytorch_imple/tree/main/CV/Self%20Supervised/SimSiam)**  | 2021 |
 
----
 
-## Natural Language Processing
+# Natural Language Processing
 | 논문 제목                                    | 연도 |
 |---------------------------------------------|-----|
 | **[Transformer (Attention Is All You Need)](https://github.com/PARKYUNSU/pytorch_imple/tree/main/NLP/Transformer)**  | 2017 |
 | **[seq2seq ((Sequence to Sequence Learning))](https://github.com/PARKYUNSU/pytorch_imple/tree/main/NLP/seq2seq)**  | 2014 |
 | **[LSTM ((Long Short-Term Memory))](https://github.com/PARKYUNSU/pytorch_imple/tree/main/NLP/LSTM)**  | 1997 |
 
----
 
-## Agentic RAG
+# Agentic RAG
 | 논문 제목                                    | 연도 |
 |---------------------------------------------|-----|
 | **[RAG (Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks)](https://github.com/PARKYUNSU/pytorch_imple/tree/main/Agentic%20RAG/Basic%20Agentic%20RAG)**  | 2021 |
 
----
 
-## Voice
+# Voice
 
 | 논문 제목                                    | 연도 |
 |---------------------------------------------|-----|
 | **[OpenVoice - 작성중](https://github.com/PARKYUNSU/pytorch_imple/tree/main/Audio/OpenVoice)**  | 2024 |
 | **[USDM (Unified Spoken Dialog Model)](https://github.com/PARKYUNSU/pytorch_imple/tree/main/Audio/USDM)**  | 2023 |
 
----
 
-## Multimodal
+# Multimodal
 ### Vision Language Model
 | 논문 제목                                    | 연도 |
 |---------------------------------------------|-----|
