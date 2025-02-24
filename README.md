@@ -10,7 +10,7 @@ Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks - 2021
 ## 논문 리뷰 영상
 
 <a href="https://www.youtube.com/watch?v=lh0kysyCEls" target="_blank">
-  <img src="https://github.com/user-attachments/assets/69838c14-d69e-4e86-b7b5-ebd068011454" width="600" alt="YouTube Video">
+  <img src="https://github.com/user-attachments/assets/910aeb33-0007-47d0-8b07-155fab1d0bc5" width="600" alt="YouTube Video">
 </a>
 
 ---
