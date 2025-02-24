@@ -7,7 +7,13 @@ Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks - 2021
 [Paper to Read](https://arxiv.org/pdf/2005.11401)
 
 ---
+## 논문 리뷰 영상
 
+<a href="https://www.youtube.com/watch?v=lh0kysyCEls" target="_blank">
+  <img src="https://github.com/user-attachments/assets/69838c14-d69e-4e86-b7b5-ebd068011454" width="600" alt="YouTube Video">
+</a>
+
+---
 # 1. Introduction
 
 자연어처리(NLP) 분야는 끊임없이 발전하고 있으며, 사전 학습된(Pre-trained) 모델들은 모델의 파라미터 내에 **지식(knowledge)** 을 저장하여, 외부 지식에 접근하지 않고도 여러 태스크를 수행할 수 있는 능력을 갖추고 있습니다. 그러나 이 모델들이 저장하는 지식은 업데이트나 확장이 어려운 단점이 있으며, 이로 인해 hallucination(환각) 현상이 발생하기도 합니다.
