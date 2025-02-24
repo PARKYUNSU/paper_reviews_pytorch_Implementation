@@ -34,7 +34,7 @@
 ### Object Detection
 | 논문 제목                                    | 연도 |
 |---------------------------------------------|-----|
-| **[SSD_MobileNetV2](https://github.com/PARKYUNSU/pytorch_imple/tree/main/CV/Object_Detection/SSD_MobilenetV2)**  | 2018 |
+| **[SSD MobileNetV2](https://github.com/PARKYUNSU/pytorch_imple/tree/main/CV/Object_Detection/SSD_MobilenetV2)**  | 2018 |
 | **[SSD (Single Shot MultiBox Detector)](https://github.com/PARKYUNSU/pytorch_imple/tree/main/CV/Object_Detection/SSD)**  | 2016 |
 
 ### Self Supervised
