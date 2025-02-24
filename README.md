@@ -58,7 +58,7 @@
 | **[RAG (Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks)](https://github.com/PARKYUNSU/pytorch_imple/tree/main/Agentic%20RAG/Basic%20Agentic%20RAG)**  | 2021 |
 
 
-# Voice
+# Audio
 
 | 논문 제목                                    | 연도 |
 |---------------------------------------------|-----|
