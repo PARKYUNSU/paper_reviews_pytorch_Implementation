@@ -48,8 +48,8 @@
 | 논문 제목                                    | 연도 |
 |---------------------------------------------|-----|
 | **[Transformer (Attention Is All You Need)](https://github.com/PARKYUNSU/pytorch_imple/tree/main/NLP/Transformer)**  | 2017 |
-| **[seq2seq ((Sequence to Sequence Learning))](https://github.com/PARKYUNSU/pytorch_imple/tree/main/NLP/seq2seq)**  | 2014 |
-| **[LSTM ((Long Short-Term Memory))](https://github.com/PARKYUNSU/pytorch_imple/tree/main/NLP/LSTM)**  | 1997 |
+| **[seq2seq (Sequence to Sequence Learning)](https://github.com/PARKYUNSU/pytorch_imple/tree/main/NLP/seq2seq)**  | 2014 |
+| **[LSTM (Long Short-Term Memory)](https://github.com/PARKYUNSU/pytorch_imple/tree/main/NLP/LSTM)**  | 1997 |
 
 
 # Agentic RAG
