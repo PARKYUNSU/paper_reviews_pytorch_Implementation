@@ -1,5 +1,7 @@
 # FLAN
-Finetuned Language Models Are Zero-Shot Learners
+
+"Finetuned Language Models Are Zero-Shot Learners" - 2022
+
 ㅡ Alexander Wei, Maarten Bosma
 
 [Paper to Read](https://arxiv.org/pdf/2109.01652)
@@ -78,13 +80,13 @@ Instruction Tuning을 위해서 새로운 데이터셋을 직접 만드는 것�
 
 <img src="https://github.com/user-attachments/assets/32a8242f-e8b4-4869-b6fa-1d893e313b92" width=600>
 
-#### NLI 데이터셋
+#### NLI 데이터셋 (Left)
 ```text
 Premise : 러시아 우주비행사 발레리 폴랴코프는 1994~1995년 동안 438일 동안 우주에서 머문 최장 기록을 세웠다.
 Hypothesis : 러시아인은 우주에서 가장 오래 머문 기록을 가지고 있다.
 ```
 
-#### NLI Instruction Template [1 ~ 3]
+#### NLI Instruction Template [1 ~ 3] (Right)
 ```text
 Template 1 : 위 문장을 읽고, 가설이 전제에서 유추될 수 있는지 판단하세요.
 Template 2 : 전제(premise)와 가설(hypothesis)이 주어졌을 때, 전제로부터 가설을 도출할 수 있는지 판단하세요.
@@ -104,6 +106,7 @@ FLAN에서는 Options 토큰을 추가해서 이를 해결합니다.
 
 예를들어, 정답을 양자택일 할 수 있도록 미리 제안하는 방법이라 생각하면 됩니다.
 
+#### NLI Dataset with Options
 ```text
 Premise : 러시아 우주비행사 발레리 폴랴코프는 1994~1995년 동안 438일 동안 우주에서 머문 최장 기록을 세웠다.
 Hypothesis : 러시아인은 우주에서 가장 오래 머문 기록을 가지고 있다.
