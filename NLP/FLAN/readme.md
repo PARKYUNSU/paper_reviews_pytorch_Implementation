@@ -78,7 +78,7 @@ Instruction Tuning을 위해서 새로운 데이터셋을 직접 만드는 것�
 
 아래 그림은 NLI 데이터셋의 Instruction Template 예시입니다.
 
-<img src="https://github.com/user-attachments/assets/32a8242f-e8b4-4869-b6fa-1d893e313b92" width=600>
+<img src="https://github.com/user-attachments/assets/32a8242f-e8b4-4869-b6fa-1d893e313b92" width=700>
 
 #### NLI 데이터셋 (Left)
 ```text
