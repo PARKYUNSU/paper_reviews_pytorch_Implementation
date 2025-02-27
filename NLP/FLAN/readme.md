@@ -1,4 +1,4 @@
-# FLAN
+<img width="680" alt="image" src="https://github.com/user-attachments/assets/fddbb1c2-0329-4d96-9c1d-1bc5b048ae4c" /># FLAN
 
 "Finetuned Language Models Are Zero-Shot Learners" - 2022
 
@@ -116,6 +116,7 @@ OPTIONS :
 
 ### 3.2. Evaluation Splits
 기존 연구에서는 모델을 평가할 때, 훈련 데이터에 없는 특정 데이터셋을 배제하는 방식으로 Zero-Shot 학습을 평가했습니다.
+
 그러나, FLAN에서는 더 보수적인 평가 기준을 사용함으로 평가 시점에 특정 Task Cluster를 완전히 제외하여, 해당 클러스터에 속하는 모든 데이터셋델은 NLI를 제외한 모든 태스크로 훈련된 FLAN을 사용하여 NLI 성능을 평가합니다.
 
 ex) 자연어 추론(NLI) 태스크의 제로샷 성능을 평가하려면, NLI 관련 모든 데이터셋(MNLI, QNLI 등)을 학습에서 제외하고 평가
@@ -126,35 +127,87 @@ ex) 자연어 추론(NLI) 태스크의 제로샷 성능을 평가하려면, NLI 
 ex) 자연어 추론(NLI) 성능 평가 모델은 NLI를 제외한 모든 태스크로 훈련된 FLAN을 사용하여 NLI 성능을 평가
 
 
-### 3.3 Instruction Tuning 과정 (FLAN)
-1. 기반 모델
+### 3.3 Experiment
+#### 1. Base Model
    
-LaMDA-PT 모델을 Instruction Tuning하여 FLAN 생성
+   LaMDA-PT 모델을 Instruction Tuning하여 FLAN 생성
 
-2. 데이터셋 구성 및 샘플링
+#### 2. 데이터셋 구성 및 샘플링
    
-모든 데이터셋을 섞어서 (randomly sampled) 훈련 데이터로 사용
+   모든 데이터셋을 섞어서 (randomly sampled) 훈련 데이터로 사용
 
-각 데이터셋에서 최대 30,000개 예제 사용 (데이터셋 크기 균형 유지)
+   각 데이터셋에서 최대 30,000개 예제 사용 (데이터셋 크기 균형 유지)
 
-데이터셋 혼합 비율은 예제 개수 비례 방식(Examples-Proportional Mixing Scheme) 적용 (최대 3,000개의 샘플 사용)
+   데이터셋 혼합 비율은 예제 개수 비례 방식(Examples-Proportional Mixing Scheme) 적용 (최대 3,000개의 샘플 사용)
 
-3. 학습 설정
+#### 3. 학습 설정
 
-총 30,000 스텝(Gradient Steps) 동안 학습 진행
+   총 30,000 스텝(Gradient Steps) 동안 학습 진행
 
-배치 크기: 8,192 토큰
+   배치 크기: 8,192 Token
 
-최적화 기법: Adafactor Optimizer (Shazeer & Stern, 2018)
+   최적화 기법: Adafactor Optimizer (Shazeer & Stern, 2018)
 
-학습률: 3e-5 (0.00003)
+   학습률: 3e-5 (0.00003)
 
-입력 시퀀스 길이: 1024 토큰, 타겟 시퀀스 길이: 256 토큰
+   입력 시퀀스 길이: 1024 토큰, 타겟 시퀀스 길이: 256 토큰
 
-Packing 기법 적용: 여러 개의 샘플을 하나의 입력 시퀀스로 묶고, EOS(Token End) 토큰을 사용해 입력과 타겟 구분
+   Packing 기법 적용: 여러 개의 샘플을 하나의 입력 시퀀스로 묶고, EOS(Token End) 토큰을 사용해 입력과 타겟 구분
 
-4. 학습 시간 및 평가
+#### 4. 학습 시간 및 평가
 
-TPUv3 (128코어)에서 약 60시간 소요
+   TPUv3 (128코어)에서 약 60시간 소요
 
-모든 평가는 30K 스텝 학습 후 마지막 체크포인트에서 진행
+   모든 평가는 30K 스텝 학습 후 마지막 체크포인트에서 진행
+
+
+### 3.4 Result
+### Task Cluster 별 성능
+NLI, Reading Comprehension, Closed-Book QA, Translation, Commonsense Reasoning, Coreference Resolution, Struct-to-Text 데이터셋에 대한 FLAN을 평가합니다.
+
+3.2. Evaluation Splits에 설명된 대로 데이터셋을 Task Cluster로 그룹화 하고, 특정 Task Cluster를 제외하고 학습한 후, 제외된 Task Cluster에서 Zero-Sht 성능을 평가합니다.
+
+ex) NLI 성능을 평가할 때는, FLAN에서는 NLI 데이터셋을 전혀 학습하지 않은 상태로 평가 합니다.
+
+이 방법을 통해서, 각 데이터셋에서 모든 Template의 평균 성능을 측정합니다.
+즉, 특정한 프롬프트 구조에 의존하지 않고, 일반적인 자연서 Instruction에 대한 기대 성능을 평가하는 것 입니다.
+
+모든 Task 별로 FLAN 137B 모델이 우수한 성능을 띄고 있다.
+<img src="https://github.com/user-attachments/assets/faae9e62-eaf8-49cd-abad-ea3b6181e3df" width=700>
+
+### GPT-3 VS FLAN
+GPT-3 175B Zero-Shot, GPT-3 175B Few-Shot, FLAN 137B Zero-Shot에 대하여 3가지 Task에 대해서 성능을 비교했으며, FLAN이 성능이 다음과 그림과 같이 좋았습니다.
+<img src="https://github.com/user-attachments/assets/29f0d83b-077c-4e44-bd0e-e9c53e4029b5" width=700>
+
+## 4. Ablation Studies & Further Analysis
+### 4.1 Number Of Instruction Tuning Clusters
+더 많은 Task Cluster를 사용하여 Instruction Tuning을 수행할수록 Zero-Shot 성능이 향상되었습니다.
+
+아래 그림은 3개의 Task Clustering(NLI, Colsed-Book QA, Commonsense Reasoning)을 제외하고 평가를 실험햇습니다. 나머지 7개의 Cluster를 Instruction Tuning에 사용하였고, Instuction Tuning에 사용한 Clusterdml 수를 1개에서 7개 까지 점진적으로 증가시키면서 성능 변화를 평가했습니다.
+
+<img src="https://github.com/user-attachments/assets/350b5eb2-0125-415c-99da-fe3bc7ee7f8c" width=500>
+
+Sentimetn Analysis Cluster에는 성능 향상이 거의 없었다.
+
+### 4.2 Scaling Laws
+Instruction Tuning은 모델 크기가 클수록 Zero-Shot 성능이 크게 향상하지만, 작은 모델인 경우에는 오히려 성능이 줄어들었습니다.
+
+다음은 동일한 Instruction Tuning Clusterfmf 사용하고 모델크기를 (422M, 2B, 8B, 68B, 137B) 점진적으로 증가킴으로 Zero-Shot을 비교했습니다.
+
+<img src="https://github.com/user-attachments/assets/f49d37d7-f8ad-4f4c-8a73-2beb727cf5f3" width=500>
+
+8B 이하의 작은 모델에서는 Instriction Tuning 데이터셋(40개 Task) 학습만으로 그 모델의 용량을 넘어 버리므로, 새로운 Task에 일반화 하기 어려워 그 성능이 줄어드는 문제가 발생합니다.
+
+### 4.3 Role of Instructions
+Instruction Tuning이 Zero-Shot 성능을 향상시키는 핵심인지 실험적으로 증명합니다.
+
+다음 그림은 4 가지의 실험을 통해 평가를 비교합니다.
+
+<img src="https://github.com/user-attachments/assets/10e09522-9d6a-4892-bdc1-f66298b6e61f" width=500>
+
+Fintuning datset에 Instruction Tuning이 적용한것과 Eval dataset에 Instruction Tuning이 적용된 FLAN이 가장 성능이 좋았습니다.
+
+### 4.4 Instruction with Few-Shot Exampels
+여기까지 FLAN 모델의 Zero-Shot 성능에 대해서 알아봤습니다. 4.4에서는 Few-Shot의 성능과 비교해서, 더 많은 정보가 주어진 Few-Shot에서는 Zero-Shot 보다 더 좋은 성능을 보였습니다.
+
+<img src="https://github.com/user-attachments/assets/f532a427-5cce-46b5-ae4f-f6460f9869dd" width=700>
