@@ -1,4 +1,4 @@
-<img width="680" alt="image" src="https://github.com/user-attachments/assets/fddbb1c2-0329-4d96-9c1d-1bc5b048ae4c" /># FLAN
+# FLAN
 
 "Finetuned Language Models Are Zero-Shot Learners" - 2022
 
