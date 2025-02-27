@@ -211,3 +211,10 @@ Fintuning datset에 Instruction Tuning이 적용한것과 Eval dataset에 Instru
 여기까지 FLAN 모델의 Zero-Shot 성능에 대해서 알아봤습니다. 4.4에서는 Few-Shot의 성능과 비교해서, 더 많은 정보가 주어진 Few-Shot에서는 Zero-Shot 보다 더 좋은 성능을 보였습니다.
 
 <img src="https://github.com/user-attachments/assets/f532a427-5cce-46b5-ae4f-f6460f9869dd" width=700>
+
+## 5. Conclusion
+FLAN은 Zero-Shot GPT-3 보다 성능이 뛰어나며, Instruction Tuning이 효과적인 방법이라는 것을 증명했습니다.
+
+Prompt Tuning과 결합할 경우 추가적인 성능 향상이 가능합니다.
+
+Instruction을 중심으로 한 NLP 연구에있어서 새로운 가능성을 열어주는 논문입니다.
