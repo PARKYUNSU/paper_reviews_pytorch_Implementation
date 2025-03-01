@@ -26,7 +26,7 @@ Table of Contents
 
 ## **1. Introduction**
 
-<img src="https://github.com/user-attachments/assets/2573acc9-8722-46db-86fb-88a49c5c09aa" width="700" height="400">
+<img src="https://github.com/user-attachments/assets/91e53b75-0c00-4ef3-8a38-c954646142b8" width="700" height="400">
 
 
 Fig.1
@@ -49,7 +49,7 @@ VGG와 같은 전통적인 network에서 깊이는 많은 layers를 걸쳐학습
 
 ### 1) Residual Block
 
-<img src="https://github.com/user-attachments/assets/9e6f4fdb-52de-458e-aeb8-a10238df5934" width="400" height="300">
+<img src="https://github.com/user-attachments/assets/4ec14ff7-a409-4625-896b-466106b78d3c" width="400" height="300">
 
 Fig.2
 
@@ -92,7 +92,7 @@ Residual Block은 입력 **𝑥가 직접 다음 레이어로 전달되는 Skip 
 
 기존 여러 레이어를 통해 입력 값을 변형시켜 최종 출력 **𝐻(𝑥)을 얻는 학습에서, 입력 값을 변형시켜 𝐹(𝑥)을 얻고, 이 𝐹(𝑥)가 0이 되도록 하면 자연스럽게 𝐻(𝑥)가 입력 값 𝑥와 같아지게 됩니다. 즉, 𝐻(𝑥) = 𝐹(𝑥) + 𝑥 이므로, 𝐹(𝑥)를 0으로 만드는 쉬운 문제가 됩니다.**
 
-<img src="https://github.com/user-attachments/assets/1ebf5cc1-1640-41a1-adcb-f0eea0f68e32" width="600" height="350">
+<img src="https://github.com/user-attachments/assets/a2ac39a1-3f67-406f-a938-87d0884756dd" width="600" height="350">
 
 FIg.3
 
@@ -113,13 +113,13 @@ $$
 y=F(x,{Wi})+Wsx
 $$
 
-<img src="https://github.com/user-attachments/assets/fb4f2041-eb63-4072-8af4-119a8266d9b2" width="350" height="300">
+<img src="https://github.com/user-attachments/assets/2876d5e9-3355-4b29-998a-413d4e83c2bc" width="350" height="300">
 
 Fig.4
 
 ## 3. Network Architectures
 
-<img src="https://github.com/user-attachments/assets/9c07b2a8-9a13-46ad-9b84-a253c20b2906" width="1000" height="450">
+<img src="https://github.com/user-attachments/assets/47d5d6c9-1d64-4319-bc3a-eb1291ee1fc7" width="1000" height="450">
 
 Fig.5
 
@@ -127,7 +127,7 @@ Residual Block을 이용하여 논문에서는 18-layer, 34-layer, 50-layer, 101
 
 18-layer 경우는 1 + 2 X 2 + 2 X 2 + 2 X 2 +2 X 2 + 1 = 18
 
-<img src="https://github.com/user-attachments/assets/7ea771a9-332e-4fe6-ba41-1d124ce551d9" width="1000" height="300">
+<img src="https://github.com/user-attachments/assets/f8a32670-55c6-4164-911b-7733321760ff" width="1000" height="300">
 
 Fig.6
 
@@ -504,5 +504,5 @@ epoch 050, Training loss: 0.2854, Training accuracy: 0.9020
 Test loss: 0.4941, Test accuracy: 0.8374
 
 
-<img src="https://github.com/user-attachments/assets/ff8c537d-9673-47f6-ada5-d0a4146127c4" width="1000" height="400">
+<img src="https://github.com/user-attachments/assets/43333834-84ad-410a-a67d-12a4fa3187f6" width="1000" height="400">
 
