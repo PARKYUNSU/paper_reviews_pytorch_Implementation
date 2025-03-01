@@ -177,6 +177,7 @@ ex) NLI 성능을 평가할 때는, FLAN에서는 NLI 데이터셋을 전혀 학
 
 ### GPT-3 VS FLAN
 GPT-3 175B Zero-Shot, GPT-3 175B Few-Shot, FLAN 137B Zero-Shot에 대하여 3가지 Task에 대해서 성능을 비교했으며, FLAN이 성능이 다음과 그림과 같이 좋았습니다.
+
 <img src="https://github.com/user-attachments/assets/29f0d83b-077c-4e44-bd0e-e9c53e4029b5" width=700>
 
 ## 4. Ablation Studies & Further Analysis
