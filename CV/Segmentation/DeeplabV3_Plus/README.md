@@ -122,9 +122,9 @@ DeepLabV3+ 는 **Inception Module**을 활용한 **Xception**을 변형한 Align
 
 Inception 및 Xception 설명
 
-Inception : https://github.com/PARKYUNSU/Inception
+[Inception](https://github.com/PARKYUNSU/pytorch_imple/tree/main/CV/Classification/Inception)
 
-Xception : https://github.com/PARKYUNSU/Xception
+[Xception](https://github.com/PARKYUNSU/pytorch_imple/tree/main/CV/Classification/Xception)
 
 Xception에서 변경점은 다음과 같습니다.
 
