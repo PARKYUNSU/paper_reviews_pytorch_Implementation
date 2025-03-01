@@ -25,7 +25,7 @@ Table of Contents
 
 모바일 및 임베디드 비전 어플리케이션을 위한 효율적인 모델 MobileNet
 
-<img src="https://github.com/user-attachments/assets/ea7b2d84-716f-41d4-a683-2ddfee02709b" width="700" height="400">
+<img src="https://github.com/user-attachments/assets/9d9b8b7e-cfce-4fea-aafe-53254f294fc2" width="700" height="400">
 
 
 이 모델은 Object Detection, Face Attributes, Finegrain Classification, Landmark Recognition 사용에 효과적임을 보여줌
@@ -46,7 +46,7 @@ Depthwise Separable Convolutions 기법은 합성곱을 깊이 별 합성곱과 
 
 이 과정으로 연산 비용을 감소효과를 가져옴 
 
-<img src="https://github.com/user-attachments/assets/3df2d826-1ad2-4d28-a4b6-ab271a418f5a" width="300" height="300">
+<img src="https://github.com/user-attachments/assets/df56fe53-bb2d-4699-96e2-204210d0f534" width="300" height="300">
 
 fig.1
 
@@ -59,7 +59,7 @@ $D_K · D_K · M · N · D_F · D_F$
 
 논문에서는, 기존 연산 과정을 Depth wise(공간 축), Point wise(채널 축) 으로 나눠서 계산
 
-<img src="https://github.com/user-attachments/assets/a43de630-1496-4c29-94d4-5e5d43234638" width="500" height="650">
+<img src="https://github.com/user-attachments/assets/06958cd1-35de-43a9-b2c1-fcd05a06f815" width="500" height="650">
 
 fig.2
 
@@ -260,12 +260,12 @@ Scheduler : 매 10 에포크마다 학습률 0.9배 감소
 | Alpha=0.25, Rho=128 | 75.06% | 72.24% | 0.7398 | 0.8192 | 27.76% |
 | Alpha=0.25, Rho=64 | 75.36% | 70.42% | 0.7267 | 0.8852 | 29.58% |
 
-<img src="https://github.com/user-attachments/assets/1a0f6fa9-93ee-47cf-a5df-061c948519cd" width="500" height="400">
-<img src="https://github.com/user-attachments/assets/a55531eb-8db3-400f-afd8-b3e72bd9f1d7" width="500" height="400">
-<img src="https://github.com/user-attachments/assets/549c50af-c007-4a66-ab02-519394f5e158" width="500" height="400">
-<img src="https://github.com/user-attachments/assets/9e77da56-3232-4803-b7a8-3bb1bcb66627" width="500" height="400">
-<img src="https://github.com/user-attachments/assets/1b5eee2f-2660-480f-bc95-c44795e77ba7" width="500" height="400">
-<img src="https://github.com/user-attachments/assets/bb2bc070-935b-4c1f-89ba-0ac42f75bab9" width="500" height="400">
+<img src="https://github.com/user-attachments/assets/c29350d2-510f-409d-9e35-81b184459902" width="500" height="400">
+<img src="https://github.com/user-attachments/assets/521230dc-011b-42af-8a2d-3b53874255a2" width="500" height="400">
+<img src="https://github.com/user-attachments/assets/5fefd72c-a127-4eef-9229-24d11c45aa52" width="500" height="400">
+<img src="https://github.com/user-attachments/assets/332a5a8d-d25a-41a2-aee3-52894f9dcd1f" width="500" height="400">
+<img src="https://github.com/user-attachments/assets/feff38e9-60e4-403f-ac46-2625cbffba1c" width="500" height="400">
+<img src="https://github.com/user-attachments/assets/9e0f9957-fc69-4bc5-9d05-0710fbd60b7f" width="500" height="400">
 
 
 ### 6.3 평가
