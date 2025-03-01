@@ -37,7 +37,7 @@ Inception은 `교차 채널 상관 관계(Cross-Channel Correlations)`와 `공�
 
 > **1x1 Conv를 사용해 교차 채널 상관 관계를 학습하고, 그 후 3x3 또는 5x5 Conv로 공간적 상관 관계를 학습합니다**
 
-<img src="https://github.com/user-attachments/assets/7ec44a9c-ce27-4ea2-82bc-bdb293180806" width=400>
+<img src="https://github.com/user-attachments/assets/32b82a03-e6b0-4970-b720-069571d9ad3d" width=400>
 
 ## 2.1.1 교차 채널 상관 관계 (Cross-Channel Correlations)
 
@@ -81,7 +81,7 @@ ex) RGB 3개 채널에 1X1 Conv 적용
 
 일반적인 Conv 연산은 다음 그림과 같이 하나의 커널로 동시에 학습하나
 
-<img src="https://github.com/user-attachments/assets/69734cf8-b279-4e47-b569-0d66a851aecd" width=400>
+<img src="https://github.com/user-attachments/assets/ae31c72d-fd32-4ab2-bea3-5e5d051286bb" width=400>
 
 Depthwise Separable Convolution 에서는 `Depth Wise(공간 축)`, `Point Wise(채널 축)` 로 2 단계로 나눕니다.
 
@@ -91,7 +91,7 @@ Inception 과 마찬가지로
 
 1. **Pointwise Convolution** (1x1 컨볼루션)으로, 학습된 공간적 상관 관계를 새로운 채널 공간으로 매핑하여 교차 채널 상관관계를 학습
 
-<img src="https://github.com/user-attachments/assets/70601855-f3bd-4e19-9f9e-a40c7e7df013" width=400>
+<img src="https://github.com/user-attachments/assets/c85f765a-cdd2-44bf-a03b-534a1ed34edf" width=400>
 
 그러나 Inception 모듈과 유사하지만 더 극단적으로, 교차 채널 상관 관계와 공간적 상관관계를 완전히 분리하는 형태
 
@@ -115,23 +115,23 @@ Xception 아키텍처
 
 Xception은 간단한 구조로, Keras나 TensorFlow-Slim을 사용해 30~40줄의 코드로 구현할 수 있으며, Inception V2나 V3보다 훨씬 정의하기 쉽습니다.
 
-<img src="https://github.com/user-attachments/assets/331ff43c-946c-4815-b10f-341bc95d6f2b" width=400>
+<img src="https://github.com/user-attachments/assets/997a971b-be84-4c49-9710-3b448c28e7d9" width=400>
 
 Figure 1. - 기존 Inception Module
 
-<img src="https://github.com/user-attachments/assets/d88a8d1d-822c-4e34-a023-5edf500d9f50" width=400>
+<img src="https://github.com/user-attachments/assets/b789dce9-35b3-4233-83d9-e29448d2ab90" width=400>
 
 Figure 2. - 해당 Inception module을 1X1 Conv로 재구성하고 Output channel이 겹치지 않는 부분에 대해서 Spatial Conv(3X3)으로 재구성
 
-<img src="https://github.com/user-attachments/assets/04dc7074-0828-4fb8-8e8a-a8bce8428ce0" width=400>
+<img src="https://github.com/user-attachments/assets/bb890614-c4d4-4196-8246-e1492e6de7b6" width=400>
 
 Figure 3. - Figure2, Figure3은 서로 동일한 형태로 branch1 은 Input에 대해 1X1 Conv를 수행하고 Output Channels에 3X3 Conv를 수행, branch2, 3 도 동일 과정을 거쳐 Concat
 
-<img src="https://github.com/user-attachments/assets/28cfeb1a-4276-4037-908f-9c65c9c2d267" width=400>
+<img src="https://github.com/user-attachments/assets/0c67a82c-122f-4777-ab94-9ffaa0d7dda9" width=400>
 
 Figure 4. - 가설로 이 방법으로 Cross-channel correlation과 Spatial Correlation을 완전하게 분리 학습 가능하다
 
-<img src="https://github.com/user-attachments/assets/f5b79c79-382a-46d4-a820-25f7553708d9" width=700>
+<img src="https://github.com/user-attachments/assets/aee25e33-5bae-4436-928e-ddb709977195" width=700>
 
 Xception Model Architecture
 
@@ -189,4 +189,4 @@ Xception Model Architecture
 
 ## 5. 타 Model과의 성능 비교 표
 
-<img src="https://github.com/user-attachments/assets/3ba4b457-0121-4399-a853-c386bef2d20b" width=700>
+<img src="https://github.com/user-attachments/assets/c37e7c5a-406a-4325-8d27-5bb5ef469d0d" width=700>
