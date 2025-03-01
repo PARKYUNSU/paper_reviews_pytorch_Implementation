@@ -40,9 +40,8 @@ DenseNet은 모든 이전 레이어의 출력 정보를 다음 레이어의 입�
 ## 2. DenseNet Architecture
 
 ### 2.1 Dense Connectivity
-
-![image](https://github.com/user-attachments/assets/e287e3a1-8ff6-4162-87b4-20c7515bd76b)
-Fig.1
+![image](https://github.com/user-attachments/assets/16d0e987-70e2-417d-94e1-4ae1c57fb50e)
+| Fig.1
 
 `Dense Connectivity`은 이전 레이어의 출력을 다음 레이어의 입력과 연결하는 아이디어는 ResNet과 같지만 `Concatenation`하는 것이 차이점이다.
 
@@ -79,13 +78,12 @@ $H_ℓ$(·)을 정의 ⇒ Batch Normalization (BN) → ReLU → 3 X 3 Convolutio
 
 Fig.2 에서 Origin Block 기존 순서인 Conv → BN → ReLU를 ⇒  Composite Function인 BN → ReLU → Conv 변형해서 사용
 
-<img src="https://github.com/user-attachments/assets/1c928f59-cc82-43ad-876d-4be8e5641fa3" width="600" height="400"/>
-
-Fig.2
+<img src="https://github.com/user-attachments/assets/3fe83196-2a65-46ca-916e-c0eccc46c510" width="600" height="400"/>
+| Fig.2
 
 ### 2.3 Pooling Layers
-![image](https://github.com/user-attachments/assets/bcb9e020-3a90-4a60-b9d8-0bb125884683)
-Fig.3
+![image](https://github.com/user-attachments/assets/37b9be43-db91-41f3-b5ba-5030c19edc4b)
+| Fig.3
 
 Concatenation 방법으로 이어 붙인 모든 Block들은 같은 size 여야 합니다. 그러나 여러 layer들을 지나면서 Feature Map의 수가 점점 증가합니다. 이때 Transition Layer를 사용해서 Feature Map의 크기를 줄여 모델의 메모리 사용 및 계산 복잡성을 조절하는데 필수적입니다.
 
@@ -111,9 +109,8 @@ DenseNet에서 Growth rate는 각 레이어가 얼마나 많은 새로운 정보
 
 ### 2.5 Bottleneck layers
 
-<img src="https://github.com/user-attachments/assets/72a1b61a-c3f0-43c0-83e3-1775c9fac760" width="600" height="400"/>
-
-Fig.4
+<img src="https://github.com/user-attachments/assets/112454a3-6399-4b7d-8d80-6acf58515496" width="600" height="400"/>
+| Fig.4
 
 ResNet과 Inception 등에서 사용된 Bottleneck layer은 DenseNet 에서도 사용되었습니다.
 
@@ -133,8 +130,8 @@ Theta = 1 일 경우 Transition Layer 를 지나는 경우 Feature map은 변하
 
 ## 3. Network Architectures
 
-![image](https://github.com/user-attachments/assets/88b30d65-18a7-4e54-aab5-531d96b652dc)
-Table.1
+![image](https://github.com/user-attachments/assets/c7942b4f-3b8c-4993-af52-ceefe5455e2a)
+| Table.1
 
 Table.1을 보면 k는 32와 48로 지정하고, Dense Block은 Batch Norm → ReLU → Conv 구조로 되어있다.
 
@@ -182,7 +179,7 @@ class bottleneck(nn.Module):
         return torch.cat([self.res(x), x], dim=1)
 ```
 
-<img src="https://github.com/user-attachments/assets/5a35b242-682e-4043-8552-cf7548ad188d" width="550" height="420"/>
+<img src="https://github.com/user-attachments/assets/5671ccc8-b2d5-4b1b-b68b-61c17f81f471" width="550" height="420"/>
 
 
 **Transition**
@@ -201,7 +198,7 @@ class transition(nn.Module):
         return self.trans(x)
 ```
 
-<img src="https://github.com/user-attachments/assets/b5af0c43-ff1f-4e61-97ee-b452adfd44af" width="600" height="380"/>
+<img src="https://github.com/user-attachments/assets/418f5d53-91d8-40c4-80b9-6d15abc46c95" width="600" height="380"/>
 
 
 **DenseNet**
@@ -275,16 +272,15 @@ def DenseNet264():
 ```
 
 **DenseNet121의 출력 변화 과정**
-
-![image](https://github.com/user-attachments/assets/86c205dd-d88e-4c04-ad2e-8766189b1904)
+![image](https://github.com/user-attachments/assets/47366234-f4ee-4314-9745-43348d62ada5)
 
 **DenseNet-121 Parameters**
 
-<img src="https://github.com/user-attachments/assets/fbee205f-afa7-4df0-b1ee-c653ca9a6fac" width="600" height="200"/>
+<img src="https://github.com/user-attachments/assets/4eb5685b-77a3-4d69-9ac9-25923f9c8a3c" width="600" height="200"/>
 
 **ResNet-101 Parameters**
 
-<img src="https://github.com/user-attachments/assets/0863295b-b5bd-4d84-a7d7-d6ee0bda9310" width="600" height="200"/>
+<img src="https://github.com/user-attachments/assets/2e61cd25-0d12-4247-9e5c-3d59da5bac8a" width="600" height="200"/>
 
 DenseNet 이 레이어가 더 많아도 ResNet 보다 연산량이 적음
 
@@ -383,6 +379,5 @@ Test loss: 0.6063, Test accuracy: 0.7927
 
 epoch 300, Training loss: 0.4692, Training accuracy: 0.8378
 Test loss: 0.6148, Test accuracy: 0.7959
-Model saved to [/kaggle/working/data/model.pth](https://file+.vscode-resource.vscode-cdn.net/kaggle/working/data/model.pth)
 
-![image](https://github.com/user-attachments/assets/3da1f781-fb45-42d7-948c-c1df38f2b8ce)
+![image](https://github.com/user-attachments/assets/f324e84c-d311-406f-80b8-1acc5060af61)
