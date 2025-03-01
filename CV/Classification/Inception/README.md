@@ -15,7 +15,7 @@ GoogLeNet 모델이 기준년(2014년) 2년 전 Krizhevsky et al에  우승한 �
 
 이 논문의 이름은 Network in Network 논문 저자인 Lin et 과 Inception 영화에서의 “We Need to go Deeper”의 밈에서 유래되었습니다. Deep이라는 단어가 두 가지 의미로 사용되는데, 하나는 Inception 모듈 이라는 a new levle of organization을 도입했다는 의미가 있고, 다른 하나는 네트워크의 깊이가 증가했다라는 의미가 있습니다.
 
-<img src="https://github.com/user-attachments/assets/53edd6f6-dfb8-4641-9769-3b2ae17ed32e" width=400>
+<img src="https://github.com/user-attachments/assets/06095f99-7240-430b-8a69-80af55221e4d" width=400>
 
 ## 2. 문제점
 
@@ -43,7 +43,7 @@ Inception Architecture는 CNN안에 존재하는 Optimal local sparse structure�
     
     Dense Component로 표현 가능하다는 말은, 실제로 Optimal Local Sparse Structure를 만든기보단 여러가지의 필터(Inception 에서는 1X1, 3X3, 5X5등)를 병렬로 사용해서 다양한 스케일 정보를 한 번에 포착하는 방식입니다. 이러한 방식은 희소하게 연결된 네트워크가 밀집된 구조를 통해 가까운 형태로 근사할 수 있습니다.
     
-<img src="https://github.com/user-attachments/assets/7435408f-80f0-4565-a5f4-222ed520e3a9" width=600>
+<img src="https://github.com/user-attachments/assets/25add84d-50cc-4032-b3c6-e6acdca39715" width=600>
 
 위의 아이디어를 근간으로 Inception Network의 주요 구조를 확인할 수 있습니다.
 
@@ -53,7 +53,7 @@ b)에서는 3X3과 5X5 Conv 앞에 1X1 Conv를 추가하여 Channel 수를 줄�
 
 다음은 1X1 Conv로 연산을 통해 파라미터구조가 어떻게 바뀌는지에 대한 예시이다.
 
-<img src="https://github.com/user-attachments/assets/dd5d2963-fe8f-4884-b11f-1e3a65669c58" width=500>
+<img src="https://github.com/user-attachments/assets/9f2cc6b2-5154-414c-9f86-f6f01dc3cfa0" width=500>
 
 ## 4. Inception Module
 
@@ -81,4 +81,4 @@ Inception 모듈은 네트워크의 깊이와 너비를 효울적으로 증가�
 
 ## 5. GoogLeNet
 
-<img src="https://github.com/user-attachments/assets/56281947-fcc3-47c6-b33d-149f8105444a" width=700>
+<img src="https://github.com/user-attachments/assets/64578c19-0ea3-4ff3-8027-8dcd2b028969" width=700>
