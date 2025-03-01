@@ -39,12 +39,12 @@ Table of Contents
 
 ## 2. Width and Depth
 
-<img src="https://github.com/user-attachments/assets/4dce1dd4-1c1e-409f-b47f-570e00c0f90a" width="700" height="400">
+<img src="https://github.com/user-attachments/assets/0d512cde-96a9-4f4c-964f-4edaffe6856e" width="700" height="400">
 
 Fig.1
 
+![image](https://github.com/user-attachments/assets/de1fb2a1-38b6-4485-8741-975d89b27397)
 
-![image](https://github.com/user-attachments/assets/8a666050-74f0-4694-8773-0c39646c27e4)
 Fig.2
 
 Fig.1을 기준으로 Width 란 Convolution Filter 개수 또는 Output Feature Map의 채널 수를 의미하며, Width가 넓은 Network란 Convolution Filter 개수를 많이 사용하여 Output Feature Map의 채널 수가 많은 모델을 의미합니다.
@@ -53,7 +53,7 @@ Fig.1을 기준으로 Width 란 Convolution Filter 개수 또는 Output Feature 
 
 깊이에 관한 연구들을 대표하는 모델로 `VGGNet`, `Inception`, `ResNet`이 있습니다.
 
-<img src="https://github.com/user-attachments/assets/075cb46e-1f7d-4100-964e-2cfafbc3e960" width="800" height="550">
+<img src="https://github.com/user-attachments/assets/ede170cc-5440-4cf9-8f6f-f5b788d62167" width="800" height="550">
 
 
 
@@ -94,15 +94,15 @@ Parameters of the block : $W_l$
 
 ResNet의 `Skip Connections` 또는 `Shortcut Connections` 방법을 사용하였습니다.
 
-<img src="https://github.com/user-attachments/assets/8dd3002b-5903-49b8-868d-1626fa6b27d2" width="400" height="450">
+<img src="https://github.com/user-attachments/assets/fb5b2217-9515-48ff-8d50-97a932b0bc03" width="400" height="450">
 
 
 
-### **1) Layer Width (widening factor k)**:
+### **1) Layer Width (widening factor k)**
 
 Wide ResNet은 레이어의 필터 수를 증가시키는 방식으로 네트워크의 너비를 확장합니다. 이때, 너비는 'widening factor'인 k를 사용하여 결정됩니다. 예를 들어, k=2이면 각 레이어에서 사용하는 필터의 수가 기본 ResNet보다 두 배 많습니다. 이러한 확장은 모델이 더 다양한 특징을 학습할 수 있도록 도와줍니다.
 
-### **2) Shortcut Connections**:
+### **2) Shortcut Connections**
 
 Wide ResNet은 ResNet과 마찬가지로 Shortcut Connections를 활용합니다. 이러한 연결은 정보가 네트워크를 더 쉽게 통과할 수 있도록 도와주며, 기울기 소실 문제를 완화시켜 학습을 더욱 안정적으로 만듭니다. 또한, 이러한 연결은 깊이가 깊어질 때 발생하는 문제들을 해결할 수 있게 합니다.
 
@@ -112,18 +112,18 @@ Wide ResNet은 ResNet과 마찬가지로 Shortcut Connections를 활용합니다
 
 Wide ResNet은 너비(Width)를 증가시키면서 네트워크의 표현력을 향상시켰습니다. 이를 통해 네트워크가 학습해야 하는 레이어의 수가 줄어들어, 네트워크가 깊어질수록 학습이 어려워지는 기존의 문제를 피할 수 있습니다.
 
-![image](https://github.com/user-attachments/assets/8a592ba9-76b6-47f6-946c-0c52033f5063)
+![image](https://github.com/user-attachments/assets/011f204c-c0ad-4496-ad5a-e6de08818e23)
 
 
-### **2) Feature Reuse**:
+### **2) Feature Reuse**
 
 깊은 네트워크에서 발생하는 Diminishing Feature Reuse 문제를 완화하기 위해, Wide ResNet은 네트워크의 너비를 늘림으로써 더 많은 피처 맵을 학습합니다. 이러한 방식으로 각 블록이 다양한 특징을 더 잘 학습하고, 이로 인해 최종 성능에 더 크게 기여할 수 있게 됩니다.
 
-### 3) 성능:
+### 3) 성능
 
 여러 연구에서 Wide ResNet은 기존의 ResNet보다 다양한 이미지 분류 작업에서 더 나은 성능을 보였습니다. 특히, Wide ResNet은 복잡한 네트워크를 필요로 하는 데이터셋에서도 안정적으로 학습할 수 있으며, 더 적은 깊이로도 비슷하거나 더 나은 성능을 보여줍니다.
 
-<img src="https://github.com/user-attachments/assets/1e5401d6-f3bd-4046-b9ce-e9dcecf78ab2" width="600" height="400">
+<img src="https://github.com/user-attachments/assets/dd6fe4c1-07ae-4f43-81c8-98c0a7961dd2" width="600" height="400">
 
 ## 6. Code
 
@@ -158,10 +158,10 @@ class Basicblock(nn.Module):
         return x
 ```
 
-<img src="https://github.com/user-attachments/assets/d908c407-9da9-4b07-89fc-5b41a83312c6" width="800" height="350">
+<img src="https://github.com/user-attachments/assets/fb177831-4f5f-4b00-bb54-63c044f7dee7" width="800" height="350">
 
 
-<img src="https://github.com/user-attachments/assets/75f76282-b790-474f-8d97-f454b304b3e1" width="800" height="350">
+<img src="https://github.com/user-attachments/assets/577e142d-840a-4339-8a61-b9c579624e35" width="800" height="350">
 
 
 논문에서는 첫번째 Learning Rate 감수한 후 손실과 검증오류가 갑자기 증가하고, 다음 Learning Rate 감소 까지 높은 값으로 진동하는 발견했습니다. 이 현상이 Weight Decay(가중치 감소)로 인한 현상이고, 이 현상을 Drop out 으로 효과로 제거가 가능하다고 합니다. 
@@ -170,7 +170,7 @@ CIFAR 데이터는 0.3 SVHN 데이터는 0.4 Drop out rate를 사용
 
 ### Drop out
 
-<img src="https://github.com/user-attachments/assets/91a2f3da-e975-4a5b-b921-e4b08af2773a" width="600" height="300">
+<img src="https://github.com/user-attachments/assets/cb098382-04a0-4648-bf6e-87852a910a54" width="600" height="300">
 
 Drop-out은 서로 연결된 연결망(layer)에서 0부터 1 사이의 확률로 뉴런을 제거(drop)하는 기법입니다. Drop-out rate를 0.5로 가정할때, Drop-out 이전에 4개의 뉴런끼리 모두 연결되어 있는 Fully Connected Layer에서 4개의 뉴런 각각은 0.5의 확률로 랜덤히게 제거됩니다.
 
@@ -187,7 +187,7 @@ Drop-out은 서로 연결된 연결망(layer)에서 0부터 1 사이의 �
 
 ### Depth
 
-<img src="https://github.com/user-attachments/assets/a3177603-1398-4ded-be34-19475e240454" width="600" height="300">
+<img src="https://github.com/user-attachments/assets/d35ce038-f8e7-4a85-936e-b5ca68726f6b" width="600" height="300">
 
 총 Depth 계산
 
@@ -257,7 +257,7 @@ class WideResNet(nn.Module):
 
 ## 7. Experimental Results
 
-<img src="https://github.com/user-attachments/assets/0dc9c19c-c092-4c55-b1b0-10c2e5c0ee14" width="600" height="300">
+<img src="https://github.com/user-attachments/assets/0b10128b-f855-491b-adfb-ae59ff11fab1" width="600" height="300">
 
 - 동일한 Depth에서는 K가 클수록 우수
 - 동일한 K에서는 Depth가 클수록 우수
@@ -287,18 +287,18 @@ SGD optimizer (momentum=0.9, weight decay=0.0005)
 
 **WRN-28-10 모델**
 
-<img src="https://github.com/user-attachments/assets/4605eb56-91d9-4084-bb5d-0236b1637c00" width="700" height="200">
+<img src="https://github.com/user-attachments/assets/29eb8cee-1cd3-4cdd-84a6-e136e257b714" width="700" height="200">
 
-<img src="https://github.com/user-attachments/assets/fa1cc32a-af02-4ff1-9e4f-aa96b0485b9e" width="700" height="400">
+<img src="https://github.com/user-attachments/assets/b4bf1de4-e3b9-4d2c-b5f4-972bc1933072" width="700" height="400">
 
 
 Minimum Test Error Rate: 4.27%
 
 **WRN-40-1 모델**
 
-<img src="https://github.com/user-attachments/assets/990638c4-79d9-422f-846a-532832a737a4" width="700" height="200">
+<img src="https://github.com/user-attachments/assets/d6926d61-a4d7-4409-b1bf-6986edc8b752" width="700" height="200">
 
-<img src="https://github.com/user-attachments/assets/c3d58808-1b78-49e4-8369-90e1e20a82c1" width="700" height="400">
+<img src="https://github.com/user-attachments/assets/79fa9e22-a068-4838-ab40-1f812ed3c1e6" width="700" height="400">
 
 
 Minimum Test Error Rate: 6.89%
@@ -309,16 +309,16 @@ Minimum Test Error Rate: 6.89%
 
 **WRN-40-1(Drop out 적용)**
 
-<img src="https://github.com/user-attachments/assets/c3d58808-1b78-49e4-8369-90e1e20a82c1" width="700" height="400">
+<img src="https://github.com/user-attachments/assets/8a7626b8-638e-4888-b473-e72b8b4ba85a" width="700" height="400">
 
 Minimum Test Error Rate: 6.89%
 
-<img src="https://github.com/user-attachments/assets/88dd4758-4b44-4355-a4b3-ded68b6c80b4" width="700" height="300">
+<img src="https://github.com/user-attachments/assets/1429de61-c1e0-40b0-a404-6c153bd45985" width="700" height="300">
 
 **WRN-40-1(Drop out 적용 X)**
 
-<img src="https://github.com/user-attachments/assets/2cb6cc87-2162-40ba-ad24-44857ea516bc" width="700" height="400">
+<img src="https://github.com/user-attachments/assets/2aa1f318-e11b-4276-b580-3e011041a885" width="700" height="400">
 
 Minimum Test Error Rate: 6.65%
 
-<img src="https://github.com/user-attachments/assets/b7d9917c-99d8-4f12-a8fe-b6a1afe565a2" width="700" height="300">
+<img src="https://github.com/user-attachments/assets/920a596a-83d5-477e-8465-737287be3e1e" width="700" height="300">
