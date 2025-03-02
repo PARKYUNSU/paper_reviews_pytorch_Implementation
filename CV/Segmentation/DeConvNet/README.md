@@ -41,8 +41,7 @@ Department of Computer Science and Engineering, POSTECH, Korea
     
     후처리인 CRF를 사용해 성능을 개선하려 하지만, 논문에서도 bilinear interpolation을 통한 업샘플링의 한계를 지적했습니다.
 
-
-<img src="https://github.com/user-attachments/assets/4bdce991-2b30-4f23-9116-bb2bad3d3799" width="600">
+<img src="https://github.com/user-attachments/assets/301b9fc0-d2df-42e7-8b69-d86309ad8382" width="600">
 
 논문에서는 FCN의 한계점을 극복하기 위해 다음의 해결방안을 제안합니다.
 
@@ -57,7 +56,7 @@ Department of Computer Science and Engineering, POSTECH, Korea
 
 ## 2. Architecture
 
-<img src="https://github.com/user-attachments/assets/e22bd454-e6b7-4fc9-9a07-caaac32e47d1" width="800">
+<img src="https://github.com/user-attachments/assets/fdfe7197-abf1-4332-a82a-80de31379afe" width="800">
 
 DeConvNet 모델은 두 부분으로 구성됩니다.
 
@@ -88,9 +87,9 @@ CNN 풀링 연산은 하위 층의 노이즈 활성화를 걸러내고, 영역 �
 
 풀링 과정에서 선택된 최대 활성화 위치를 switch 변수에 저장하고, 나중에 Unpooling을 할때 원래 위치로 되돌립니다.
 
-<img src="https://github.com/user-attachments/assets/eaac4a04-0c68-4025-b382-339a6971bbef" width="500">
+<img src="https://github.com/user-attachments/assets/b78bf63d-2436-44a1-8521-b3233d2782f3" width="500">
 
-<img src="https://github.com/user-attachments/assets/0e783889-be45-4d64-95a0-3ba2bf757fa5" width="700">
+<img src="https://github.com/user-attachments/assets/5670999d-fd87-4874-a439-e014da498d98" width="700">
 
 ### 3.2 Deconvolution
 
@@ -100,18 +99,17 @@ Deconvolution 층도 합성곱 네트워크와 마찬가지로 객체의 다양�
 
 아래 그림은 Deconvolution 연산과정을 보여줍니다. 2 X 2입력값을 3 X 3 영역에 배치를 하는데, 처음 입력값인 빨간색을 3 X 3 영역에 배치하고, 다음 입력 값인 파란색을 그 다음 3 X 3 영역에 배치합니다. 두 3 X 3 영역에서 겹치는 부분은 Summation 하여 Deconvolution 연산을 수행합니다.
 
-
-<img src="https://github.com/user-attachments/assets/6c758579-462d-4ff9-9f99-335e387a1ecb" width="400">
+<img src="https://github.com/user-attachments/assets/53eaa7e7-7b19-42bc-9946-446dd888d818" width="400">
 
 다음은 Deconvolution 네트워크의  활성화 Map의 시각화에 대한 설명입니다.
 
 Deconvolution 층을 통해서 특징이 전달되면서 객체의 세부 정보가 드러납니다. 배경은 전파 과정에서 억제가되고, 클래스와 밀접하게 강화됩니다.  상위 Deconvolution 층의 학습된 필터가 클래스별 형태 정보를 포착하는 경향을 보입니다.
 
-<img src="https://github.com/user-attachments/assets/71f3e682-452a-4e30-b5eb-f7afe85ec362" width="800">
+<img src="https://github.com/user-attachments/assets/06d710ae-a25f-46aa-80ca-55cb3de961cb" width="800">
 
 1. input image
 2. 14 X 14 Deconv
-3. 28 X 28 Deconv
+3. 28 X 28 Unpool
 4. 56 X 56 Deconv
 5. 56 X 56 Unpool
 6. 56 X 56 Deconv
@@ -122,14 +120,18 @@ Deconvolution 층을 통해서 특징이 전달되면서 객체의 세부 정보
 
 ## 4. Architecture
 
-<img src="https://github.com/user-attachments/assets/d55fb2e0-e54b-4760-8467-1e5aa17c8feb" width="700">
+<img src="https://github.com/user-attachments/assets/59b1b4ca-ce95-4aed-9078-e5786f0d960a" width="700">
 
 ## 5. Evaluation results on PASCAL VOC 2012
 
-<img src="https://github.com/user-attachments/assets/686c5907-7a05-44ce-9b26-99b705e87394" width="800">
+<img src="https://github.com/user-attachments/assets/34d1ea8e-d362-4604-ba90-5c1fdc1dbf61" width="800">
 
 ## 6. Result
 
-<img src="https://github.com/user-attachments/assets/358ae2b1-002e-4474-a692-b241c4f95253" width="800">
+<img src="https://github.com/user-attachments/assets/a6657f80-8cc1-4446-941b-c4bd7dd89cb3" width="800">
 
-<img src="https://github.com/user-attachments/assets/75e08160-8ab6-4be8-9a98-cd0c7f1ed780" width="600">
+<img src="https://github.com/user-attachments/assets/709b4c4e-6e7f-45e5-ad55-bb3a40e3207e" width="600">
+
+### Result (100 epoch)
+<img src="https://github.com/user-attachments/assets/680db77c-aeba-4896-a079-7f50e858ffdf" width=600>
+
