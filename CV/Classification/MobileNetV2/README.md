@@ -41,7 +41,7 @@ Depthwise Separable Convolutions 기법은 합성곱을 깊이 별 합성곱과 
 
 이 과정으로 연산 비용을 감소효과를 가져옴 
 
-<img src="https://github.com/user-attachments/assets/5148d7ef-9781-468a-a5e5-7761dd569966" width="400" height="400">
+<img src="https://github.com/user-attachments/assets/cee2f59d-3fa0-4686-a6dc-6813359de968" width="400" height="400">
 
 fig.1
 
@@ -53,7 +53,7 @@ $D_K · D_K · M · N · D_F · D_F$
 
 논문에서는, 기존 연산 과정을 Depth wise(공간 축), Point wise(채널 축) 으로 나눠서 계산
 
-<img src="https://github.com/user-attachments/assets/d2a8c376-2e3f-49b1-83f3-149b01c079db" width="500" height="550">
+<img src="https://github.com/user-attachments/assets/0eb97f23-170a-4d40-9c0c-c41cdfcbda6a" width="500" height="550">
 
 fig.2
 
@@ -136,21 +136,21 @@ Neural Network에서는 중요한 Manifold가 하위 차원에 임베드될 수 
 
 즉, 정보들이 고차원 공간에 퍼져 있지 않고, 저차원 공간에 위치할 수 있다라는 가정입니다.
 
-<img src="https://github.com/user-attachments/assets/f760ec1f-85d5-4199-988b-1663b59c75eb" width="400" height="400">
+<img src="https://github.com/user-attachments/assets/5fc7428f-400d-48ee-8514-a2e22ec4a567" width="400" height="400">
 
 가장 보편적으로 Manifold를 설명할 때 나오는 스위스롤을 예시로 보면,
 
 그 롤 위에 개미가 있고 롤 안쪽부터 바깥쪽의 거리를 개미가 비유클리디안 형태를 만져가며 모양을 이해해 나가는 것을 생각하면 이해하기 쉬울 것이다. 즉, 스위스롤도 신경망 모델 입장에서 경우에 따라 말린 부분을 펼친 모양으로 나타낼 수 있다는 말이다.
 
-<img src="https://github.com/user-attachments/assets/3dc18c7a-faf0-419d-8973-1bad516cb4c5" width="450" height="300">
+<img src="https://github.com/user-attachments/assets/2e899d12-44b1-457c-9764-e49034b08160" width="450" height="300">
 
-<img src="https://github.com/user-attachments/assets/f9f30ece-f742-4f75-accf-8aba5b8716f8" width="450" height="300">
+<img src="https://github.com/user-attachments/assets/ce7d5e29-d015-4b82-8d42-8371d3fec285" width="450" height="300">
 
 데이터 A와 데이터 B 사이를 보간(Interpolation)하면, 3차원 상의 A↔B 보간하는 것 보다, 2차원의 매니폴드 상의 A↔B를 보간하는 것이 해당 데이터에 더 적절한 방법이다 라는 가정.
 
 MNIST 데이터에 대하여 2~0 사이를 보간하는 내용을 예시로,
 
-<img src="https://github.com/user-attachments/assets/6882a448-fd67-4442-88ba-c942d09fe0a0" width="450" height="300">
+<img src="https://github.com/user-attachments/assets/a961a7df-ee8b-4b93-8536-c8fedda91e3f" width="450" height="300">
 
 1) Manifold Interpolation(매니폴드 보간) : 2에 대한 데이터, 0에 대한 데이터 사이에 6에 대한 데이터가 존재한다고 볼 수 있다.
 
@@ -166,7 +166,7 @@ MobileNetV2에서는 BottleNeck(Linear BottleNeck)구조를 이용하여 계산�
 
 ### 3.2 ReLU의 비선형성 문제
 
-<img src="https://github.com/user-attachments/assets/2e95f841-4250-44b8-af52-af159b5663d2" width="300" height="300">
+<img src="https://github.com/user-attachments/assets/0493bc5f-d02e-434a-a1fa-11c49bbf755b" width="300" height="300">
 
 그러나, 이러한 저차원 데이터를 ReLU를 통과하면 
 
@@ -178,9 +178,9 @@ $ReLU(x)=max(0,x)$
 
 논문에서는 Manifold에 대한 가설의 실험으로 Linear Bottlenecks 에서 ReLU를 사용하여 더 안 좋은 결과가 나옴을 설명함
 
-<img src="https://github.com/user-attachments/assets/1ff930da-1472-4664-8de3-7dedaa303041" width="450" height="300">
+<img src="https://github.com/user-attachments/assets/7e7dc4bd-845f-4da7-9cfd-96e691b294c6" width="450" height="300">
 
-<img src="https://github.com/user-attachments/assets/d931b8d6-8103-4724-a4a4-baea665952cd" width="450" height="300">
+<img src="https://github.com/user-attachments/assets/814d8b72-a809-4fa7-b734-f87cb50584ad" width="450" height="300">
 
 왼쪽 MobileNetV1, 오른쪽 MobileNetV2. Point Wise 부분에서 ReLU6의 여부의 차이점을 볼 수 있다.
 
@@ -188,7 +188,7 @@ $ReLU(x)=max(0,x)$
 
 ### 4.1 Residual Block & Inverted Residual Block
 
-<img src="https://github.com/user-attachments/assets/910c114e-b298-4eea-a565-1e9bb33d270f" width="500" height="200">
+<img src="https://github.com/user-attachments/assets/77ea28db-6f49-4912-8a01-ffb0efe95575" width="500" height="200">
 
 **(a) Residual Block**
 
@@ -208,7 +208,7 @@ wide → narrow → wide 형태로 가운데가 좁은 형태로 Bottleneck 구�
 
 Mobilenet V2에서 제공한 구조로 기존 Residual과 정반대로 narrow → wide → narrow 구조로 되어있습니다. 그래서 Inverted Residual Block.
 
-<img src="https://github.com/user-attachments/assets/7dcd6de0-216e-4a09-979d-651136a64da9" width="500" height="200">
+<img src="https://github.com/user-attachments/assets/cd4ae99d-ff68-4f87-aacf-8639bf14ab3b" width="500" height="200">
 
 1) Input Tensor가 처음 Inverted Residual Block에 들어온 상태가 narrow 상태
 
@@ -234,7 +234,7 @@ Mobilenet V2에서 제공한 구조로 기존 Residual과 정반대로 narrow �
 
 ## 5. Model Architecture
 
-<img src="https://github.com/user-attachments/assets/153cec1c-801f-47c1-b88d-f41465379f6a" width="400" height="300">
+<img src="https://github.com/user-attachments/assets/c444d10d-ca9c-4eff-ac84-4ec18e4c9121" width="400" height="300">
 
 t = expansion ratio
 
@@ -374,7 +374,7 @@ Initial Learning Rate=0.045 Learning Rate Decay=0.98 per epoch
 
 batch size : 96
 
-<img src="https://github.com/user-attachments/assets/2f75441c-ab47-4ea4-9cd5-7aa629698621" width="700" height="300">
+<img src="https://github.com/user-attachments/assets/c4130aff-5974-426d-990a-172354b49fb0" width="700" height="300">
 
 Minimum Train Error Rate: 0.10%
 Minimum Val Error Rate: 18.73%
