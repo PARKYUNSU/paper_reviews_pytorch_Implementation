@@ -63,7 +63,7 @@ $h_t = σ(W_h h_{t-1} + W_x x_t + b)$
 
 ### 구조 설명
 
-<img src="https://github.com/user-attachments/assets/98486a20-a16f-458a-bc79-0686d311d4cb" width=500 alt="RNN 도식화">
+<img src="https://github.com/user-attachments/assets/da2d951d-c99a-4edb-8cbb-e05bb6455041" width=500 alt="RNN 도식화">
 
 | RNN 도식화
 
@@ -76,7 +76,7 @@ $h_t = σ(W_h h_{t-1} + W_x x_t + b)$
 
 ---
 
-<img src="https://github.com/user-attachments/assets/0da3970a-20e3-4f32-96e6-a73f07a0dfb9" width=500 alt="RNN 표현방식">
+<img src="https://github.com/user-attachments/assets/0ba2486f-dbe2-43ed-98a9-fe8dadc41941" width=500 alt="RNN 표현방식">
 
 | 재귀적 표현(좌측), 펼친 표현(우측)
 
@@ -110,7 +110,7 @@ RNN은 연속적인 데이터를 처리하는 데 적합하지만 몇 가지 한
 RNN의 한계점을 극복하기 위해 **LSTM(Long Short-Term Memory)** 이 제안되었습니다.  
 LSTM은 기존 RNN의 구조에 **셀 상태(Cell State)** 와 **게이트 구조** 를 추가하여 긴 시간 간격의 정보를 효과적으로 학습할 수 있습니다.
 
-<img src="https://github.com/user-attachments/assets/c40ee410-ab99-46fc-9f53-24f77aa8cf49" width=500>
+<img src="https://github.com/user-attachments/assets/4c68308e-9147-4019-ba25-bc3529bff897" width=500>
 
 | RNN to LSTM
 
@@ -136,13 +136,18 @@ LSTM은 이러한 구조를 통해 RNN의 단점을 완화하고, 긴 시계열 
 
 ## LSTM의 단계별 동작
 
+<img src="https://github.com/user-attachments/assets/b63501ed-ce2d-4e86-aa87-f74b0cb90a88" width=500>
+<img src="https://github.com/user-attachments/assets/48836d1a-9318-4d36-83ab-8376d2864bb3" width=300>
+
+| LSTM 전체 단계
+
 **1. Forget Gate Layer (기존 정보의 제거)**
    
 이 단계에서는 **이전 상태 $h_{t−1}$** 와 **현재 입력 $x_t$** 를 기반으로, **Cell State $C_{t−1}$** 에서 어떤 정보를 버릴지 결정합니다.
 
 Sigmoid Layer를 통해 0과 1 사이의 값인 $f_t$를 계산하며, 값이 0에 가까울수록 해당 정보를 잊게 됩니다.
 
-<img src="https://github.com/user-attachments/assets/716dc352-b9b4-4e62-bb29-451b64de77f2" width=500>
+<img src="https://github.com/user-attachments/assets/5f67866a-286a-4eff-8883-263530f5f9a3" width=500>
 
 
 **2. Input Gate Layer (새로운 정보 추가)**
@@ -155,7 +160,7 @@ Input Gate $i_t$: Sigmoid Layer가 어떤 값을 업데이트할지 결정.
 
 Candidate Value $C~_t$: Tanh Layer를 통해 새롭게 추가할 후보 값을 생성.
 
-<img src="https://github.com/user-attachments/assets/b63407f1-bf32-4fbd-aa51-d2c84b0b99e8" width=500>
+<img src="https://github.com/user-attachments/assets/ca17b2d6-de3a-4374-928f-b8ba31954c37" width=500>
 
 
 **3. Cell State 업데이트**
@@ -166,7 +171,7 @@ Forget Gate와 Input Gate의 결과를 조합하여 새 상태를 생성합니�
 
 이 과정은 이전 상태에서 잊어야 할 정보는 제거하고, 새로운 정보를 추가하는 방식으로 이루어집니다.
 
-<img src="https://github.com/user-attachments/assets/0e9c2cff-d915-472e-9380-487327af97ce" width=500>
+<img src="https://github.com/user-attachments/assets/a1044781-c9e9-4881-b63f-dea6657ba98d" width=500>
 
 
 **4. Output Gate Layer (출력 생성)**
@@ -179,7 +184,7 @@ Output Gate $o_t$: Sigmoid Layer가 출력할 정보를 결정.
 
 Filtered Output: Cell State를 Tanh Layer에 통과시켜 -1과 1 사이의 값으로 변환한 뒤, Output Gate와 곱하여 최종 출력값 생성.
 
-<img src="https://github.com/user-attachments/assets/1660b37d-5d41-4b21-ad52-98e921074070" width=500>
+<img src="https://github.com/user-attachments/assets/22b41a82-1586-4416-a797-13915e9bbf7c" width=500>
 
 ---
 
@@ -236,5 +241,5 @@ Filtered Output: Cell State를 Tanh Layer에 통과시켜 -1과 1 사이의 값�
    - Train Loss: **0.0077**, Train Accuracy: **88.95%**
    - Validation Loss: **0.0142**, Validation Accuracy: **82.55%**
 
-<img src="https://github.com/user-attachments/assets/98da957e-f89a-44af-8442-bcf51580d769">
+<img src="https://github.com/user-attachments/assets/aa4697d6-c9f1-4350-b486-461ff194b8c6">
 
