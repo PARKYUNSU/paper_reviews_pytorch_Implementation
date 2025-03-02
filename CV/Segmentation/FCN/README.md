@@ -28,7 +28,7 @@ FCN(Fully Convolutional Network)은 이미지 분류에 뛰어난 성능을 보�
 
 즉, 이미지 내에 여러 개의 동일 클래스 객체가 있을 경우 각각을 독립적으로 인식하고 픽셀 단위로 구분합니다. 예를 들어, 이미지 내에 2개의 종이쓰레기가 있을 때, 각각의 종이쓰레기를 독립된 개체로 구분하여 픽셀을 할당합니다.
 
-<img src="https://github.com/user-attachments/assets/29aa9796-0717-40b0-9b1d-fdde766207e0" width="600px">
+<img src="https://github.com/user-attachments/assets/98b95f42-e9f7-49e0-af7a-582ed0d0a801" width="600px">
 
 
 |   | **시멘틱 세그멘테이션** | **인스턴스 세그멘테이션** |
@@ -41,13 +41,13 @@ FCN(Fully Convolutional Network)은 이미지 분류에 뛰어난 성능을 보�
 ---
 
 ## FCN
-<img src="https://github.com/user-attachments/assets/f8447903-0a2f-4a37-849b-f38a67f3d056" width="500px">
+<img src="https://github.com/user-attachments/assets/1c961fb2-65ec-4a85-910a-6c6cc713060e" width="500px">
 
 ### 1. VGG BackBone
 
 FCN(Fully Convolutional Network)은 VGG를 백본으로 사용하는 모델입니다. VGG는 이미지 분류에서 우수한 성능을 보여왔기 때문에, FCN은 이를 기반으로 하여 Semantic Segmentation 작업에 맞게 변형되었습니다. VGG의 컨볼루션 레이어들을 활용하여 이미지로부터 중요한 특징들을 추출하고, 그 이후에 **FC(완전연결층)**을 제거하여 1x1 컨볼루션과 업샘플링(Transpose Convolution) 과정을 통해 각 픽셀을 분류합니다. 그러나 Segmentation 작업을 위해서 변형이 필요합니다.
 
-<img src="https://github.com/user-attachments/assets/61fafcf0-a548-49c7-a2c3-385bd293d276" width="600px">
+<img src="https://github.com/user-attachments/assets/ab60fdf3-c507-4279-889d-20a6619a5858" width="600px">
 
 ### 2. VGG Networks Fully Connected Layer -> Convolution으로 대체
 
@@ -59,9 +59,9 @@ VGG 네트워크의 FC6과 FC7 층을 Convolution으로 변경합니다.
 
 아래 그림은 이 차이를 잘 보여줍니다. Convolution을 사용한 경우에는 초록색 라벨 세제의 위치 정보가 유지되지만, Fully Connected Layer를 사용할 경우 위치 정보가 손실됩니다.
 
-<img src="https://github.com/user-attachments/assets/07ad1490-1d15-4a3a-a734-f2c7349307ff" width="500px">
+<img src="https://github.com/user-attachments/assets/5651914c-a13d-4e9c-9791-3b04db51ad9d" width="500px">
 
-<img src="https://github.com/user-attachments/assets/e41d1143-65c7-4330-acc6-14ead0f9a26f" width="500px">
+<img src="https://github.com/user-attachments/assets/e5213e30-c8cd-4591-af3d-87d4f6f5f130" width="500px">
 
 ### 3. Transposed Convolution을 이용해서 Input Size로 복원 및 Pixel Wise Prediction 수행
 
@@ -69,7 +69,7 @@ FCN은 Transposed Convolution을 이용해 원본 이미지의 크기로 복원�
 
 이를 통해 공간 정보를 보존하면서도 분할 작업을 진행할 수 있습니다.
 
-<img src="https://github.com/user-attachments/assets/23c33bd8-4edf-4c5c-896d-e194b370f9d6" width="600px">
+<img src="https://github.com/user-attachments/assets/dd6ceb70-c882-470b-8f83-d3607345bf68" width="600px">
 
 
 ### 4. FCN 구조
@@ -84,7 +84,7 @@ Up-sampling: 낮은 해상도의 히트맵을 Transposed Convolution으로 업�
 
 네트워크 학습: 최종 피처맵과 라벨 피처맵의 차이를 기반으로 네트워크를 학습합니다.
 
-<img src="https://github.com/user-attachments/assets/657bf405-f76f-42af-b2d3-2a834abed5b9" width="600px">
+<img src="https://github.com/user-attachments/assets/5a189d98-56ce-41f0-9c9f-7378ed7e8885" width="600px">
 
 ### 5. Upsampling 문제와 해결책
 VGG16 네트워크에서 입력 이미지 크기가 224x224인 경우, 5개의 컨볼루션 블록을 통과하면 피처 맵 크기는 7x7로 줄어듭니다.
@@ -112,7 +112,7 @@ FCN-8s: 더 많은 세부 정보를 보존하기 위해 8배 업샘플링합니�
 
 FCN-8은 피처 맵 결합을 통해 세밀한 정보가 포함되므로 복잡한 경계를 더 정확하게 추정할 수 있습니다. 반면, FCN-32는 단일 피처 맵을 32배 업샘플링하기 때문에 세밀한 경계 정보가 부족하여 대략적인 형태만 추정합니다.
 
-<img src="https://github.com/user-attachments/assets/972f2712-2536-45bf-b74c-64988a9cc911" width="600px">
+<img src="https://github.com/user-attachments/assets/51f8db0b-2ce3-451d-9983-4c64da091bdf" width="600px">
 
 - **연산 비용과 파라미터 수**: VGG 백본을 공유하므로 세 모델 간 파라미터 수의 차이는 크지 않습니다. 하지만 **FCN-8**은 추가 피처 맵 결합으로 연산 비용이 다소 증가해 가장 느리고, **FCN-32**는 연산이 단순해 가장 빠릅니다.
 
@@ -139,8 +139,7 @@ FCN은 업샘플링에 bilinear interpolation을 사용하나, 이 방법은 성
 
 후처리인 CRF를 사용해 성능을 개선하려 하지만, 논문에서도 bilinear interpolation을 통한 업샘플링의 한계를 지적했습니다.
 
-
-<img src="https://github.com/user-attachments/assets/81c8aa2b-2693-4666-9979-21d387a7070f" width="500px">
+<img src="https://github.com/user-attachments/assets/20c84ce6-99ff-4089-b9fa-57c8e8241740" width="500px">
 
 ---
 
@@ -171,11 +170,11 @@ FCN은 업샘플링에 bilinear interpolation을 사용하나, 이 방법은 성
 
 #### Segmentation Result
 
-<img src="https://github.com/user-attachments/assets/93d6c056-4504-4eed-b928-6b1bf771b082" width="800">
+<img src="https://github.com/user-attachments/assets/b07325f6-c60e-4668-8664-3d17bdce89f3" width="800">
 
 #### Loss & Accuracy
 
-<img src="https://github.com/user-attachments/assets/08763fbb-4c3b-4431-b6f0-68a0b7b5d4b2" width="800">
+<img src="https://github.com/user-attachments/assets/2f0a534a-e596-4281-9227-b873a80b3fca" width="800">
 
 ---
 
@@ -190,14 +189,14 @@ FCN은 업샘플링에 bilinear interpolation을 사용하나, 이 방법은 성
 
 #### Segmentaion Result
 
-<img src="https://github.com/user-attachments/assets/cb77cabf-c50e-4587-9498-6b32a055c60d" width="800">
+<img src="https://github.com/user-attachments/assets/867420f0-df3d-440a-bfbd-32d650e18007" width="800">
 
-<img src="https://github.com/user-attachments/assets/c661be13-94fe-4f86-bda7-30650dc63eec" width="800">
+<img src="https://github.com/user-attachments/assets/6b679d3d-0098-4415-8139-814116c33270" width="800">
 
-<img src="https://github.com/user-attachments/assets/0229be9a-f4fe-485e-8f18-f7abf4d8dc45" width="800">
+<img src="https://github.com/user-attachments/assets/1850effc-b669-4c3f-bf4b-14e0e7dabedb" width="800">
 
-<img src="https://github.com/user-attachments/assets/0c68d4d5-a55d-47db-9cc4-6ac635bdcb16" width="800">
+<img src="https://github.com/user-attachments/assets/14d80f1f-6989-4b48-b6c3-dabcf597b22f" width="800">
 
-<img src="https://github.com/user-attachments/assets/d29d3132-40ba-49a2-985d-2ea41c9eb6da" width="800">
+<img src="https://github.com/user-attachments/assets/64963e05-a08d-4203-9d8e-a52d5f62d01e" width="800">
 
-<img src="https://github.com/user-attachments/assets/e2173684-639e-41a9-8d02-b4f56edca21e" width="800">
+<img src="https://github.com/user-attachments/assets/d3ffc0b9-c401-4a9b-b6d9-1e65a6fa7bcd" width="800">
