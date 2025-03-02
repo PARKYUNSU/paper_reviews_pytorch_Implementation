@@ -211,7 +211,7 @@ Ghost Bottleneck은 다음과 같이 구성
 
   - 입력 특징 맵의 채널별 중요도를 조정
 
-    | [SE-Net 내용](https://github.com/PARKYUNSU/SE-Net)
+    | [SE-Net 내용](https://github.com/PARKYUNSU/pytorch_imple/tree/main/CV/Classification/SE-Net)
 
 
 ### 4.2 Ghost Module 2
