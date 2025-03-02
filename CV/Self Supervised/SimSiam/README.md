@@ -72,9 +72,9 @@ class SiameseNetwork(nn.Module):
   Input 데이터의 변형에 민감함
 
 
-<img src="https://github.com/user-attachments/assets/d54df74e-8f8c-4d23-9985-a40c948c2ee7" width=500>
+<img src="https://github.com/user-attachments/assets/10447b23-e585-4e0c-ada1-584ff1835d6c" width=500>
 
-<img src="https://github.com/user-attachments/assets/e91bfd4f-1db7-4727-8c60-1b84a3b2a66f" width=300>
+<img src="https://github.com/user-attachments/assets/a6292f9b-9b24-4cdf-9e49-dfb869f61c88" width=300>
 
 
 Loss Functions
@@ -98,8 +98,8 @@ Loss Functions
    - 같은 Class의 샘플: 거리 D를 최소화
       
    - 다른 Class의 샘플: 거리를 margin 이상으로 벌림
-  
-<img src="https://github.com/user-attachments/assets/5264586d-d74a-44fe-9f17-f4565b30b215" width=500>
+
+<img src="https://github.com/user-attachments/assets/180c26a9-b0d4-41d7-91e1-bc7edfdc8fe1" width=500>
 
 
 2. Triplet Loss
@@ -122,7 +122,7 @@ Loss Functions
   
    - $Negative:$ Anchor와 다른 클래스에 속하는 데이터.
 
-<img src="https://github.com/user-attachments/assets/5e0ac3d3-52d0-41af-9ccf-6862098b913d" width=500>
+<img src="https://github.com/user-attachments/assets/556c861d-bfd4-4235-8df6-025a2d44e78d" width=500>
      
      Anchor: "A"라는 데이터
      
@@ -147,7 +147,7 @@ Self-Supervised Learning은 주로 Siamese Networks 구조를 사용합니다. S
 | **Clustering**       | SwAV: Siamese Networks에 Online Clustering을 도입                             | Online Clustering으로 Collapsing 방지                                            |
 | **BYOL**             | Positive Pairs만 사용                                                      | Momentum Encoder를 사용하여 Collapsing 방지                                      |
 
-<img src="https://github.com/user-attachments/assets/fa34ddd5-4d2b-443a-9073-240b45fa3ae9" width=400>
+<img src="https://github.com/user-attachments/assets/691f7bf9-c3d0-4da7-83bb-a76592f28ec3" width=400>
 
 | Comparison on Siamese architectures
 
@@ -165,7 +165,7 @@ SimSiam은 기존 방법론에서 Key Component 제거하여 더 간결한 구�
 
 ## 3. Method
 
-<img src="https://github.com/user-attachments/assets/8541e2ab-40ca-42e3-8e98-3d5ec6a6683a" width=400>
+<img src="https://github.com/user-attachments/assets/5644f8e8-b988-4c7c-a449-e3d78cbb4a97" width=400>
 
 | SimSiam Architecture
 
