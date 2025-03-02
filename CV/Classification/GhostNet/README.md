@@ -49,7 +49,7 @@ ___
 
 기존 잘 학습된 CNN 네트워크는 Feature Map에는 풍부하지만, 중복적인 정보가 존재한다고 얘기하고 있습니다.
 
-<img src="https://github.com/user-attachments/assets/594f54f0-b35a-4fa7-8f0c-124bcaab7c62" width=400>
+<img src="https://github.com/user-attachments/assets/a0b59206-5d0f-4939-9deb-8dc1fe8a5140" width=400>
 
 | ResNet-50의 첫 번째 Residual Groupd에서 생성된 Feature Map 시각화
 
@@ -64,17 +64,17 @@ ___
 
 #### Input
 
-<img src="https://github.com/user-attachments/assets/6a60586f-a758-4316-99ae-03218b28dfb0" width=300>
+<img src="https://github.com/user-attachments/assets/9a06bbf9-b5bd-41c6-b70c-5549caae43f0" width=300>
 
 #### Output
 
-<img src="https://github.com/user-attachments/assets/c727a7a5-fad2-442c-a10e-870a794ce07d" width=400>
+<img src="https://github.com/user-attachments/assets/64ef7854-83df-40db-850e-8375d5b00767" width=400>
 
 | 전체 이미지 : [ResNet-50 Feature Map](img/ResNet-50_feature_map.png)
 
 ---
 
-<img src="https://github.com/user-attachments/assets/660eb7f9-b274-4189-b9f8-ad286f004761" width=300>
+<img src="https://github.com/user-attachments/assets/3291db6b-fc01-457b-bba4-69712f6d8c5b" width=300>
 
 | Architecture of ResNet-50
 
@@ -92,7 +92,7 @@ ResNet-50의 2번째 레이어의 Feature Map (256개인 이유)
 
 ## 3. Ghost Module
 
-<img src="https://github.com/user-attachments/assets/f96f326f-3179-46c1-9cf1-fee0043f3fc6" width=500>
+<img src="https://github.com/user-attachments/assets/22631016-194b-4369-b881-4f33cd4b9da7" width=500>
 
 ### 1) 기본 구조
 
@@ -222,13 +222,13 @@ Ghost Bottleneck은 다음과 같이 구성
 
    - 입력 크기와 출력 크기가 다르면(if stride=2), 1×1 convolution으로 크기를 맞춘 후 연결
 
-<img src="https://github.com/user-attachments/assets/162de10c-83b9-44a2-82d9-19b37d05d4fc" width=400>
+<img src="https://github.com/user-attachments/assets/e508bdd8-444b-4138-986b-cf6d5257aa88" width=400>
 
 | Ghost Bottle Neck (left: stride=1, Right: stride=2)
 
 ## 5. Architecture
 
-<img src="https://github.com/user-attachments/assets/503066ef-eeb8-4db1-9407-d739dc81bd14" width=600>
+<img src="https://github.com/user-attachments/assets/3d894a05-7646-4352-b38e-f5d4f8b63069" width=600>
 
 ---
 ## 6. Result
@@ -277,17 +277,19 @@ Ghost Bottleneck은 다음과 같이 구성
 
 
 #### GhostNet
-<img src="https://github.com/user-attachments/assets/d3992e67-d7bb-45d8-9847-26c1da340943" width=300>
 
-<img src="https://github.com/user-attachments/assets/35c7d8eb-e876-492b-acb3-4a4874af27e6" width=300>
+<img src="https://github.com/user-attachments/assets/71e6d144-43e1-4198-b3e7-90f9d6c0058d" width=300>
+
+<img src="https://github.com/user-attachments/assets/032bf5f7-4bba-4ea9-8961-d248a5ab25cb" width=300>
 
 | GhostNet Accuracy & Loss Result
 
 
 #### MobileNetV3(Large)
-<img src="https://github.com/user-attachments/assets/53929c9e-b9c5-48a7-848e-5697ed211305" width=300>
 
-<img src="https://github.com/user-attachments/assets/1de2878a-7dec-4408-a5f2-ae930b3b8bdb" width=300>
+<img src="https://github.com/user-attachments/assets/58aaaafe-aeb2-4fea-b6c7-0fa3e212b0d1" width=300>
+
+<img src="https://github.com/user-attachments/assets/746f1035-59df-442b-8e71-93365aecef1e" width=300>
 
 | MobileNetV3(Large) Accuracy & Loss Result
 
