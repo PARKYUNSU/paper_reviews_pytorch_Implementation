@@ -333,6 +333,8 @@ def se_resnet152():
 | 20        | 0.2138         | 92.48                  | 7.52                     | 1.3049       | 30.42                    | 3.30                     |
 | 30        | 0.0420         | 98.78                  | 1.22                     | 1.2505       | 26.20                    | 3.09                     |
 
+![image](https://github.com/user-attachments/assets/aeb236c3-127e-4e2e-8844-194a481b3b3b)
+
 
 ### SE-ResNet
 
@@ -356,6 +358,9 @@ Top-1 Error Rate와 Top-5 Error Rate 둘다 SE-ResNet이 더 낮은 Error Rate�
 | 20        | 0.2138         | 92.48                  | 7.52                     | 1.3049       | 30.42                    | 3.30                     |
 | 30        | 0.0420         | 98.78                  | 1.22                     | 1.2505       | 26.20                    | 3.09                     |
 
+![image](https://github.com/user-attachments/assets/43084ee4-4eca-4d2e-b9ba-e157973819df)
+
+
 ### SE-ResNeXt
 
 | **Epoch** | **Train Loss** | **Train Accuracy (%)** | **Train Error Rate (%)** | **Val Loss** | **Top-1 Error Rate (%)** | **Top-5 Error Rate (%)** |
@@ -363,6 +368,10 @@ Top-1 Error Rate와 Top-5 Error Rate 둘다 SE-ResNet이 더 낮은 Error Rate�
 | 10        | 0.7902         | 72.83                  | 27.17                    | 0.9393       | 30.44                    | 3.51                     |
 | 20        | 0.1120         | 96.43                  | 3.57                     | 1.1439       | 27.16                    | 4.05                     |
 | 30        | 0.0139         | 99.71                  | 0.29                     | 1.0737       | 23.43                    | 2.98                     |
+
+![image](https://github.com/user-attachments/assets/0884a588-682b-43e7-b0b1-fd0f2aa48999)
+
+
 
 ---
 SE-ResNeXt는 epoch 10, 20, 30 모두에서 Train Loss가 더 빠르게 감소하고, Train Accuracy도 더 높습니다. epoch 30에서는 SE-ResNeXt의 Train Accuracy는 **99.71%**, ResNeXt는 **98.78%** 입니다.
