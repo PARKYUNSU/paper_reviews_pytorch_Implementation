@@ -26,7 +26,6 @@ RNN, LSTM, gated recurrent 신경망은 언어 모델과 번역에 많이 사용
 이러한 문제점을 해결 하기위해, 논문에서는 입출력 시퀀스에서 거리와 무관하게 모델링이 가능한 Attention을 이용해서 순환 구조를 배제하여 오직 Attention 메커니즘을 사용해서 병렬 처리 및 전연적인 정보를 출력하는 모델인 **Transformer** 모델을 제안합니다.
 
 <p align="center"><img src="https://github.com/user-attachments/assets/0fe81c35-2817-4769-8f1e-fa6a03714d2b" width=400></p>
-
 <p align="center">| Trnasformer Architecture</p>
 
 # 2. Trnasformer
