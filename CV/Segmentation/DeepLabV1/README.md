@@ -75,7 +75,7 @@ dilation이 2라면 커널 사이의 간격이 2가 되고, 커널의 크기가 
 
 ###### 케라스에서는 dilation rate로 파이토치에서는 dilation으로 입력을 받는다.
 
-<img src="https://github.com/user-attachments/assets/b1a3b425-8910-4450-94c2-2b1047746fd0" width="700">
+<img src="https://github.com/user-attachments/assets/82d543ba-e75a-47d6-b54e-47d4069cc412" width="700">
 
 ## 2.1 Dilation convolution의 계산 방법
 
@@ -89,10 +89,9 @@ $k_e$ = $k$ + ($k$ - 1)($r$ - 1)
 5 = 3 + (3 - 1)(2 - 1)
 $k_e$ = 5 (5 X 5 커널)
 
-<img src="https://github.com/user-attachments/assets/6bcc6fd3-0774-482f-8a70-5a9176d47b0d" width="500">
+<img src="https://github.com/user-attachments/assets/93e7dab7-7b21-4aad-bd41-d9f405ad9a05" width="500">
 
-
-<img src="https://github.com/user-attachments/assets/7b0dfabe-4625-49e4-b01a-05dae4273722" width="600">
+<img src="https://github.com/user-attachments/assets/df7ede1f-e1bb-4801-9e09-8a3f65e5302d" width="600">
 
 논문에서는 Dilation convolution를 Conv5와 FC6에서 rate=2, rate=12로 지정해서 사용했다.
 
@@ -102,7 +101,7 @@ $k_e$ = 5 (5 X 5 커널)
 
 Bilinear Intrepolation 선형 보간법으로 작은 이미지를 부드럽게 확장하는 효과가 있다.
 
-<img src="https://github.com/user-attachments/assets/02bd2f7f-c6cf-48f8-a684-3478153c44e5" width="800">
+<img src="https://github.com/user-attachments/assets/004b2cf8-0fa8-47a7-b562-80e6089465cf" width="800">
 
 
 ## 3. Fully-Connected Conditional Random Field / Dense Conditional Random Field (CRF)
@@ -113,7 +112,7 @@ Spatial Invariance으로 인해 손실된 공간적 정보를 복원하고, 객�
 
 논문에서는 10번의 CRF 과정을 적용하여 세밀한 경계선을 복원하고 정확한 위치 정보를 보완 합니다.
 
-<img src="https://github.com/user-attachments/assets/e5a4e799-1f4c-4ba8-9f56-189dccbe80bd" width="800">
+<img src="https://github.com/user-attachments/assets/c5eec110-fd68-43cd-bdcf-aa2e62b00a04" width="800">
 
 
 ## 3.1 Spatial Invariance
@@ -122,7 +121,7 @@ Spatial Invariance는 어떤 이미제 물체가 나타나면 그 위치에 관�
 
 그로인해서, 고양이가 이미지 왼쪽 위, 오른쪽 위 등 어느 곳에 있든지 위치에 상관없이 고양이로 인식하는 것을 의미합니다.
 
-<img src="https://github.com/user-attachments/assets/de58e08a-7f32-408f-a20d-d9be5e8e2897" width="500">
+<img src="https://github.com/user-attachments/assets/671ac15b-a817-4354-a8e4-fc660e32f90b" width="500">
 
 
 ## 3.2 CRF
@@ -150,14 +149,14 @@ Spatial Invariance는 어떤 이미제 물체가 나타나면 그 위치에 관�
        인접한 픽셀이 같은 클래스로 분류되도록 유도합니다. 두 픽셀이 가까울수록 같은 클래스로 분류될 가능성이 높아지며, 경계선 주변의 픽셀을 부드럽게 연결하는 효과를 줍니다.
 
 
-<img src="https://github.com/user-attachments/assets/8fdbdbe1-1953-44fd-8378-08f3b89e7b8e" width="800">
+<img src="https://github.com/user-attachments/assets/148dbbcf-7df0-4fa9-8add-6c5bf727b917" width="800">
 
-<img src="https://github.com/user-attachments/assets/efd9bc5d-e4f0-45da-924b-0d5392c664bf" width="800">
+<img src="https://github.com/user-attachments/assets/f186590a-7fa5-4894-b782-be1713fa2bde" width="800">
 
    
 ## 3.2.1 수식
 
-<img src="https://github.com/user-attachments/assets/e6b97a48-6ad2-49ba-b976-e20bbc563c27" width="800">
+<img src="https://github.com/user-attachments/assets/d0d6a5af-3ec5-49c8-9c0a-356f193306b4" width="800">
 
    $x$ 는 Pixels에 대한 label assignment입니다. Unray Term은 $θ_i(x_i)$ = $-logP(x_i)$를 사용하며 $P(x_i)$는 DCNN으로 계산된 개별 픽셀의 클래스 확률입니다.
 
@@ -165,8 +164,7 @@ Spatial Invariance는 어떤 이미제 물체가 나타나면 그 위치에 관�
 
    각 $K^m$은 Gaussian Kernel이고 Pixel $i$와 $j$로 부터 추출된 Features f에 의존하며 pararmeter $w_m$으로 weight가 된다. Bilateral position와 colore terms를 사용하면 kernel은 다음과 같습니다.
 
-
-<img src="https://github.com/user-attachments/assets/0210421c-ab67-4f29-911b-e22229fb3c9e" width="800">
+<img src="https://github.com/user-attachments/assets/56481dff-354c-46f0-8f9f-b345c430c38b" width="800">
 
 
 - 첫 번째 항 (appearance kernel): Gaussian Pairwise Term
@@ -187,4 +185,20 @@ Spatial Invariance는 어떤 이미제 물체가 나타나면 그 위치에 관�
 
 Input > DCNN(Deep Convolutional Neural Network) > Coarse Socre Map > Upsampling(Bilinear Interpolation) > CRF > Output
 
-<img src="https://github.com/user-attachments/assets/6706e409-d0d7-4aa2-a600-f74131ca4045" width="800">
+<img src="https://github.com/user-attachments/assets/f7f48188-f851-4952-877e-8a097862baa5" width="800">
+
+## Result
+### 50 epoch
+![image](https://github.com/user-attachments/assets/c59afa9b-05f4-4475-ad06-1c36390d34b8)
+
+### 100 epoch
+![image](https://github.com/user-attachments/assets/80b9a395-afb1-42d4-ba48-35ffef4afc6f)
+
+### 150 epoch
+![image](https://github.com/user-attachments/assets/21cac9d6-7764-4eee-bcf0-ddcf651854bb)
+
+### 200 epoch
+![image](https://github.com/user-attachments/assets/afb94464-5997-4ce9-aa12-4dfd2a5e0dfc)
+
+
+
