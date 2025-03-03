@@ -10,7 +10,7 @@ Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks - 2021
 ## 논문 리뷰 영상
 
 <a href="https://www.youtube.com/watch?v=lh0kysyCEls" target="_blank">
-  <img src="https://github.com/user-attachments/assets/910aeb33-0007-47d0-8b07-155fab1d0bc5" width="600" alt="YouTube Video">
+  <img src="https://github.com/user-attachments/assets/228deba8-92d4-4bc2-bd5b-36f13e6ea163" width="600" alt="YouTube Video">
 </a>
 
 ---
@@ -32,7 +32,7 @@ RAG 모델은 Retrieval과 Generator 부분으로 이루어져 있습니다. Ret
 
 # 2. Method
 
-<img src="https://github.com/user-attachments/assets/6160effe-056a-4e2a-9f42-66dafff8ce54" width=700>
+<img src="https://github.com/user-attachments/assets/03379f99-9fa6-401a-8a9b-52989be189c6" width=700>
 
 ## 2.1. Retriever
 
@@ -74,7 +74,7 @@ $$
 
 벡터화가 된 질문 벡터( $q(x)$ )와 문서 벡터( $d(x)$ )는 MIPS(Maximum Inner Product Search)를 사용해서 유사도를 계산합니다.
 
-<img src="https://github.com/user-attachments/assets/882eef25-b205-4673-bcbb-14c5286ea5ec" width=500>
+<img src="https://github.com/user-attachments/assets/2227351e-b4bd-45d4-813d-b85bcd7a7b28" width=500>
 
 ## **Cosine Similarity vs MIPS**
     
@@ -131,7 +131,7 @@ $Where$
 
 학습 시에는 여러 문서 중에서 실제로 Loss가 가장 낮아지는(즉, 타깃 답변과 가장 잘 맞아떨어지는) 문서를 선택하여 답을 생성하는 방식으로 최적화됩니다.
 
-<img src="https://github.com/user-attachments/assets/4c97680e-e908-4691-974d-dde31e5202d8" width=700>
+<img src="https://github.com/user-attachments/assets/e28390e5-5cff-4f77-9e8c-c239febf0ab1" width=700>
 
 Query와 가까운 Top-5 Document(Passage)를 이용해서 각 Document와 Query를 Concat하여 BART Input을 생성합니다.
  (하나의 Query 당 5개의 BART Input이 존재하며, 배치처리를 통해 추론하여 빠른 속도로 처리가 가능합니다.)
@@ -176,7 +176,7 @@ BART의 Decoder는 Self-attention을 사용하여 각 단어가 문맥에 맞는
 RAG 모델은 디코딩을 RAG-Token과 RAG-Sequence 두 가지 방식을 선택적으로 사용합니다. 두 모델은 **디코딩 방식**에 차이가 있으며, 학습과 출력 과정에서의 차이로 인해 성능 차이를 보일 수 있습니다.
 
 ### 3. Beam Search
-<img src="https://github.com/user-attachments/assets/4c64a47b-784d-45f7-a92f-cca905d5e298" width=600>
+<img src="https://github.com/user-attachments/assets/7489e52c-0281-4302-bf44-1da7206eb9b5" width=600>
 
 Beam Search는 Greedy Search와 다르게, 모든 가능한 경우의 수를 탐색하는 대신, 최적의 후보를 선택하여 탐색을 진행하는 방식입니다. 일반적으로 **Beam Width (n)** 를 설정하여, 각 단계에서 n개의 후보를 선택하고, 그 후보들 중에서 최적의 시퀀스를 찾는 방식입니다.
 
@@ -224,7 +224,7 @@ $Wherer$
 
 - $p_θ : Generator$
 
- <img src="https://github.com/user-attachments/assets/8c381788-0b70-421c-8a66-0ed084148951" width=700>
+ <img src="https://github.com/user-attachments/assets/1d6955e5-c12c-44f8-9726-1cb55395be4f" width=700>
 
 
 ### 3. **RAG-Sequence Model**
@@ -248,7 +248,7 @@ $Wherer$
 
 이러한 점에서 기존 Beam Search를 적용하기에 문제가 있어서 논문에서는 document 별로 beam search를 진행합니다.
 
-<img src="https://github.com/user-attachments/assets/e2f8b8e6-bafb-49a3-b95f-b0af02d1ce62" width=700>
+<img src="https://github.com/user-attachments/assets/715b7989-d2f2-4f17-ab05-076cb851fe0f" width=700>
 
 입력 $x$에 대해 **top-k문서** 를 검색합니다. 여기서는 $k=3$으로 설정되어 있어, 3개의 문서가 선택됩니다.
 
@@ -258,18 +258,18 @@ $Wherer$
 
 각 문서에서 구해진 확률을 marginalize하여 최종 확률 $p(y|x)$를 구합니다. 즉, 모든 문서에 대한 $p(y|x, z)$ 값을 더해 최종 출력 확률을 계산합니다.
 
-<img src="https://github.com/user-attachments/assets/df95640e-6923-4b10-b061-89dbcd41107b" wdith=700>
+<img src="https://github.com/user-attachments/assets/cc17f1e0-b114-4680-ae14-611af88e4386" wdith=700>
 
 그러나, 만약 Beam Search 과정에서 특정 값이 계산되지 않으면, 해당 확률 값을 알 수 없는 문제가 발생합니다. 그림처럼, $y_2$는 문서 $z_2$로부터 계산되지 않았는데, 이를 marginalize 하려면 $p(y_2|x, z_2)$ 값을 알아야 합니다. 하지만 이 값을 알 수 없어서 계산이 불가능한 상황이 발생합니다.
 
 이 문제를 해결하기 위해 추가적인 forward pass를 통해 $p(y_2|x, z_2)$ 값을 계산해야 합니다. 하지만 이 과정은 비효율적이고 시간적, 비용적 부담이 크기 때문에 적합하지 않습니다.
 
-<img src="https://github.com/user-attachments/assets/2fdcec7c-8691-4ec9-abe0-7ce86b2be5d0" width=700>
+<img src="https://github.com/user-attachments/assets/578d1f12-12bb-494a-a33e-bbb7e2f82952" width=700>
 
 논문에서는 이를 해결하기 위해, 발견되지 않은 값들에 대해 확률을 0으로 처리하는 방법인 **Fast Decoding**을 제시합니다. 이 방식으로 추가적인 계산을 피하면서 marginalize를 진행할 수 있게 해줍니다.
 
 ## 2.4 정리
-<img src="https://github.com/user-attachments/assets/687dd9bf-1013-4f17-804a-925690ffd1c4" width=700>
+<img src="https://github.com/user-attachments/assets/a42a3772-fdd1-42e2-8951-fd1c2584b6a4" width=700>
 
 Input sequence인 $x$를 input으로 받아서, 이를 활용하여 external knowledge corpus(말뭉치)로 관련이 제일 높은 document $z$를 $k$개 retreiver 합니다. 이후 $x$와 $d$를 이용해서 target sequence인 $y$를 생성하면서 두 가지 요소를 다루게 됩니다.
 
@@ -354,8 +354,7 @@ int faiss_IndexFlat_compute_distance_subset(
     } CATCH_AND_HANDLE
 }
 ```
-
-![image](https://github.com/user-attachments/assets/585b9d2c-ebf2-48de-b6c6-1c7932bede76)
+![image](https://github.com/user-attachments/assets/8638455e-1387-4b1f-a031-d699767bc39c)
 
 Left & Cneter
 - RAG-SEQ의 경우 Retreived Documents의 수가 많을 수록 성능이 개선
