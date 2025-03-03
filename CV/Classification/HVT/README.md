@@ -26,7 +26,7 @@ Metric Learning은 데이터의 표상(representation)을 학습하는 방법의
 
 Hyperbolic Vision Transformer(HViT) 모델의 배경은 다음과 같은 선행 연구들로 만들어졌습니다.
 
-## 1.1 Embedding Space 선택 배경
+## 1.1 Embedding Space 선택
 ### Euclidean Space
 
 기존 Metric Learning에서는 유클리드 거리(Euclidean Distance) 혹은 **코사인 유사도(Cosine Similarity)** 를 활용하여 Embedding을 학습합니다.
@@ -66,7 +66,7 @@ Hierarchical Data(계층적 데이터)란 데이터 항목 간에 Tree나 Graph 
 </div>
 </details>
 
-## 1.2 Encoder 모델 선택 배경
+## 1.2 Encoder Model 선택
 ### CNN에서 Vision Transformer 선택
 
 기존에는 CNN(합성곱 신경망)이 이미지 임베딩 추출에 주로 사용되었으나, Transformer가 강력한 백본(backbone)으로 각광 받았습니다.
