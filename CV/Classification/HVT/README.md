@@ -205,7 +205,7 @@ $$D_{cos}(z_i, z_j) = ∥\frac{z_i}{∥z_i∥_2} - \frac{z_j}{∥z_j∥_2}∥^2_
 
 $$l_{i, j} = -log \frac{\exp(-D(z_i, z_j)/τ)}{\sum^K_{k=1. k\neq{i}}\exp(-D(z_i, z_j)/τ)}$$
 
-$Whwere:$
+$Where:$
 
 $D$ : Hyperbolic Distance ($D_{hyp} or D_{cis}$)
 
