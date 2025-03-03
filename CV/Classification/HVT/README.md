@@ -109,6 +109,7 @@ $$D^n = {x ∈ \mathbb{R}^n: c∥x∥^2 < 1, c \ge 0}$$
 
 
 Riemannian Metric $g_D$로 구성되어 있습니다,
+
 $$g_D = λ^2_cg_E$$
 
 $where:$
