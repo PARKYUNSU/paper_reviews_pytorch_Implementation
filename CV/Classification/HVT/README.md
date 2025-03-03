@@ -116,7 +116,7 @@ $where:$
 
 $g_E = I_n$ : Euclidean metric tensor
 
-$λ_c = \over{2}{1-c∥x∥^2}$ : conformal(공형:각도를 보존하는) 인자로, 볼의 경계 근처로 가면 $λ_c$가 커져서 거리가 무한대로 확장
+$λ_c = \frac{2}{1-c∥x∥^2}$ : conformal(공형:각도를 보존하는) 인자로, 볼의 경계 근처로 가면 $λ_c$가 커져서 거리가 무한대로 확장
 
 <img src="https://github.com/user-attachments/assets/420f7c26-4f92-4103-8aec-91ef582620d0" width=500>
 <details>
