@@ -8,7 +8,7 @@
 ### Classification
 | 논문 제목                                                   | 연도 |
 |-----------------------------------------------------------|-----|
-| [**HVT (Hyperbolic Vision Transformer)**](https://github.com/PARKYUNSU/pytorch_imple/tree/main/CV/Classification/HVT)                   | 2022 |
+| [**HViT (Hyperbolic Vision Transformer)**](https://github.com/PARKYUNSU/pytorch_imple/tree/main/CV/Classification/HVT)                   | 2022 |
 | [**LoRA (Low-Rank Adaptation)** - 작성중](https://github.com/PARKYUNSU/pytorch_imple/tree/main/CV/Classification/LoRA)                            | 2021 |
 | [**GhostNet**](https://github.com/PARKYUNSU/pytorch_imple/tree/main/CV/Classification/GhostNet)                                              | 2020 |
 | [**Vision Transformer**](https://github.com/PARKYUNSU/pytorch_imple/tree/main/CV/Classification/Vision_Transformer)                           | 2020 |
