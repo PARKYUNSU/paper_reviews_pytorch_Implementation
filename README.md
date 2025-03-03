@@ -63,7 +63,7 @@
 
 | 논문 제목                                    | 연도 |
 |---------------------------------------------|-----|
-| **[OpenVoice - 작성중](https://github.com/PARKYUNSU/pytorch_imple/tree/main/Audio/OpenVoice)**  | 2024 |
+| **[OpenVoice - 작성중](https://github.com/PARKYUNSU/pytorch_imple/tree/main/Audio/Openvoice)**  | 2024|
 | **[USDM (Unified Spoken Dialog Model)](https://github.com/PARKYUNSU/pytorch_imple/tree/main/Audio/USDM)**  | 2023 |
 
 
