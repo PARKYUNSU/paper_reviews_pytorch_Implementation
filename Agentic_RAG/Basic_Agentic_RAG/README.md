@@ -4,7 +4,7 @@ Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks - 2021
 
 ㅡ Patrick Lewis, Ethan Perez
 
-[Paper to Read](https://arxiv.org/pdf/2005.11401)
+[Read the Paper](https://arxiv.org/pdf/2005.11401)
 
 ---
 ## 논문 리뷰 영상
