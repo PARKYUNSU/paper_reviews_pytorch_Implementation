@@ -34,7 +34,7 @@ PLM을 그대로 사용하면서, Few-Shot, One-Shot, Zero-Shot 방식으로 프
 
 ### 2.1.3. Instruction Tuning (FLAN)
 PLM에 다양한 Task에 대한 NLP Instruction을 제공하면서 학습시키는 방법입니다.
-이를 통해서 모델은 주어진 Instruction을 이해하고 따르는 방법을 학습하며, Unseen Task에서도 Instruction 만으로도 적덜한 답변을 생성할 수 있습니다.
+이를 통해서 모델은 주어진 Instruction을 이해하고 따르는 방법을 학습하며, Unseen Task에서도 Instruction 만으로도 적절한 답변을 생성할 수 있습니다.
 Fine-Tuning과 Prompting의 장점을 결합해서, 적은 데이터로도 여러 Task에서 높은 성능을 발휘하는 방법론입니다.
 
 
@@ -127,7 +127,7 @@ ex) 자연어 추론(NLI) 태스크의 제로샷 성능을 평가하려면, NLI 
 ex) 자연어 추론(NLI) 성능 평가 모델은 NLI를 제외한 모든 태스크로 훈련된 FLAN을 사용하여 NLI 성능을 평가
 
 
-### 3.3 Experiment
+### 3.3. Experiment
 #### 1. Base Model
    
    LaMDA-PT 모델을 Instruction Tuning하여 FLAN 생성
@@ -161,7 +161,7 @@ ex) 자연어 추론(NLI) 성능 평가 모델은 NLI를 제외한 모든 태스
    모든 평가는 30K 스텝 학습 후 마지막 체크포인트에서 진행
 
 
-### 3.4 Result
+### 3.4. Result
 ### Task Cluster 별 성능
 NLI, Reading Comprehension, Closed-Book QA, Translation, Commonsense Reasoning, Coreference Resolution, Struct-to-Text 데이터셋에 대한 FLAN을 평가합니다.
 
@@ -172,7 +172,7 @@ ex) NLI 성능을 평가할 때는, FLAN에서는 NLI 데이터셋을 전혀 학
 이 방법을 통해서, 각 데이터셋에서 모든 Template의 평균 성능을 측정합니다.
 즉, 특정한 프롬프트 구조에 의존하지 않고, 일반적인 자연서 Instruction에 대한 기대 성능을 평가하는 것 입니다.
 
-모든 Task 별로 FLAN 137B 모델이 우수한 성능을 띄고 있다.
+모든 Task 별로 FLAN 137B 모델이 우수한 성능을 띄고 있습니다.
 <img src="https://github.com/user-attachments/assets/faae9e62-eaf8-49cd-abad-ea3b6181e3df" width=700>
 
 ### GPT-3 VS FLAN
