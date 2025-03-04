@@ -41,7 +41,7 @@ Ex) CNN+Fully-Connected 레이어로 구성된 고차원 임베딩(VGG 4,096차�
 
 트리(Tree)나 계층적(Hierarchical) 구조를 지닌 데이터를 효율적으로 표현할 수 있으며, 유클리드 공간 대비 더 낮은 차원에서도 높은 표현력을 보인다는 장점이 있습니다.
 
-Ex) HViT 모델은 384차원이라는 비교적 낮은 임베딩 차원에서도 충분한 표현력을 확보할 수 있다.
+Ex) HViT 모델은 384차원이라는 비교적 낮은 임베딩 차원에서도 충분한 표현력을 확보할 수 있습니다.
 
 <details>
 <summary>Hierarchical Data/펼치기</summary>
@@ -224,7 +224,7 @@ $τ$ : Temperature Hyperparameter (모델의 유사도 민감도를 조절하는
 
 Positive Pair 유사도를 높이는 방향으로, 다른 클래스는(Negative Pair)는 $D_{hyp}$ 또는 $D_{cos}$로 멀게 학습하는 방법을 택합니다.
 
-ex) Class [’침대’, ‘테이블’, ‘램프’, ‘서랍’, ‘의자’, ‘소파’]
+Ex) Class [’침대’, ‘테이블’, ‘램프’, ‘서랍’, ‘의자’, ‘소파’]
 - 각 클래스에서 2개의 샘플 추출(침대 2개,…) ⇒ **positive pair**
 - 클래스 끼리는(침대 2개 ↔ 테이블 2개) ⇒ **negative pair**
 
