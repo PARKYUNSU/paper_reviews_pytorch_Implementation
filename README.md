@@ -28,8 +28,8 @@
 |---------------------------------------------|-----|
 | **[DeepLabV3+](https://github.com/PARKYUNSU/pytorch_imple/tree/main/CV/Segmentation/DeeplabV3_Plus)**  | 2018 |
 | **[DeepLabV1](https://github.com/PARKYUNSU/pytorch_imple/tree/main/CV/Segmentation/DeepLabV1)**        | 2015 |
-| **[DeConvNet (Deconvolution Network)](https://github.com/PARKYUNSU/pytorch_imple/tree/main/CV/Segmentation/DeConvNet)**         | 2015 |
-| **[FCN (Fully Convolutional Networks)](https://github.com/PARKYUNSU/pytorch_imple/tree/main/CV/Segmentation/FCN)**                    | 2014 |
+| **[DeConvNet (Deconvolution Network)](https://github.com/PARKYUNSU/pytorch_imple/tree/main/CV/Segmentation/DeConvNet)**  | 2015 |
+| **[FCN (Fully Convolutional Networks)](https://github.com/PARKYUNSU/pytorch_imple/tree/main/CV/Segmentation/FCN)**  | 2014 |
 
 ### Object Detection
 | 논문 제목                                    | 연도 |
@@ -56,8 +56,9 @@
 # Agentic RAG
 | 논문 제목                                    | 연도 |
 |---------------------------------------------|-----|
-| **[RAG (Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks)](https://github.com/PARKYUNSU/pytorch_imple/tree/main/Agentic%20RAG/Basic%20Agentic%20RAG)**  | 2021 |
 | **[CRAG (Corrective Retrieval Augmented Generation)](https://github.com/PARKYUNSU/pytorch_imple/tree/main/Agentic_RAG/Corrective_RAG)**  | 2024 |
+| **[RAG (Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks)](https://github.com/PARKYUNSU/pytorch_imple/tree/main/Agentic%20RAG/Basic%20Agentic%20RAG)**  | 2021 |
+
 
 
 
