@@ -11,9 +11,9 @@
 
 LLM의 대표적인 문제인 Hallucination(환각) 현상은 선행된 연구인 [RAG](https://github.com/PARKYUNSU/pytorch_imple/tree/main/Agentic_RAG/Basic_Agentic_RAG)에 의해 다소 보완되었으나, RAG의 주요 문제는 검색(Retrieval) 단계에 있습니다. 이는 검색된 문서의 연관성에 크게 의존하게되어, 질문(Query)에 도움이 되지 않는 부정확하거나 불필요한 정보가 포함될 수 있기 때문입니다.
 
-이에 본 논문은, 부정확한 검색 결과를 줄이고 생성의 견고성을 향상시키기 위해서 Corrective Retrieval Augmented Generation (CRAG)을 제안합니다.
+이에 본 논문은, 부정확한 검색 결과를 줄이고 답변의 견고성을 향상시키기 위해서 Corrective Retrieval Augmented Generation (CRAG)을 제안합니다.
 
-CRAG는 내부 문서의 관련성 score를 기반으로 confidence를 계산해서, 문서들을 Correct, Incorrect, Ambiguous 세가지로 구분한 후, 각 파트에 맞게끔 문서를 정제하거나 외부 지식을 보완하여 최종 답변을 제공해서 문제를 보완합니다.
+CRAG는 내부 문서의 관련성 score를 기반으로 confidence를 계산해서, 문서들을 Correct, Incorrect, Ambiguous 세가지로 구분한 후, 각 파트에 맞게끔 문서를 정제하거나 외부 지식으로부터 보완한 최종 답변을 제공해서 RAG의 문제점을 보완합니다.
 
 # 2. Related Work
 ### 1. Hallucinations of LLMs
