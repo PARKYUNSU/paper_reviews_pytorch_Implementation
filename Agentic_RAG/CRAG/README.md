@@ -26,8 +26,14 @@ LLM은 명령어 이해를 바탕으로 텍스트를 생성하지만, 여전히 
 
 하지만 앞서 설명한 RAG의 문제는 그 자체 검색(Retrieval)에 문제가 있으며 부정확한 검색은 답변 결과에 영향을 끼치기 마련입니다.
 
+다음은 부정확한 Document로 인안 RAG의 잘 못된 답변을 생성하는 그림입니다.
+<br/>
+<br/>
+<br/>
 <img src="https://github.com/user-attachments/assets/ab8c0c94-1fd8-4ab5-854f-8d5de42804fb" width=400>
-
+<br/>
+<br/>
+<br/>
 RAG는 Retrieval $R$과 Generator $G$로 나뉩니다. 
 
 입력 $X$와 $C = {d_1, …, d_N}$로 이루어진 대량의 Document에서 상위 $K$ 개의 문서 $D = {d_{r1}, …, d_{rk}}$를 검색해서 답변 $Y$를 생성하는 프로세스입니다. 이 과정을 수식으로 표현하면,
@@ -52,13 +58,13 @@ Retreieval에서는 입력된 Query에 맞게 문서를 검색하고, 경량화�
 이 Score는 총 3가지의 Cofidence로 정량화되어, 1) Correct, 2) Incorrect, 3) Ambiguous 로 나뉘어서 동작합니다.
 
 #### 1) Correct
-검색된 문서들이 더 정밀한 Knowledge Strips로 정제되며, Decomposition, Filter, Recomposition 과정을 거쳐서 정제됩니다.
+&nbsp; 검색된 문서들이 더 정밀한 Knowledge Strips로 정제되며, Decomposition, Filter, Recomposition 과정을 거쳐서 정제됩니다.
 
 #### 2) Incorrect
-검색된 문서들을 사용하지 않고, Web Search로 검색된 정보를 사용합니다.
+&nbsp; 검색된 문서들을 사용하지 않고, Web Search로 검색된 정보를 사용합니다.
 
-#### 1) Ambiguous
-검색된 문서가 부정확한 문서인지 아닌지 경정 내릴 수 없는 상태로, 이런 경우에는 두 가지 동작을 모두 사용하여 균형잡힌 검색 결과가 나오도록 유도합니다.
+#### 3) Ambiguous
+&nbsp; 검색된 문서가 부정확한 문서인지 아닌지 경정 내릴 수 없는 상태로, 이런 경우에는 두 가지 동작을 모두 사용하여 균형잡힌 검색 결과가 나오도록 유도합니다.
 
 ![image](https://github.com/user-attachments/assets/e080a3eb-971b-4310-9ca5-f3ed47cd6d6a)
 
